@@ -55,13 +55,16 @@ function postProcessRenderedPhotos(functionContext,
         local success, pathOrMessage = rendition:waitForRender()
         if success then
             logger:trace("Exported " .. pathOrMessage .. " successfully")
-            images = images .. " " .. pathOrMessage
+            images = images .. ' "' .. pathOrMessage .. '"'
         else
             logger:trace(pathOrMessage .. " could not be exported")
         end
     end
     if (images ~= "") then
         cmd = '"' .. pureRawPath ..'"' .. images
+        if ( WIN_ENV) then
+            cmd = '"start /wait /min "DxO PureRAW" ' .. cmd
+        end
         logger:trace("Execute " .. cmd)
         local status = LrTasks.execute(cmd)
     end

@@ -56,7 +56,7 @@ return {
                         title = "...",
                         action = function()
                             local startDir
-                            startDir = LrPathUtils.parent(prefs.PureRawPath or "")
+                            startDir = LrPathUtils.parent(LrPathUtils.parent(prefs.PureRawPath) or "")
                             local pureRawPath = LrDialogs.runOpenPanel({
                                 title = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Select DxO PureRAW program"),
                                 prompt = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Select DxO PureRAW program"),
@@ -68,9 +68,13 @@ return {
                             if type(pureRawPath) == "table" and #pureRawPath > 0 then
                                 local pureRawExe
                                 local newToolPath
-                                pureRawExe = "pureraw.exe"
-                                newToolPath = LrPathUtils.child(pureRawPath[1], pureRawExe)
-                                if LrFileUtils.exists(newToolPath) == "file" then
+                                pureRawExe = "PureRawv1.exe"
+                                if (pureRawPath[1].match("(?i)DxO PureRAW$")) then
+                                        newToolPath = LrPathUtils.child(pureRawPath[1], pureRawExe)
+                                else
+                                    newToolPath = LrPathUtils.child(pureRawPath[1], 'DxO/DxO PureRAW/' .. pureRawExe)
+                                end
+                                 if LrFileUtils.exists(newToolPath) == "file" then
                                     prefs.PureRawPath = newToolPath
                                 else
                                     LrDialogs.message(LOC("$$$/LRPureRaw/Settings/BadPath=Path is incorrect"), LOC("$$$/LRPureRaw/Settings/NoExe=The folder chosen does not contain ^1.", pureRawExe), "critical")

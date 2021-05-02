@@ -46,7 +46,7 @@ local function init()
         -- winOS
         --
         if prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 then
-            pureRawPath = 'C:\\Program Files (x86)\\DxO\\PureRaw\\pureraw.exe'
+            pureRawPath = 'C:\\Program Files\\DxO\\DxO PureRAW\\PureRawv1.exe'
             prefs.PureRawPath = pureRawPath
         end
     end
