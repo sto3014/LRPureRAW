@@ -77,13 +77,13 @@ return {
     processRenderedPhotos = postProcessRenderedPhotos,
     allowFileFormats = {
         "ORIGINAL",
+        "DNG",
     },
     hideSections = {
         "postProcessing",
         "video",
         "watermarking",
         "fileNaming",
-        "fileSettings",
         "imageSettings",
         "outputSharpening",
         "metadata",
