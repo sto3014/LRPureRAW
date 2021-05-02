@@ -1,0 +1,12 @@
+"$$$/LRPureRaw/PluginName=PureRaw"
+"$$$/LRPureRaw/Settings/PathNotExists=^1. Path zu ^2 existiert nicht:"
+"$$$/LRPurePath/Settings/PathToPureRaw/MAC=Pfad zu DxO PureRAW"
+"$$$/LRPurePath/Settings/PathToPureRaw/WIN=Pfad zu DxO PureRAW"
+"$$$/LRPureRaw/Settings/PluginSettings=Plugin Einstellungen"
+"$$$/LRPureRaw/Settings/PureRawPath=Pfad zu DxO PureRAW"
+"$$$/LRPureRaw/Settings/Select=Auswahl DxO PureRAW Programm"
+"$$$/LRPureRaw/Settings/BadPath=Pfad existiert nicht"
+"$$$/LRPureRaw/Settings/NoExe=Das Verzeichnis enthält nicht ^1."
+"$$$/LRPureRaw/Settings/SelectDxOPureRaw/MAC=Auswahl DxO PureRAW Programm"
+"$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Auswahl DxO PureRAW Programm"
+
