@@ -5,5 +5,5 @@ export VERSION=1.0.0
 
 cd $SCRIPT_DIR/target
 echo Extract files to ~:
-unzip -o LRKomoot$VERSION"_mac.zip" -d ~
+unzip -o LRPureRAW$VERSION"_mac.zip" -d ~
 echo done

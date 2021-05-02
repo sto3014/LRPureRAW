@@ -1,5 +1,3 @@
-require("PluginInit")
-local LrApplication = import("LrApplication")
 local LrTasks = import 'LrTasks'
 local LrLogger = import("LrLogger")
 local LrPrefs = import("LrPrefs")
@@ -8,34 +6,11 @@ logger:enable("logfile")
 -- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
 --
 -- LrMobdebug.start()
-function getSubFolder()
-    local activeCatalog = LrApplication.activeCatalog()
-    local photos = activeCatalog:getTargetPhotos()
-    local subFolder
-    local previousSubfolder = ""
-    for _, photo in ipairs(photos) do
-        subFolder = (photo:getPropertyForPlugin(PluginInit.pluginID, 'tourName'))
-        if (subFolder == nil or subFolder == "") then
-            subFolder = ""
-            break
-        else
-            if (previousSubfolder == "") then
-                previousSubfolder = subFolder
-            else
-                if (previousSubfolder ~= subFolder) then
-                    subFolder = ""
-                    break
-                end
-            end
-        end
-    end
-    logger:trace("Chosen folder: " .. subFolder)
-    return subFolder
-end
+--
 function initSettings (exportSettings)
-    if (exportSettings.LR_export_useSubfolder == true and exportSettings.LR_export_destinationPathSuffix == "") then
-        subFolder = getSubFolder()
-        exportSettings.LR_export_destinationPathSuffix = subFolder
+    if (exportSettings.LR_format ~= "ORIGINAL" and exportSettings.LR_format ~= "DNG") then
+        logger:trace("Init export format with value ORIGINAL")
+        exportSettings.LR_format = "ORIGINAL"
     end
 end
 --
@@ -61,8 +36,8 @@ function postProcessRenderedPhotos(functionContext,
         end
     end
     if (images ~= "") then
-        cmd = '"' .. pureRawPath ..'"' .. images
-        if ( WIN_ENV) then
+        cmd = '"' .. pureRawPath .. '"' .. images
+        if (WIN_ENV) then
             cmd = '"start /wait /min "DxO PureRAW" ' .. cmd
         end
         logger:trace("Execute " .. cmd)
@@ -73,7 +48,7 @@ end
 --
 return {
     -- endDialog = initSettings,
-    -- updateExportSettings = initSettings,
+    updateExportSettings = initSettings,
     processRenderedPhotos = postProcessRenderedPhotos,
     allowFileFormats = {
         "ORIGINAL",

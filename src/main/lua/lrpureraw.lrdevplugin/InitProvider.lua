@@ -1,15 +1,14 @@
 --
 -- Created by IntelliJ IDEA.
--- User: dieterstockhausen
+-- User: Dieter Stockhausen
 -- Date: 02.05.21
 -- To change this template use File | Settings | File Templates.
 --
 local LrLogger = import 'LrLogger'
-local LrPathUtils = import 'LrPathUtils'
 
 -- Logger
-local log = LrLogger('LRPureRaw') -- the log file name
-log:enable("logfile")
+local logger = LrLogger('PureRawLrLogger') -- the log file name
+logger:enable("logfile")
 
 InitProvider = {
     vInfo = require("Info.lua")
@@ -26,7 +25,7 @@ local function init()
 
     -- resetPrefs()
 
-    log:trace("Init...")
+    logger:trace("Init...")
     local prefs = LrPrefs.prefsForPlugin()
     prefs.hasErrors = false
 
@@ -58,7 +57,7 @@ local function init()
         prefs.hasErrors = true
     end
 
-    log:trace("Init done.")
+    logger:trace("Init done.")
 end
 
 init()

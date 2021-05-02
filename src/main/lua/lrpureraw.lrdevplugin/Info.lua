@@ -23,10 +23,10 @@ return {
 
         if (MAC_ENV) then
             -- PureRawPath_Title
-            prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/MAC=Path to DxO PurePAW")
+            prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/MAC=Path to DxO PureRAW")
         else
             -- PureRawPath_Title
-            prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/WIN=Path to DxO PurePAW")
+            prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/WIN=Path to DxO PureRAW")
         end
 
         local bind = LrView.bind
@@ -38,7 +38,7 @@ return {
                 title = LOC("$$$/LRPureRaw/Settings/PluginSettings=Plugin Settings"),
                 bind_to_object = prefs,
                 --
-                -- Path to purepaw
+                -- Path to pureraw
                 --
                 viewFactory:row({
                     viewFactory:static_text({
