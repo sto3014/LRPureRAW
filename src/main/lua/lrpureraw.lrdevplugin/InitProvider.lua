@@ -54,7 +54,7 @@ local function init()
         --
         if prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 then
             pureRawDir = 'C:\\Program Files\\DxO\\DxO PureRAW'
-            prefs.PureRawPath = pureRawDir
+            prefs.PureRawDir = pureRawDir
         end
         if ( prefs.PureRawExe==nil or prefs.PureRawExe:len() ==0) then
             prefs.PureRawExe="PureRawv1.exe"
@@ -83,7 +83,7 @@ local function init()
         prefs.export_destinationPathSuffix="LR2PureRAW"
     end
     if ( prefs.export_destinationType==nil or prefs.export_destinationType:len() ==0) then
-        prefs.export_destinationType="picutures"
+        prefs.export_destinationType="pictures"
     end
     if ( prefs.export_useParentFolder==nil) then
         prefs.export_useParentFolder=false

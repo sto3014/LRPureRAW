@@ -11,7 +11,7 @@
 "$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Select executable"
 "$$$/LRPureRaw/MenuAction/Export=Export to DxO PureRAW"
 "$$$/LRPurePath/Settings/PureRawExe/MAC=Executable"
-"$$$/LRPurePath/Init/Failed=Zusatzmodul PureRaw could not be initialised."
+"$$$/LRPurePath/Init/Failed=Plugin PureRaw could not be initialised."
 "$$$/LRPurePath/Settings/BadSettings/message=One more more settings have wrong values:^1"
 "$$$/LRPureRaw/Settings/SelectDxOPureRawExe/MAC=Select executable"
 "$$$/LRPureRaw/Settings/NotAnApp=Selected file is not an application."

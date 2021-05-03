@@ -11,7 +11,7 @@
 "$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Auswahl Programm-Datei"
 "$$$/LRPureRaw/MenuAction/Export=Ausgabe für DxO PureRAW"
 "$$$/LRPurePath/Settings/PureRawExe/MAC=Ausführbare Datei"
-"$$$/LRPurePath/Init/Failed=PureRaw konnte nicht initialisiert werden."
+"$$$/LRPurePath/Init/Failed=Plugin PureRaw konnte nicht initialisiert werden."
 "$$$/LRPurePath/Settings/BadSettings/message=Ein oder mehrere Einstellungen haben falsche Werte:^1"
 "$$$/LRPureRaw/Settings/SelectDxOPureRawExe/MAC=Auswahl ausführbare Datei"
 "$$$/LRPureRaw/Settings/SelectDxOPureRawExe/WIN=Auswahl ausführbare Datei"

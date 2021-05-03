@@ -1,7 +1,7 @@
 s = {
-	id = "A8647FA8-8B20-4DA3-8625-BDA58F6C242D",
-	internalName = "DxO PureRAW",
-	title = "DxO PureRAW (only)",
+	id = "6C63A9A7-5A12-46B2-9953-1FD14A6129CF",
+	internalName = "DxO PureRAW (excluded)",
+	title = "PureRAW (excluded)",
 	type = "LibraryFilter",
 	value = {
 		columnBrowserActive = false,
@@ -37,7 +37,7 @@ s = {
 		noLabel = false,
 		pick = "<nil>",
 		ratingOp = ">=",
-		searchOp = "any",
+		searchOp = "noneOf",
 		searchString = "DxO PureRAW",
 		searchStringActive = true,
 		searchTarget = "exif",
