@@ -1,0 +1,48 @@
+s = {
+	id = "A8647FA8-8B20-4DA3-8625-BDA58F6C242D",
+	internalName = "DxO PureRAW",
+	title = "DxO PureRAW (only)",
+	type = "LibraryFilter",
+	value = {
+		columnBrowserActive = false,
+		columnBrowserDesc = {
+			{
+				criteria = "dateHierarchy",
+			},
+			{
+				criteria = "camera",
+			},
+			{
+				criteria = "lens",
+			},
+			{
+				criteria = "label",
+			},
+		},
+		customLabel = false,
+		edit = "<nil>",
+		filtersActive = true,
+		gpsLocation = false,
+		gpsLocationNELatitude = 48.415137011147,
+		gpsLocationNELongitude = 14.30394549231,
+		gpsLocationSWLatitude = 48.391290193788,
+		gpsLocationSWLongitude = 14.23854250769,
+		label1 = false,
+		label2 = false,
+		label3 = false,
+		label4 = false,
+		label5 = false,
+		labelOp = "any",
+		minRating = "<nil>",
+		noLabel = false,
+		pick = "<nil>",
+		ratingOp = ">=",
+		searchOp = "any",
+		searchString = "DxO PureRAW",
+		searchStringActive = true,
+		searchTarget = "exif",
+		usage = "<nil>",
+		whichCopies = "<nil>",
+	},
+	version = 0,
+}

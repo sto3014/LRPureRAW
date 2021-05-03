@@ -8,25 +8,29 @@ return {
     LrInitPlugin = "InitProvider.lua",
     LrPluginInfoProvider = "InfoProvider.lua",
     LrExportServiceProvider = {
-        title = "PureRaw",
+        title = "DxO PureRAW",
         file = "PureRawExportServiceProvider.lua",
     },
-
+    LrExportMenuItems = {
+        title = "$$$/LRPureRaw/MenuAction/Export=Export to DxO PureRAW",
+        file = "ExportToDxOPureRAWMenuAction.lua",
+        enabledWhen = "photosSelected"
+    },
     VERSION = { major = 1, minor = 0, revision = 0, build = 0, },
 
     settingsSections = function(LrView, prefs)
-
         local LrDialogs = import("LrDialogs")
         local LrPathUtils = import("LrPathUtils")
         local LrFileUtils = import("LrFileUtils")
         local viewFactory = LrView.osFactory()
-
+        local LrPrefs = import("LrPrefs")
         if (MAC_ENV) then
             -- PureRawPath_Title
-            prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/MAC=Path to DxO PureRAW")
+            prefs.PureRawDir_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/MAC=DxO PureRAW directory")
+            prefs.PureRawExe_Title = LOC("$$$/LRPurePath/Settings/PureRawExe/MAC=Executable")
         else
             -- PureRawPath_Title
-            prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/WIN=Path to DxO PureRAW")
+            prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/WIN=DxO PureRAW executable")
         end
 
         local bind = LrView.bind
@@ -58,27 +62,17 @@ return {
                             local startDir
                             startDir = LrPathUtils.parent(LrPathUtils.parent(prefs.PureRawPath) or "")
                             local pureRawPath = LrDialogs.runOpenPanel({
-                                title = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Select DxO PureRAW program"),
-                                prompt = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Select DxO PureRAW program"),
-                                canChooseFiles = false,
-                                canChooseDirectories = true,
+                                title = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Select executable"),
+                                prompt = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/WIN=Select executable"),
+                                canChooseFiles = true,
+                                canChooseDirectories = false,
                                 allowsMultipleSelection = false,
                                 initialDirectory = startDir
                             })
                             if type(pureRawPath) == "table" and #pureRawPath > 0 then
-                                local pureRawExe
-                                local newToolPath
-                                pureRawExe = "PureRawv1.exe"
-                                if (pureRawPath[1].match("(?i)DxO PureRAW$")) then
-                                        newToolPath = LrPathUtils.child(pureRawPath[1], pureRawExe)
-                                else
-                                    newToolPath = LrPathUtils.child(pureRawPath[1], 'DxO/DxO PureRAW/' .. pureRawExe)
-                                end
-                                 if LrFileUtils.exists(newToolPath) == "file" then
-                                    prefs.PureRawPath = newToolPath
-                                else
-                                    LrDialogs.message(LOC("$$$/LRPureRaw/Settings/BadPath=Path is incorrect"), LOC("$$$/LRPureRaw/Settings/NoExe=The folder chosen does not contain ^1.", pureRawExe), "critical")
-                                end
+                                prefs.PureRawPath = pureRawPath[1]
+                                prefs.PureRawExe = LrPathUtils.leafName(pureRawPath[1])
+                                prefs.PureRawDir = LrPathUtils.parent(pureRawPath[1])
                             end
                         end
                     })
@@ -94,13 +88,13 @@ return {
                 -- Path to pureraw
                 viewFactory:row({
                     viewFactory:static_text({
-                        title = bind("PureRawPath_Title"),
+                        title = bind("PureRawDir_Title"),
                         width_in_chars = 19,
                         -- fill_horizontal = 1,
                         -- height_in_lines = -1
                     }),
                     viewFactory:edit_field({
-                        value = LrView.bind("PureRawPath"),
+                        value = LrView.bind("PureRawDir"),
                         fill_horizontal = 1,
                         enabled = false
                     }),
@@ -108,8 +102,8 @@ return {
                         title = "...",
                         action = function()
                             local startDir
-                            startDir = LrPathUtils.parent(LrPathUtils.parent(LrPathUtils.parent(LrPathUtils.parent(prefs.PureRawPath) or "")))
-                            local pureRawPath = LrDialogs.runOpenPanel({
+                            startDir = LrPathUtils.parent(prefs.PureRawDir) or ""
+                            local pureRawDir = LrDialogs.runOpenPanel({
                                 title = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/MAC=Select DxO PureRAW application"),
                                 prompt = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRaw/MAC=Select DxO PureRAW application"),
                                 canChooseFiles = true,
@@ -117,23 +111,64 @@ return {
                                 allowsMultipleSelection = false,
                                 initialDirectory = startDir
                             })
-                            if type(pureRawPath) == "table" and #pureRawPath > 0 then
-                                local pureRawExe
-                                local newToolPath
-                                pureRawExe = "PureRawv1"
-                                if (pureRawPath[1].match("(?i)DxO PureRAW\.app$")) then
-                                    newToolPath = LrPathUtils.child(pureRawPath[1], '/Contents/MacOS/' .. pureRawExe)
-                                else
-                                    newToolPath = LrPathUtils.child(pureRawPath[1], 'DxO PureRAW.app/Contents/MacOS/' .. pureRawExe)
-                                end
-                                if LrFileUtils.exists(newToolPath) == "file" then
+
+                            if type(pureRawDir) == "table" and #pureRawDir > 0 then
+                                if (string.find(pureRawDir[1], ".app") ~= nil) then
+                                    local pureRawExe = prefs.PureRawExe
+                                    local newToolPath = pureRawDir[1] .. "/Contents/MacOS/" .. pureRawExe
+                                    prefs.PureRawDir = pureRawDir[1]
                                     prefs.PureRawPath = newToolPath
+                                    if LrFileUtils.exists(newToolPath) ~= "file" then
+                                        prefs.hasErrors=true
+                                        LrDialogs.message(LOC("$$$/LRPureRaw/Settings/NoFile=File not found"), LOC("$$$/LRPureRaw/Settings/NoExe=The folder chosen does not contain ^1.", pureRawExe), critical)
+                                    end
+                                else
+                                    LrDialogs.message(LOC("$$$/LRPureRaw/Settings/BadPath=Path is incorrect"), LOC("$$$/LRPureRaw/Settings/NotAnApp=Selected file is not an application."), critical)
+                                end
+
+                            end
+                        end
+                    })
+                }),
+                -- Name of executable
+                viewFactory:row({
+                    viewFactory:static_text({
+                        title = bind("PureRawExe_Title"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    viewFactory:edit_field({
+                        value = LrView.bind("PureRawExe"),
+                        fill_horizontal = 1,
+                        enabled = false
+                    }),
+                    viewFactory:push_button({
+                        title = "...",
+                        action = function()
+                            local startDir
+                            startDir = prefs.PureRawDir or ""
+                            local pureRawExe = LrDialogs.runOpenPanel({
+                                title = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRawExe/MAC=Select executable"),
+                                prompt = LOC("$$$/LRPureRaw/Settings/SelectDxOPureRawExe/MAC=Select executable"),
+                                canChooseFiles = true,
+                                canChooseDirectories = false,
+                                allowsMultipleSelection = false,
+                                initialDirectory = startDir
+                            })
+                            -- prefs.PureRawExe = LrPathUtils.leafName(pureRawExe[1])
+                            if type(pureRawExe) == "table" and #pureRawExe > 0 then
+                                if LrFileUtils.exists(pureRawExe[1]) == "file" then
+                                    prefs.PureRawExe = LrPathUtils.leafName(pureRawExe[1])
+                                    prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. pureRawExe
                                 else
                                     LrDialogs.message(LOC("$$$/LRPureRaw/Settings/BadPath=Path is incorrect"), LOC("$$$/LRPureRaw/Settings/NoExe=The folder chosen does not contain ^1.", pureRawExe), "critical")
                                 end
                             end
+
                         end
                     })
+
                 }),
             }
         end
