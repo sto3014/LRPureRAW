@@ -125,8 +125,8 @@ local function init()
     if ( prefs.resetRating==nil or prefs.resetRating:len()==0) then
         prefs.resetRating="off"
     end
-    if ( prefs.resetPickStatus==nil or prefs.resetPickStatus:len()==0) then
-        prefs.resetPickStatus="off"
+    if ( prefs.resetPickStatus==nil) then
+        prefs.resetPickStatus=100
     end
 
     logger:trace("Init done.")

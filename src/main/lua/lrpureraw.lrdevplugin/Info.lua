@@ -248,10 +248,10 @@ return {
                         viewFactory:popup_menu {
                             value = bind("resetPickStatus"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
-                                { title = "off", value = 'off' },
-                                { title = "flagged", value = '1' },
-                                { title = "unflagged", value = '0' },
-                                { title = "rejected", value = '-1' },
+                                { title = "off", value = 100 },
+                                { title = "flagged", value = 1 },
+                                { title = "unflagged", value = 0 },
+                                { title = "rejected", value = -1 },
                             }
                         },
                     },

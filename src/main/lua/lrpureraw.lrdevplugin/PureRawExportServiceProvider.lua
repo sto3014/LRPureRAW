@@ -2,7 +2,6 @@ local LrTasks = import 'LrTasks'
 local LrLogger = import("LrLogger")
 local LrPrefs = import("LrPrefs")
 local logger = LrLogger("PureRawLrLogger")
-local LrApplication = import 'LrApplication'
 
 logger:enable("logfile")
 
@@ -51,6 +50,7 @@ local function postProcessRenderedPhotos(functionContext,
     local exportSession = exportContext.exportSession
     local exportSettings = assert(exportContext.propertyTable)
     local catalog = exportSession.catalog
+
     logger:trace("Export format is " .. exportSettings.LR_format)
     local images = ""
     logger:trace("Renditions: " .. exportSession:countRenditions())

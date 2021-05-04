@@ -3,6 +3,7 @@
 --- Created by dieterstockhausen.
 --- DateTime: 04.05.21 22:00
 ---
+local LrApplication = import 'LrApplication'
 local LrLogger = import("LrLogger")
 local logger = LrLogger("PureRawLrLogger")
 logger:enable("logfile")
@@ -10,6 +11,17 @@ logger:enable("logfile")
 local PureRawExportFilterProvider = {}
 function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
     logger:trace("shouldRenderPhoto")
+    local catalog = LrApplication.activeCatalog()
+    local tp = catalog:getTargetPhoto()
+    if ( tp == nil) then
+        logger:trace("Nothing selected." )
+        return false
+    end
+    local fileFormat = photo:getRawMetadata("fileFormat")
+    logger:trace("Filetype for " .. photo:getFormattedMetadata("fileName") .. ": ".. fileFormat)
+    if ( fileFormat ~= "DNG" and fileFormat ~= "RAW") then
+        return false
+    end
     local software = photo:getFormattedMetadata('software')
     logger:trace("Software: " .. software)
     shouldRender = software ~= "DxO PureRAW"
