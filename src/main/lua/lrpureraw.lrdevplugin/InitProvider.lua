@@ -119,6 +119,16 @@ local function init()
         prefs.collisionHandling="overwrite"
     end
 
+    if ( prefs.resetColorLabel==nil or prefs.resetColorLabel:len()==0) then
+        prefs.resetColorLabel="off"
+    end
+    if ( prefs.resetRating==nil or prefs.resetRating:len()==0) then
+        prefs.resetRating="off"
+    end
+    if ( prefs.resetPickStatus==nil or prefs.resetPickStatus:len()==0) then
+        prefs.resetPickStatus="off"
+    end
+
     logger:trace("Init done.")
 end
 

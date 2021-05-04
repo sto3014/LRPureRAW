@@ -14,8 +14,14 @@ return {
     LrExportMenuItems = {
         title = "$$$/LRPureRaw/MenuAction/Export=Export to DxO PureRAW",
         file = "ExportToDxOPureRAWMenuAction.lua",
-        enabledWhen = "photosSelected"
+        enabledWhen = "photosSelected",
     },
+    LrExportFilterProvider = {
+            title = "DxO PureRAW", -- the string that appears in the export filter section of the export dialog in LR
+            file = 'PureRawExportFilterProvider.lua', -- name of the file containing the filter definition script
+            id = "noRejected",  -- unique identifier for export filter
+    },
+
     VERSION = { major = 1, minor = 0, revision = 0, build = 0, },
 
     settingsSections = function(LrView, prefs)
@@ -77,6 +83,30 @@ return {
                         end
                     })
                 }),
+                viewFactory:row({
+                    viewFactory:group_box {
+                        title = "Popup Menu",
+                        fill_horizontal = 1,
+                        spacing = viewFactory:control_spacing(),
+                        viewFactory:popup_menu {
+                            value = bind("resetColorLabel"), -- current value bound to same key as static text
+                            items = { -- the menu items and their values
+                                { title = "not used", value = 'ignore' },
+                                { title = "red", value = '1' },
+                                { title = "yellow", value = '2' },
+                                { title = "green", value = '3' },
+                                { title = "blue", value = '4' },
+                                { title = "purple", value = '6' },
+                                { title = "purple", value = '6' },
+                                { title = "custom", value = 'custom' },
+                            }
+                        },
+                        viewFactory:static_text {
+                            fill_horizontal = 1,
+                            title = bind("resetColorLabel"), -- bound to same key as current selection
+                        },
+                    },
+                }),
             }
         else
             --
@@ -119,7 +149,7 @@ return {
                                     prefs.PureRawDir = pureRawDir[1]
                                     prefs.PureRawPath = newToolPath
                                     if LrFileUtils.exists(newToolPath) ~= "file" then
-                                        prefs.hasErrors=true
+                                        prefs.hasErrors = true
                                         LrDialogs.message(LOC("$$$/LRPureRaw/Settings/NoFile=File not found"), LOC("$$$/LRPureRaw/Settings/NoExe=The folder chosen does not contain ^1.", pureRawExe), critical)
                                     end
                                 else
@@ -169,6 +199,62 @@ return {
                         end
                     })
 
+                }),
+                viewFactory:row({
+                    viewFactory:static_text({
+                        title = "Reset metadata",
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    viewFactory:group_box {
+                        title = "Color label",
+                        fill_horizontal = 1,
+                        spacing = viewFactory:control_spacing(),
+                        viewFactory:popup_menu {
+                            value = bind("resetColorLabel"), -- current value bound to same key as static text
+                            items = { -- the menu items and their values
+                                { title = "off", value = 'off' },
+                                { title = "none", value = 'none' },
+                                { title = "red", value = 'red' },
+                                { title = "yellow", value = 'yellow' },
+                                { title = "green", value = 'green' },
+                                { title = "blue", value = 'blue' },
+                                { title = "purple", value = 'purple' },
+                            }
+                        },
+                    },
+                    viewFactory:group_box {
+                        title = "Rating",
+                        fill_horizontal = 1,
+                        spacing = viewFactory:control_spacing(),
+                        viewFactory:popup_menu {
+                            value = bind("resetRating"), -- current value bound to same key as static text
+                            items = { -- the menu items and their values
+                                { title = "off", value = 'off' },
+                                { title = "0", value = "0" },
+                                { title = "1", value = '1' },
+                                { title = "2", value = '2' },
+                                { title = "3", value = '3' },
+                                { title = "4", value = '4' },
+                                { title = "5", value = '5' },
+                            }
+                        },
+                    },
+                    viewFactory:group_box {
+                        title = "Pick Status",
+                        fill_horizontal = 1,
+                        spacing = viewFactory:control_spacing(),
+                        viewFactory:popup_menu {
+                            value = bind("resetPickStatus"), -- current value bound to same key as static text
+                            items = { -- the menu items and their values
+                                { title = "off", value = 'off' },
+                                { title = "flagged", value = '1' },
+                                { title = "unflagged", value = '0' },
+                                { title = "rejected", value = '-1' },
+                            }
+                        },
+                    },
                 }),
             }
         end
