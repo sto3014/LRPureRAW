@@ -5,6 +5,14 @@ s = {
 	type = "Export",
 	value = {
 		collisionHandling = "overwrite",
+		exportFilters = {
+			{
+				id = "at.homebrew.lrpureraw",
+				pluginId = "at.homebrew.lrpureraw",
+				pluginName = "PureRAW",
+				title = "DxO PureRAW",
+			},
+		},
 		exportServiceProvider = "at.homebrew.lrpureraw",
 		exportServiceProviderTitle = "DxO PureRAW",
 		export_colorSpace = "AdobeRGB",

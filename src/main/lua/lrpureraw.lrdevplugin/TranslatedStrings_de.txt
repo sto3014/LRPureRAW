@@ -17,3 +17,7 @@
 "$$$/LRPureRaw/Settings/SelectDxOPureRawExe/WIN=Auswahl ausführbare Datei"
 "$$$/LRPureRaw/Settings/NotAnApp=Gewählte Datei ist keine Applikation."
 "$$$/LRPureRaw/Settings/NoFile=Datei nicht gefunden."
+"$$$/LRPurePath/Filter/Title=Filter für gültige Fotos"
+"$$$/LRPurePath/Filter=Gültige Fotos"
+"$$$/LRPureRaw/Filter/Descr=Nur noch nicht behandelte RAW und DNG Fotos werden verarbeitet."
+"$$$/LRPurePath/Reset/Title=Setzen nach Export"

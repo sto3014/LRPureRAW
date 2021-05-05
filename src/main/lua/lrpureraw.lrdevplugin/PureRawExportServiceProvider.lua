@@ -2,15 +2,19 @@ local LrTasks = import 'LrTasks'
 local LrLogger = import("LrLogger")
 local LrPrefs = import("LrPrefs")
 local logger = LrLogger("PureRawLrLogger")
+-------------------------------------------------------------------------------
 
 logger:enable("logfile")
-
 -- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
---
 -- LrMobdebug.start()
---
 
-local function updateExportSettings (exportSettings)
+-------------------------------------------------------------------------------
+
+local PureRawExportServiceProvider = {}
+
+-------------------------------------------------------------------------------
+
+function PureRawExportServiceProvider.updateExportSettings (exportSettings)
     logger:trace("updateExportSettings")
     if (exportSettings.LR_format ~= "ORIGINAL" and exportSettings.LR_format ~= "DNG") then
         logger:trace("Init export format with value ORIGINAL")
@@ -32,10 +36,11 @@ local function updateExportSettings (exportSettings)
     prefs.DNG_lossyCompression = exportSettings.LR_DNG_lossyCompression
     prefs.collisionHandling = exportSettings.LR_collisionHandling
 end
---
 
-local function postProcessRenderedPhotos(functionContext,
-                                         exportContext)
+-------------------------------------------------------------------------------
+
+function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
+                                                            exportContext)
 
     --LrMobdebug.on()
     prefs = LrPrefs.prefsForPlugin()
@@ -87,26 +92,32 @@ local function postProcessRenderedPhotos(functionContext,
         if (WIN_ENV) then
             cmd = '"start /wait /min "DxO PureRAW" ' .. cmd
         end
-        logger:trace("Execute " .. cmd)
+        logger:trace("Command line length: " .. cmd:len())
+        logger:trace("Execute: " .. cmd)
         local status = LrTasks.execute(cmd)
     end
 end
 
---
-return {
-    updateExportSettings = updateExportSettings,
-    processRenderedPhotos = postProcessRenderedPhotos,
-    allowFileFormats = {
-        "ORIGINAL",
-        "DNG",
-    },
-    hideSections = {
-        "postProcessing",
-        "video",
-        "watermarking",
-        "fileNaming",
-        "imageSettings",
-        "outputSharpening",
-        "metadata",
-    },
+-------------------------------------------------------------------------------
+
+PureRawExportServiceProvider.allowFileFormats = {
+    "ORIGINAL",
+    "DNG",
 }
+
+-------------------------------------------------------------------------------
+
+PureRawExportServiceProvider.hideSections = {
+    "postProcessing",
+    "video",
+    "watermarking",
+    "fileNaming",
+    "imageSettings",
+    "outputSharpening",
+    "metadata",
+}
+
+-------------------------------------------------------------------------------
+
+return PureRawExportServiceProvider
+

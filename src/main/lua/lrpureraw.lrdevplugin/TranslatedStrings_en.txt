@@ -16,3 +16,7 @@
 "$$$/LRPureRaw/Settings/SelectDxOPureRawExe/MAC=Select executable"
 "$$$/LRPureRaw/Settings/NotAnApp=Selected file is not an application."
 "$$$/LRPureRaw/Settings/NoFile=File not found"
+"$$$/LRPurePath/Filter/Title=Filter for valid photos"
+"$$$/LRPurePath/Filter=Valid photos"
+"$$$/LRPureRaw/Filter/Descr=Only unprocessed RAW and DNG photos will pass."
+"$$$/LRPurePath/Reset/Title=Set after export"

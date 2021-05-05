@@ -17,7 +17,7 @@ return {
         enabledWhen = "photosSelected",
     },
     LrExportFilterProvider = {
-            title = "DxO PureRAW", -- the string that appears in the export filter section of the export dialog in LR
+            title = LOC("$$$/LRPurePath/Filter=Valid photos"),
             file = 'PureRawExportFilterProvider.lua', -- name of the file containing the filter definition script
             id = "noRejected",  -- unique identifier for export filter
     },
@@ -39,6 +39,7 @@ return {
             prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/WIN=DxO PureRAW executable")
         end
 
+        prefs.resetMetaData_Title = LOC("$$$/LRPurePath/Reset/Title=Set after export")
         local bind = LrView.bind
         --
         -- Windows
@@ -202,7 +203,7 @@ return {
                 }),
                 viewFactory:row({
                     viewFactory:static_text({
-                        title = "Reset metadata",
+                        title = bind("resetMetaData_Title"),
                         width_in_chars = 19,
                         -- fill_horizontal = 1,
                         -- height_in_lines = -1
