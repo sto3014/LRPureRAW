@@ -17,9 +17,9 @@ return {
         enabledWhen = "photosSelected",
     },
     LrExportFilterProvider = {
-            title = LOC("$$$/LRPurePath/Filter=Valid photos"),
-            file = 'PureRawExportFilterProvider.lua', -- name of the file containing the filter definition script
-            id = "noRejected",  -- unique identifier for export filter
+        title = LOC("$$$/LRPurePath/Filter=Valid photos"),
+        file = 'PureRawExportFilterProvider.lua', -- name of the file containing the filter definition script
+        id = "noRejected", -- unique identifier for export filter
     },
 
     VERSION = { major = 1, minor = 0, revision = 0, build = 0, },
@@ -40,6 +40,7 @@ return {
         end
 
         prefs.resetMetaData_Title = LOC("$$$/LRPurePath/Reset/Title=Set after export")
+
         local bind = LrView.bind
         --
         -- Windows
@@ -105,6 +106,62 @@ return {
                         viewFactory:static_text {
                             fill_horizontal = 1,
                             title = bind("resetColorLabel"), -- bound to same key as current selection
+                        },
+                    },
+                }),
+                viewFactory:row({
+                    viewFactory:static_text({
+                        title = bind("resetMetaData_Title"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    viewFactory:group_box {
+                        title = LOC("$$$/LRPureRaw/Reset/label=Color Label"),
+                        fill_horizontal = 1,
+                        spacing = viewFactory:control_spacing(),
+                        viewFactory:popup_menu {
+                            value = bind("resetColorLabel"), -- current value bound to same key as static text
+                            items = { -- the menu items and their values
+                                { title = LOC("$$$/LRPureRaw/Reset/off=Off"), value = 'off' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/none=None"), value = 'none' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/red=Red"), value = 'red' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/yellow=Yellow"), value = 'yellow' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/green=Green"), value = 'green' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/blue=Blue"), value = 'blue' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/purple=Purple"), value = 'purple' },
+                            }
+                        },
+                    },
+                    viewFactory:group_box {
+                        title = LOC("$$$/LRPureRaw/Reset/rating=Rating"),
+                        fill_horizontal = 1,
+                        spacing = viewFactory:control_spacing(),
+                        viewFactory:popup_menu {
+                            value = bind("resetRating"), -- current value bound to same key as static text
+                            items = { -- the menu items and their values
+                                { title = LOC("$$$/LRPureRaw/Reset/off=Off"), value = 'off' },
+                                { title = "0", value = "0" },
+                                { title = "1", value = '1' },
+                                { title = "2", value = '2' },
+                                { title = "3", value = '3' },
+                                { title = "4", value = '4' },
+                                { title = "5", value = '5' },
+                            }
+                        },
+                    },
+                    viewFactory:group_box {
+                        title = LOC("$$$/LRPureRaw/Reset/pickstatus=Flag"),
+                        fill_horizontal = 1,
+                        spacing = viewFactory:control_spacing(),
+                        viewFactory:popup_menu {
+                            value = bind("resetPickStatus"), -- current value bound to same key as static text
+                            items = { -- the menu items and their values
+                                { title = LOC("$$$/LRPureRaw/Reset/off=Off"), value = 100 },
+                                { title = LOC("$$$/LRPureRaw/Reset/Pick/flagged=Flagged"), value = 1 },
+                                { title = LOC("$$$/LRPureRaw/Reset/Pick/unflagged=Unflagged"), value = 0 },
+                                { title = LOC("$$$/LRPureRaw/Reset/Pick/rejected=Rejected"), value = -1 },
+                            }
                         },
                     },
                 }),
@@ -209,30 +266,30 @@ return {
                         -- height_in_lines = -1
                     }),
                     viewFactory:group_box {
-                        title = "Color label",
+                        title = LOC("$$$/LRPureRaw/Reset/label=Color Label"),
                         fill_horizontal = 1,
                         spacing = viewFactory:control_spacing(),
                         viewFactory:popup_menu {
                             value = bind("resetColorLabel"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
-                                { title = "off", value = 'off' },
-                                { title = "none", value = 'none' },
-                                { title = "red", value = 'red' },
-                                { title = "yellow", value = 'yellow' },
-                                { title = "green", value = 'green' },
-                                { title = "blue", value = 'blue' },
-                                { title = "purple", value = 'purple' },
+                                { title = LOC("$$$/LRPureRaw/Reset/off=Off"), value = 'off' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/none=None"), value = 'none' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/red=Red"), value = 'red' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/yellow=Yellow"), value = 'yellow' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/green=Green"), value = 'green' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/blue=Blue"), value = 'blue' },
+                                { title = LOC("$$$/LRPureRaw/Reset/Label/purple=Purple"), value = 'purple' },
                             }
                         },
                     },
                     viewFactory:group_box {
-                        title = "Rating",
+                        title = LOC("$$$/LRPureRaw/Reset/rating=Rating"),
                         fill_horizontal = 1,
                         spacing = viewFactory:control_spacing(),
                         viewFactory:popup_menu {
                             value = bind("resetRating"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
-                                { title = "off", value = 'off' },
+                                { title = LOC("$$$/LRPureRaw/Reset/off=Off"), value = 'off' },
                                 { title = "0", value = "0" },
                                 { title = "1", value = '1' },
                                 { title = "2", value = '2' },
@@ -243,16 +300,16 @@ return {
                         },
                     },
                     viewFactory:group_box {
-                        title = "Pick Status",
+                        title = LOC("$$$/LRPureRaw/Reset/pickstatus=Flag"),
                         fill_horizontal = 1,
                         spacing = viewFactory:control_spacing(),
                         viewFactory:popup_menu {
                             value = bind("resetPickStatus"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
-                                { title = "off", value = 100 },
-                                { title = "flagged", value = 1 },
-                                { title = "unflagged", value = 0 },
-                                { title = "rejected", value = -1 },
+                                { title = LOC("$$$/LRPureRaw/Reset/off=Off"), value = 100 },
+                                { title = LOC("$$$/LRPureRaw/Reset/Pick/flagged=Flagged"), value = 1 },
+                                { title = LOC("$$$/LRPureRaw/Reset/Pick/unflagged=Unflagged"), value = 0 },
+                                { title = LOC("$$$/LRPureRaw/Reset/Pick/rejected=Rejected"), value = -1 },
                             }
                         },
                     },
