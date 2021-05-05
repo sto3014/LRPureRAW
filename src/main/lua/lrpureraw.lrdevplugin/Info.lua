@@ -86,30 +86,6 @@ return {
                     })
                 }),
                 viewFactory:row({
-                    viewFactory:group_box {
-                        title = "Popup Menu",
-                        fill_horizontal = 1,
-                        spacing = viewFactory:control_spacing(),
-                        viewFactory:popup_menu {
-                            value = bind("resetColorLabel"), -- current value bound to same key as static text
-                            items = { -- the menu items and their values
-                                { title = "not used", value = 'ignore' },
-                                { title = "red", value = '1' },
-                                { title = "yellow", value = '2' },
-                                { title = "green", value = '3' },
-                                { title = "blue", value = '4' },
-                                { title = "purple", value = '6' },
-                                { title = "purple", value = '6' },
-                                { title = "custom", value = 'custom' },
-                            }
-                        },
-                        viewFactory:static_text {
-                            fill_horizontal = 1,
-                            title = bind("resetColorLabel"), -- bound to same key as current selection
-                        },
-                    },
-                }),
-                viewFactory:row({
                     viewFactory:static_text({
                         title = bind("resetMetaData_Title"),
                         width_in_chars = 19,
