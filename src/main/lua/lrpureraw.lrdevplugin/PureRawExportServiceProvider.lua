@@ -48,7 +48,7 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
         return
     end
 
-    logger:trace("Start postProcessRenderedPhotos")
+    logger:trace("Start processRenderedPhotos")
     pureRawPath = prefs.PureRawPath
     pureRawExe = prefs.PureRawExe
 

@@ -56,6 +56,6 @@ LrTasks.startAsyncTask(function()
             photosToExport = filmstrip
         })
         exportSession:doExportOnCurrentTask()
-        
+
     end
 end)
