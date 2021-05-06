@@ -6,22 +6,38 @@
 --
 local logger = require("Logger")
 
-
 InitProvider = {
     vInfo = require("Info.lua")
 }
 local function resetPrefs()
     local LrPrefs = import("LrPrefs")
     local prefs = LrPrefs.prefsForPlugin()
+    prefs.hasErrors=nil
     prefs.PureRawPath = nil
     prefs.PureRawDir = nil
     prefs.PureRawExe = nil
-
+    prefs.export_destinationPathPrefix = nil
+    prefs.export_destinationPathSuffix = nil
+    prefs.export_destinationType = nil
+    prefs.export_useParentFolder = nil
+    prefs.export_useSubfolder = nil
+    prefs.format = nil
+    prefs.DNG_compatibilityV3 = nil
+    prefs.DNG_conversionMethod = nil
+    prefs.DNG_previewSize = nil
+    prefs.DNG_compressed = nil
+    prefs.DNG_embedCache = nil
+    prefs.DNG_embedRAW = nil
+    prefs.DNG_lossyCompression = nil
+    prefs.collisionHandling = nil
+    prefs.resetColorLabel = nil
+    prefs.resetRating = nil
+    prefs.resetPickStatus = nil
 end
 
 local function init()
-    local LrPrefs = import("LrPrefs")
-    local LrFileUtils = import("LrFileUtils")
+    local LrPrefs = import "LrPrefs"
+    local LrFileUtils = import "LrFileUtils"
     local LrDialogs = import "LrDialogs"
 
     -- resetPrefs()
@@ -41,8 +57,8 @@ local function init()
             pureRawDir = '/Applications/DxO PureRAW.app'
             prefs.PureRawDir = pureRawDir
         end
-        if ( prefs.PureRawExe==nil or prefs.PureRawExe:len() ==0) then
-            prefs.PureRawExe="PureRawv1"
+        if (prefs.PureRawExe == nil or prefs.PureRawExe:len() == 0) then
+            prefs.PureRawExe = "PureRawv1"
         end
         prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
     else
@@ -53,8 +69,8 @@ local function init()
             pureRawDir = 'C:\\Program Files\\DxO\\DxO PureRAW'
             prefs.PureRawDir = pureRawDir
         end
-        if ( prefs.PureRawExe==nil or prefs.PureRawExe:len() ==0) then
-            prefs.PureRawExe="PureRawv1.exe"
+        if (prefs.PureRawExe == nil or prefs.PureRawExe:len() == 0) then
+            prefs.PureRawExe = "PureRawv1.exe"
         end
         prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
     end
@@ -73,57 +89,57 @@ local function init()
         LrDialogs.message(LOC("$$$/LRPurePath/Init/Failed=PureRaw could not be initialised."), LOC("$$$/LRPurePath/Settings/BadSettings/message=One more more settings have wrong values:^1", errorMessage), "critical")
     end
 
-    if ( prefs.export_destinationPathPrefix==nil or prefs.export_destinationPathPrefix:len() ==0) then
-        prefs.export_destinationPathPrefix=""
+    if (prefs.export_destinationPathPrefix == nil or prefs.export_destinationPathPrefix:len() == 0) then
+        prefs.export_destinationPathPrefix = ""
     end
-    if ( prefs.export_destinationPathSuffix==nil or prefs.export_destinationPathSuffix:len() ==0) then
-        prefs.export_destinationPathSuffix="LR2PureRAW"
+    if (prefs.export_destinationPathSuffix == nil or prefs.export_destinationPathSuffix:len() == 0) then
+        prefs.export_destinationPathSuffix = "LR2PureRAW"
     end
-    if ( prefs.export_destinationType==nil or prefs.export_destinationType:len() ==0) then
-        prefs.export_destinationType="pictures"
+    if (prefs.export_destinationType == nil or prefs.export_destinationType:len() == 0) then
+        prefs.export_destinationType = "pictures"
     end
-    if ( prefs.export_useParentFolder==nil) then
-        prefs.export_useParentFolder=false
+    if (prefs.export_useParentFolder == nil) then
+        prefs.export_useParentFolder = false
     end
-    if ( prefs.export_useSubfolder==nil) then
-        prefs.export_useSubfolder=true
+    if (prefs.export_useSubfolder == nil) then
+        prefs.export_useSubfolder = true
     end
-    if ( prefs.format==nil or prefs.format:len()==0) then
-        prefs.format="ORIGINAL"
+    if (prefs.format == nil or prefs.format:len() == 0) then
+        prefs.format = "ORIGINAL"
     end
-    if ( prefs.DNG_compatibilityV3==nil) then
-        prefs.DNG_compatibilityV3=201588736
+    if (prefs.DNG_compatibilityV3 == nil) then
+        prefs.DNG_compatibilityV3 = 201588736
     end
-    if ( prefs.DNG_conversionMethod==nil or prefs.DNG_conversionMethod:len()==0) then
-        prefs.DNG_conversionMethod="preserveRAW"
+    if (prefs.DNG_conversionMethod == nil or prefs.DNG_conversionMethod:len() == 0) then
+        prefs.DNG_conversionMethod = "preserveRAW"
     end
-    if ( prefs.DNG_previewSize==nil or prefs.DNG_previewSize:len()==0) then
-        prefs.DNG_previewSize="medium"
+    if (prefs.DNG_previewSize == nil or prefs.DNG_previewSize:len() == 0) then
+        prefs.DNG_previewSize = "medium"
     end
-    if ( prefs.DNG_compressed==nil) then
-        prefs.DNG_compressed=true
+    if (prefs.DNG_compressed == nil) then
+        prefs.DNG_compressed = true
     end
-    if ( prefs.DNG_embedCache==nil) then
-        prefs.DNG_embedCache=true
+    if (prefs.DNG_embedCache == nil) then
+        prefs.DNG_embedCache = true
     end
-    if ( prefs.DNG_embedRAW==nil) then
-        prefs.DNG_embedRAW=false
+    if (prefs.DNG_embedRAW == nil) then
+        prefs.DNG_embedRAW = false
     end
-    if ( prefs.DNG_lossyCompression==nil) then
-        prefs.DNG_lossyCompression=true
+    if (prefs.DNG_lossyCompression == nil) then
+        prefs.DNG_lossyCompression = true
     end
-    if ( prefs.collisionHandling==nil or prefs.collisionHandling:len()==0) then
-        prefs.collisionHandling="overwrite"
+    if (prefs.collisionHandling == nil or prefs.collisionHandling:len() == 0) then
+        prefs.collisionHandling = "overwrite"
     end
 
-    if ( prefs.resetColorLabel==nil or prefs.resetColorLabel:len()==0) then
-        prefs.resetColorLabel="off"
+    if (prefs.resetColorLabel == nil or prefs.resetColorLabel:len() == 0) then
+        prefs.resetColorLabel = "off"
     end
-    if ( prefs.resetRating==nil or prefs.resetRating:len()==0) then
-        prefs.resetRating="off"
+    if (prefs.resetRating == nil or prefs.resetRating:len() == 0) then
+        prefs.resetRating = "off"
     end
-    if ( prefs.resetPickStatus==nil) then
-        prefs.resetPickStatus=100
+    if (prefs.resetPickStatus == nil) then
+        prefs.resetPickStatus = 100
     end
 
     logger.trace("Init done.")
