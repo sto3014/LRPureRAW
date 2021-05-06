@@ -1,11 +1,9 @@
 local LrView = import("LrView")
 local LrPrefs = import("LrPrefs")
-local LrLogger = import 'LrLogger'
-local logger = LrLogger('PureRawLrLogger') -- the log file name
-logger:enable("logfile")
+
 --local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
 --LrMobdebug.start()
-
+local logger = require("Logger")
 
 InfoProvider = {
     vInfo = require("Info.lua")
@@ -13,7 +11,7 @@ InfoProvider = {
 
 local function UpdateSettingsDialog(viewFactory, propertyTable)
     local prefs
-    logger:trace("UpdateSettingsDialog entered")
+    logger.trace("UpdateSettingsDialog entered")
     if _PLUGIN ~= nil and prefs == nil then
         prefs = LrPrefs.prefsForPlugin()
     else

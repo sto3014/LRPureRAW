@@ -6,9 +6,7 @@
 -------------------------------------------------------------------------------
 
 local LrApplication = import 'LrApplication'
-local LrLogger = import("LrLogger")
-local logger = LrLogger("PureRawLrLogger")
-logger:enable("logfile")
+local logger = require("Logger")
 
 -------------------------------------------------------------------------------
 
@@ -16,26 +14,27 @@ local PureRawExportFilterProvider = {}
 
 -------------------------------------------------------------------------------
 function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
-    logger:trace("shouldRenderPhoto")
+    logger.trace("start shouldRenderPhoto")
 
     -- if nothing was selected, nothing should be exported.
     local catalog = LrApplication.activeCatalog()
     local tp = catalog:getTargetPhoto()
     if ( tp == nil) then
-        logger:trace("Nothing selected." )
+        logger.trace("Nothing selected." )
         return false
     end
 
     -- only DNG and RAW are allowed
     local fileFormat = photo:getRawMetadata("fileFormat")
-    logger:trace("Filetype for " .. photo:getFormattedMetadata("fileName") .. ": ".. fileFormat)
+    logger.trace("Filetype for " .. photo:getFormattedMetadata("fileName") .. ": ".. fileFormat)
     if ( fileFormat ~= "DNG" and fileFormat ~= "RAW") then
+        logger.trace("Photo is not a DNG or RAW. Skipped." )
         return false
     end
 
     -- skipp if already processed
     local software = photo:getFormattedMetadata('software')
-    logger:trace("Software: " .. software)
+    logger.trace("Software: " .. software)
     shouldRender = software ~= "DxO PureRAW"
     return shouldRender
 end

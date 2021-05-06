@@ -4,11 +4,8 @@
 -- Date: 02.05.21
 -- To change this template use File | Settings | File Templates.
 --
-local LrLogger = import 'LrLogger'
+local logger = require("Logger")
 
--- Logger
-local logger = LrLogger('PureRawLrLogger') -- the log file name
-logger:enable("logfile")
 
 InitProvider = {
     vInfo = require("Info.lua")
@@ -29,7 +26,7 @@ local function init()
 
     -- resetPrefs()
 
-    logger:trace("Init...")
+    logger.trace("Init...")
     local prefs = LrPrefs.prefsForPlugin()
     prefs.hasErrors = false
 
@@ -62,7 +59,7 @@ local function init()
         prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
     end
 
-    logger:trace("PureRawPath: " .. prefs.PureRawPath .. " (" .. tostring(LrFileUtils.exists(prefs.PureRawPath)) .. ")")
+    logger.trace("PureRawPath: " .. prefs.PureRawPath .. " (" .. tostring(LrFileUtils.exists(prefs.PureRawPath)) .. ")")
 
     if (prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 or LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
         errorNo = errorNo + 1
@@ -72,7 +69,7 @@ local function init()
     end
 
     if (prefs.hasErrors) then
-        logger:trace("Has errors: \n" .. errorMessage)
+        logger.trace("Has errors: \n" .. errorMessage)
         LrDialogs.message(LOC("$$$/LRPurePath/Init/Failed=PureRaw could not be initialised."), LOC("$$$/LRPurePath/Settings/BadSettings/message=One more more settings have wrong values:^1", errorMessage), "critical")
     end
 
@@ -129,7 +126,7 @@ local function init()
         prefs.resetPickStatus=100
     end
 
-    logger:trace("Init done.")
+    logger.trace("Init done.")
 end
 
 init()

@@ -2,10 +2,8 @@ local LrApplication = import("LrApplication")
 local LrTasks = import("LrTasks")
 local LrExportSession = import("LrExportSession")
 local LrPrefs = import("LrPrefs")
-local LrLogger = import("LrLogger")
-local logger = LrLogger("PureRawLrLogger")
-logger:enable("logfile")
 
+local logger = require("Logger")
 local filterProvider = require("PureRawExportFilterProvider")
 local utils = require("Utils")
 
@@ -14,7 +12,7 @@ LrTasks.startAsyncTask(function()
     if prefs.hasErrors then
         return
     end
-    logger:trace("Exporting to DxO PureRAW")
+    logger.trace("Exporting to DxO PureRAW")
 
     local exportSettings = {
         LR_exportServiceProvider = "at.homebrew.lrpureraw",
