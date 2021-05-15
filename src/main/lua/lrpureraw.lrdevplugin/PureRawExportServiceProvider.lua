@@ -92,9 +92,11 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     end)
 
     if (images ~= "") then
-        cmd = 'open -a "' .. pureRawPath .. '"' .. images
+        local cmd = '"' .. pureRawPath .. '"' .. images
         if (WIN_ENV) then
             cmd = 'start ' .. cmd
+        else
+            cmd = 'open -a ' .. cmd
         end
         logger.trace("Command line length: " .. cmd:len())
         logger.trace("Execute: " .. cmd)
