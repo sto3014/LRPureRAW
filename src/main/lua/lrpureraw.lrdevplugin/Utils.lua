@@ -11,5 +11,13 @@ function Utils.arraySize(array)
     return count
 end
 -------------------------------------------------------------------------------
+function Utils.starts_with(str, start)
+    return str:sub(1, #start) == start
+end
+-------------------------------------------------------------------------------
+function Utils.ends_with(str, ending)
+    return ending == "" or str:sub(-#ending) == ending
+end
+-------------------------------------------------------------------------------
 
 return Utils

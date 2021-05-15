@@ -13,3 +13,13 @@ Creation.
 ### Added
 ### Changed
 ### Fixed
+
+## [1.0.1.0] - 2021-05-15
+
+Creation.
+
+### Added
+* Progress bar for export.
+* Export process does not wait for PureRaw to end.
+### Changed
+### Fixed

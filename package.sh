@@ -6,7 +6,7 @@ export TARGET_DIR_MAC="$SCRIPT_DIR/target/mac/Library/Application Support/Adobe/
 export TARGET_DIR_WIN="$SCRIPT_DIR/target/win/AppData/Roaming/Adobe/Lightroom"
 export SOURCE_DIR=$SCRIPT_DIR/src/main/lua/$PACKAGE_NAME.lrdevplugin
 export RESOURCE_DIR=$SCRIPT_DIR/res
-export VERSION=1.0.0
+export VERSION=1.0.1
 #
 # mac
 #

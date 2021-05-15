@@ -34,3 +34,6 @@
 "$$$/LRPureRaw/Reset/label=Farbmarkierung"
 "$$$/LRPureRaw/Reset/pickstatus=Markierung"
 "$$$/LRPureRaw/Reset/rating=Bewertung"
+
+"$$$/LRPurePath/ProgressMany=Exportiere ^1 Fotos für DxO PureRAW"
+"$$$/LRPurePath/ProgressOne=Exportiere ein Foto für DxO PureRAW"

@@ -34,3 +34,6 @@
 "$$$/LRPureRaw/Reset/pickstatus=Flag"
 "$$$/LRPureRaw/Reset/rating=Rating"
 
+"$$$/LRPurePath/ProgressMany=Export ^1 photos for DxO PureRAW"
+"$$$/LRPurePath/ProgressOne=Export one photo for DxO PureRAW"
+

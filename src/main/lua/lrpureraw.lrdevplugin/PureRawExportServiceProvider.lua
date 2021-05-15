@@ -54,7 +54,12 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     local exportSession = exportContext.exportSession
     local exportSettings = assert(exportContext.propertyTable)
     local catalog = exportSession.catalog
-
+    local nPhotos = exportSession:countRenditions()
+    local progressScope = exportContext:configureProgress {
+        title = nPhotos > 1 and
+                LOC("$$$/LRPurePath/ProgressMany=Export ^1 photos for DxO PureRAW", nPhotos)
+                or LOC "$$$/LRPurePath/ProgressOne=Export one photo for DxO PureRAW",
+    }
     logger.trace("Export format is " .. exportSettings.LR_format)
     local images = ""
     logger.trace("Renditions: " .. exportSession:countRenditions())
@@ -87,9 +92,9 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     end)
 
     if (images ~= "") then
-        cmd = '"' .. pureRawPath .. '"' .. images
+        cmd = 'open -a "' .. pureRawPath .. '"' .. images
         if (WIN_ENV) then
-            cmd = '"start /wait /min "DxO PureRAW" ' .. cmd
+            cmd = 'start ' .. cmd
         end
         logger.trace("Command line length: " .. cmd:len())
         logger.trace("Execute: " .. cmd)
