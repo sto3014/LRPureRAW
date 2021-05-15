@@ -33,7 +33,6 @@
 "$$$/LRPureRaw/Reset/label=Color Label"
 "$$$/LRPureRaw/Reset/pickstatus=Flag"
 "$$$/LRPureRaw/Reset/rating=Rating"
-
-"$$$/LRPurePath/ProgressMany=Export ^1 photos for DxO PureRAW"
-"$$$/LRPurePath/ProgressOne=Export one photo for DxO PureRAW"
+"$$$/LRPurePath/ProgressMany=Export ^1 photos to DxO PureRAW"
+"$$$/LRPurePath/ProgressOne=Export one photo to DxO PureRAW"
 
