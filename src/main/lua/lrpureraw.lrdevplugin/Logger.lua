@@ -6,7 +6,7 @@
 local LrLogger = import("LrLogger")
 local _logger = LrLogger("PureRawLrLogger")
 _logger:enable("logfile")
-local enabled = true
+local enabled = false
 -------------------------------------------------------------------------------
 local logger = {}
 -------------------------------------------------------------------------------
