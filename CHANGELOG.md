@@ -20,3 +20,7 @@ Creation.
 * Export process does not wait for PureRaw to end.
 ### Changed
 ### Fixed
+
+## [1.0.1.1] - 2021-06-01
+### Fixed
+Installation packages were not up to date.
