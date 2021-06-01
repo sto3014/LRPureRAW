@@ -50,6 +50,7 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     logger.trace("Start processRenderedPhotos")
     pureRawPath = prefs.PureRawPath
     pureRawExe = prefs.PureRawExe
+    pureRawDir = prefs.PureRawDir
 
     local exportSession = exportContext.exportSession
     local exportSettings = assert(exportContext.propertyTable)
@@ -92,11 +93,11 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     end)
 
     if (images ~= "") then
-        local cmd = '"' .. pureRawPath .. '"' .. images
+        -- local cmd = '"' .. pureRawPath .. '"' .. images
         if (WIN_ENV) then
-            cmd = 'start ' .. cmd
+            cmd = 'start /D ' .. '"' .. pureRawDir ..'"' .. ' ' .. pureRawExe .. images
         else
-            cmd = 'open -a ' .. cmd
+            cmd = 'open -a ' .. '"' .. pureRawPath .. '"' .. images
         end
         logger.trace("Command line length: " .. cmd:len())
         logger.trace("Execute: " .. cmd)

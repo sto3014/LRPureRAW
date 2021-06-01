@@ -24,3 +24,8 @@ Creation.
 ## [1.0.1.1] - 2021-06-01
 ### Fixed
 Installation packages were not up to date.
+
+## [1.0.2.0] - 2021-06-01
+### Fixed
+On Windows PureRaw only started when it was the default application for *.dng files.
+
