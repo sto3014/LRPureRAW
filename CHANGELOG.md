@@ -29,3 +29,8 @@ Installation packages were not up to date.
 ### Fixed
 On Windows PureRaw only started when it was the default application for *.dng files.
 
+## [1.0.2.1] - 2021-08-18
+### Fixed
+If the software metadata tag is not set, an exception is thrown.
+
+
