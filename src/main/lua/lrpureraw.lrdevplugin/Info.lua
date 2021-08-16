@@ -22,6 +22,6 @@ return {
         id = "noRejected", -- unique identifier for export filter
     },
 
-    VERSION = { major = 1, minor = 0, revision = 2, build = 0, },
+    VERSION = { major = 1, minor = 0, revision = 2, build = 1, },
 
 }

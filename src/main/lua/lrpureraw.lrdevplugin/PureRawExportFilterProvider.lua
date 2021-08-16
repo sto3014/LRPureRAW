@@ -26,6 +26,10 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
 
     -- only DNG and RAW are allowed
     local fileFormat = photo:getRawMetadata("fileFormat")
+    if ( fileFormat == nil) thenc
+      logger.trace("fileFormat is not set. So it seems not to be a DNG or RAW.")
+      return false
+    end
     logger.trace("Filetype for " .. photo:getFormattedMetadata("fileName") .. ": ".. fileFormat)
     if ( fileFormat ~= "DNG" and fileFormat ~= "RAW") then
         logger.trace("Photo is not a DNG or RAW. Skipped." )
@@ -34,6 +38,10 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
 
     -- skipp if already processed
     local software = photo:getFormattedMetadata('software')
+    if ( software == nil) then
+      logger.trace("Software is not set. So it was not processed by DxO PureRAW.")
+      return true
+    end
     logger.trace("Software: " .. software)
     shouldRender = software ~= "DxO PureRAW"
     return shouldRender
