@@ -33,4 +33,9 @@ On Windows PureRaw only started when it was the default application for *.dng fi
 ### Fixed
 If the software metadata tag is not set, an exception is thrown.
 
+## [1.0.2.2] - 2021-10-24
+### Changed
+Changed the default export path from _Picutures folder_ to _Same folder as original photo_. 
+See known issues in README.
+
 

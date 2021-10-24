@@ -56,10 +56,17 @@ If _DxO PureRAW_ is installed in a different place or is of different version, y
   in the plugin settings of PureRAW in the Plug-in Manager.
   
 ## Known Issues
+###Length of command line
 The photos are sent to _DxO PureRAW_ via command line. The length of the command line is restricted in length. The 
 more photos we sent, the longer the command line will be. The command line length limits are:
 * Windows: 8191  
 * Mac: 262144   
-
 I.e., on Mac we do not have a real limit in amount of photos, but in Windows we have. 
 Be as it is, even in Windows 100 photos should not be a problem to convert in one step.
+  
+###LR Import dialog will not be opened
+When exporting the developed DxO photos from the _Pictures folder_ (or a subfolder of it) into Lightroom the 
+Lightroom's import dialog will not be open. It seems to be a DxO PureRAW issue, because it can be reproduced by exporting 
+any photo from this folder to Lightroom. 
+Therefore, the default export path was changed to _Same folder as original photo_ in 1.0.2.2.
+At the time this issue is documented only for Windows systems.
