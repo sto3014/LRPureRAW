@@ -12,7 +12,18 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 * Restart Lightroom
 
 The plug-in and presets are now available for your user.
+
+## Update
+Same as installation. Be aware, that the export preset will be overwritten. So maybe you want to make a
+backup and restore it after the update. You can find your the export preset in:
+* Windows  
+%APPDATA%\Adobe\Lightroom\Export Presets\PureRAW   
+  Example: C:\users\janedoe\AppData\Roaming\Adobe\Lightroom\Export Presets\PureRAW   
   
+* Mac   
+~/Library/Application Support/Adobe/Lightroom/Export Presets/PureRAW   
+  Example: /Users/janedoe/Library/Application Support/Adobe/Lightroom/Export Presets/PureRAW
+
 ## Usage
 The basic workflow works roughly as follows:
 * Select one or more photos
