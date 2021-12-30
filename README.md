@@ -1,19 +1,50 @@
 # LRPureRAW
 
-## Features
+---
 _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 
+## Features
+
+---
+* Export photos and start DxO PureRAW
+* Set metadata (color, rating, flags) after export to identify the processed photos
+* Predefined filters for PureRAW specific attributes
+
 ## Requirements
-* _DxO PureRAW_ must be installed
+
+---
+* _DxO PureRAW_ 1.X
 
 ## Installation
-* Download the zip archive for your operating system from [GitHub](https://github.com/sto3014/LRPureRAW/tree/main/target).
-* Extract the archive into your home directory.  
-* Restart Lightroom
+
+---
+1. Download the zip archive for your operating system from [GitHub](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.0.2.3.zip).
+2. Extract the archive in the download folder
+3. Copy plug-in and resources into the configuration folder of Lightroom
+    1. On Windows  
+       Goto ```Downloads/LRPureRAW-1.0.2.3``` and execute install.bat.
+       Install.bat copies the plug-in into:
+       ```
+       <User Home>\AppData\Roaming\Adobe\Lightroom\Modules\LRPureRAW.lrplugin
+       ```
+    2. On macOS
+       Open a terminal window, change to ```Downloads/LRPureRAW-1.0.2.3``` and execute install.sh:
+        ```
+        -> ~ cd Downloads/LRPureRAW-1.0.2.3
+        -> ./install.sh 
+        ```
+        Install.sh copies the plug-in into:
+        ``` 
+        ~/Library/Application Support/Adobe/Lightroom/Modules/LRPureRAW.lrplugin
+        ```
+
+4. Restart Lightroom
 
 The plug-in and presets are now available for your user.
 
 ## Update
+
+---
 Same as installation. Be aware, that the export preset will be overwritten. So maybe you want to make a
 backup and restore it after the update. You can find your the export preset in:
 * Windows  
@@ -25,6 +56,8 @@ backup and restore it after the update. You can find your the export preset in:
   Example: /Users/janedoe/Library/Application Support/Adobe/Lightroom/Export Presets/PureRAW
 
 ## Usage
+
+---
 The basic workflow works roughly as follows:
 * Select one or more photos
 * Select File/Export…  
@@ -57,6 +90,8 @@ Additionally, there are three filter presets which may support your workflow:
 Displays only processed photos.
   
 ## Troubleshooting
+
+---
 _LRPureRAW_ expects that _DxO PureRAW_ 1.0 is installed in the following directory:
 * Windows  
   C:\Program Files\DxO\DxO PureRAW
@@ -67,6 +102,8 @@ If _DxO PureRAW_ is installed in a different place or is of different version, y
   in the plugin settings of PureRAW in the Plug-in Manager.
   
 ## Known Issues
+
+---
 ###Length of command line
 The photos are sent to _DxO PureRAW_ via command line. The length of the command line is restricted in length. The 
 more photos we sent, the longer the command line will be. The command line length limits are:

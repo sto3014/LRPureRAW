@@ -38,4 +38,10 @@ If the software metadata tag is not set, an exception is thrown.
 Changed the default export path from _Picutures folder_ to _Same folder as original photo_. 
 See known issues in README.
 
+## [1.0.2.3] - 2021-12-30
+Only the documentation has changed. No need to update.
+### Added
+### Changed
+### Fixed
+Fix installation chapter in README.md 
 
