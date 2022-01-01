@@ -12,7 +12,7 @@ InitProvider = {
 local function resetPrefs()
     local LrPrefs = import("LrPrefs")
     local prefs = LrPrefs.prefsForPlugin()
-    prefs.hasErrors=nil
+    prefs.hasErrors = nil
     prefs.PureRawPath = nil
     prefs.PureRawDir = nil
     prefs.PureRawExe = nil
@@ -33,6 +33,9 @@ local function resetPrefs()
     prefs.resetColorLabel = nil
     prefs.resetRating = nil
     prefs.resetPickStatus = nil
+    prefs.scriptBeforeExecute = nil
+    prefs.scriptAfterExecute = nil
+    prefs.forceOneSource = nil
 end
 
 local function init()
@@ -140,6 +143,16 @@ local function init()
     end
     if (prefs.resetPickStatus == nil) then
         prefs.resetPickStatus = 100
+    end
+
+    if (prefs.scriptBeforeExecute == nil) then
+        prefs.scriptBeforeExecute = false
+    end
+    if (prefs.scriptAfterExecute == nil) then
+        prefs.scriptAfterExecute = false
+    end
+    if (prefs.forceOneSource == nil) then
+        prefs.forceOneSource = false
     end
 
     logger.trace("Init done.")

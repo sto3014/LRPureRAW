@@ -6,6 +6,8 @@
 -------------------------------------------------------------------------------
 
 local LrApplication = import 'LrApplication'
+local LrPrefs = import("LrPrefs")
+
 local logger = require("Logger")
 
 -------------------------------------------------------------------------------
@@ -19,28 +21,47 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
     -- if nothing was selected, nothing should be exported.
     local catalog = LrApplication.activeCatalog()
     local tp = catalog:getTargetPhoto()
-    if ( tp == nil) then
-        logger.trace("Nothing selected." )
+    if (tp == nil) then
+        logger.trace("Nothing selected.")
         return false
     end
 
     -- only DNG and RAW are allowed
     local fileFormat = photo:getRawMetadata("fileFormat")
-    if ( fileFormat == nil) then
-      logger.trace("fileFormat is not set. So it seems not to be a DNG or RAW.")
-      return false
+    if (fileFormat == nil) then
+        logger.trace("fileFormat is not set. So it seems not to be a DNG or RAW.")
+        return false
     end
-    logger.trace("Filetype for " .. photo:getFormattedMetadata("fileName") .. ": ".. fileFormat)
-    if ( fileFormat ~= "DNG" and fileFormat ~= "RAW") then
-        logger.trace("Photo is not a DNG or RAW. Skipped." )
+    logger.trace("Filetype for " .. photo:getFormattedMetadata("fileName") .. ": " .. fileFormat)
+    if (fileFormat ~= "DNG" and fileFormat ~= "RAW") then
+        logger.trace("Photo is not a DNG or RAW. Skipped.")
         return false
     end
 
     -- skipp if already processed
     local software = photo:getFormattedMetadata('software')
-    if ( software == nil) then
-      logger.trace("Software is not set. So it is be expected to be not yet processed by DxO PureRAW.")
-      return true
+    if (software == nil) then
+        logger.trace("Software is not set. So it is be expected to be not yet processed by DxO PureRAW.")
+        return true
+    end
+
+    -- force one source
+    prefs = LrPrefs.prefsForPlugin()
+    if prefs.hasErrors then
+        return false
+    end
+    if (prefs.forceOneSource) then
+        local catalog = LrApplication.activeCatalog()
+        local photos = catalog:getTargetPhotos()
+        local lastFolder = ""
+        for _, photo in ipairs(photos) do
+            local currentFolder = photo:getFormattedMetadata("folderName")
+            logger.trace("Folder=" .. currentFolder)
+            if (currentFolder ~= lastFolder) then
+                logger.trace("Error: More than one source folder.")
+                return false
+            end
+        end
     end
     logger.trace("Software: " .. software)
     shouldRender = software ~= "DxO PureRAW"
@@ -49,7 +70,7 @@ end
 
 -------------------------------------------------------------------------------
 
-function PureRawExportFilterProvider.sectionForFilterInDialog( f, propertyTable )
+function PureRawExportFilterProvider.sectionForFilterInDialog(f, propertyTable)
     return {
         title = LOC("$$$/LRPurePath/Filter/Title=Filter for valid photos"),
         f:row {
