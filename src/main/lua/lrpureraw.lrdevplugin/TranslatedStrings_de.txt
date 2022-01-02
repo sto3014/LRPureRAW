@@ -36,3 +36,18 @@
 "$$$/LRPureRaw/Reset/rating=Bewertung"
 "$$$/LRPurePath/ProgressMany=Exportiere ^1 Fotos für DxO PureRAW"
 "$$$/LRPurePath/ProgressOne=Exportiere ein Foto für DxO PureRAW"
+"$$$/LRPureRaw/Settings/ScriptsTitle=Scripts:"
+"$$$/LRPureRaw/Settings/ScriptBeforeTitle=Vor Export"
+"$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Ausführen"
+"$$$/LRPureRaw/Settings/ScriptBeforeSelect=Auswahl Script vor Export"
+"$$$/LRPureRaw/Settings/ScriptAfterTitle=Nach Export"
+"$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Ausführen"
+"$$$/LRPureRaw/Settings/ScriptAfterSelect=Auswahl Script nach Export"
+"$$$/LRPureRaw/Settings/OneSourceTitle=Quell-Verzeichnis:"
+"$$$/LRPureRaw/Settings/OneSourceForceTitle=Erzwinge eindeutiges Verzeichnis"
+"$$$/LRPureRaw/Errors/ErrorExport=Fehler während des Exports."
+"$$$/LRPureRaw/Errors/OneSource=Gewählte Fotos müssen aus dem selben Verzeichnis kommen."
+"$$$/LRPureRaw/Errors/script=Fehler bei der Ausführung des Scripts ^n^1"
+"$$$/LRPureRaw/Errors/scriptUnknownError=Unbekannter Fehler, weil die Fehler-Datei ^1 nicht gefunden wurde."
+
+

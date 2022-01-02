@@ -7,6 +7,7 @@ local LrFileUtils = import("LrFileUtils")
 --local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
 --LrMobdebug.start()
 local logger = require("Logger")
+local initProvider = require("InitProvider")
 
 InfoProvider = {
     vInfo = require("Info.lua")
@@ -27,13 +28,25 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
 
     prefs.resetMetaData_Title = LOC("$$$/LRPurePath/Reset/Title=Set after export")
 
+    prefs.scriptsTitle = LOC("$$$/LRPureRaw/Settings/ScriptsTitle=Scripts")
+
+    prefs.scriptBeforeTitle = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Script before export:")
+    prefs.scriptAfterTitle = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=Script after export:")
+
+    prefs.scriptBeforeExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export:")
+    prefs.scriptAfterExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export:")
+
+    prefs.scriptBeforeExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export:")
+    prefs.scriptAfterExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export:")
+
+    prefs.oneSourceTitle = LOC("$$$/LRPureRaw/Settings/OneSourceTitle=Source folder:")
+
     local bind = LrView.bind
     --
     -- Windows
     --
     if (WIN_ENV) then
         return {
-
             {
                 title = LOC("$$$/LRPureRaw/Settings/PluginSettings=Plugin Settings"),
                 bind_to_object = prefs,
@@ -84,6 +97,7 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         title = LOC("$$$/LRPureRaw/Reset/label=Color Label"),
                         fill_horizontal = 1,
                         spacing = f:control_spacing(),
+                        size = "regular",
                         f:popup_menu {
                             value = bind("resetColorLabel"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
@@ -101,6 +115,7 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         title = LOC("$$$/LRPureRaw/Reset/rating=Rating"),
                         fill_horizontal = 1,
                         spacing = f:control_spacing(),
+                        size = "regular",
                         f:popup_menu {
                             value = bind("resetRating"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
@@ -118,6 +133,7 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         title = LOC("$$$/LRPureRaw/Reset/pickstatus=Flag"),
                         fill_horizontal = 1,
                         spacing = f:control_spacing(),
+                        size = "regular",
                         f:popup_menu {
                             value = bind("resetPickStatus"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
@@ -127,6 +143,109 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                                 { title = LOC("$$$/LRPureRaw/Reset/Pick/rejected=Rejected"), value = -1 },
                             }
                         },
+                    },
+                }),
+                -- Path to Scripts
+                f:row({
+                    f:static_text({
+                        title = bind("scriptsTitle"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    f:group_box({
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Before export"),
+                        fill_horizontal = 2,
+                        spacing = f:control_spacing(),
+                        size = "regular",
+                        f:row({
+                            f:edit_field({
+                                value = LrView.bind("scriptBefore"),
+                                fill_horizontal = 1,
+                                enabled = false
+                            }),
+                            f:push_button({
+                                title = "...",
+                                action = function()
+                                    local startDir
+                                    startDir = prefs.scriptBeforePath
+                                    local scriptBeforeFile = LrDialogs.runOpenPanel({
+                                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeSelect=Select script before export"),
+                                        prompt = LOC("$$$/LRPureRaw/Settings/ScriptBeforeSelect=Select script before export"),
+                                        canChooseFiles = true,
+                                        canChooseDirectories = false,
+                                        allowsMultipleSelection = false,
+                                        initialDirectory = startDir
+                                    })
+
+                                    if type(scriptBeforeFile) == "table" and #scriptBeforeFile > 0 then
+                                        prefs.scriptBefore = LrPathUtils.leafName(scriptBeforeFile[1])
+                                        prefs.scriptBeforePath = LrPathUtils.parent(scriptBeforeFile[1])
+                                    end
+                                end
+                            })
+                        }),
+                        f:checkbox {
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export"),
+                            value = LrView.bind("scriptBeforeExecute"),
+                            --checked_value = true, -- this is the initial state
+                            --unchecked_value = false,
+                        },
+                    }),
+                    f:group_box({
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=After export"),
+                        fill_horizontal = 2,
+                        spacing = f:control_spacing(),
+                        size = "regular",
+                        f:row({
+                            f:edit_field({
+                                value = LrView.bind("scriptAfter"),
+                                fill_horizontal = 1,
+                                enabled = false
+                            }),
+                            f:push_button({
+                                title = "...",
+                                action = function()
+                                    local startDir
+                                    startDir = prefs.scriptAfterPath
+                                    local scriptAfterFile = LrDialogs.runOpenPanel({
+                                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterSelect=Select script after export"),
+                                        prompt = LOC("$$$/LRPureRaw/Settings/ScriptAfterSelect=Select script after export"),
+                                        canChooseFiles = true,
+                                        canChooseDirectories = false,
+                                        allowsMultipleSelection = false,
+                                        initialDirectory = startDir
+                                    })
+
+                                    if type(scriptAfterFile) == "table" and #scriptAfterFile > 0 then
+                                        prefs.scriptAfter = LrPathUtils.leafName(scriptAfterFile[1])
+                                        prefs.scriptAfterPath = LrPathUtils.parent(scriptAfterFile[1])
+                                    end
+                                end
+                            })
+                        }),
+                        f:checkbox {
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export"),
+                            value = LrView.bind("scriptBeforeExecute"),
+
+                            --checked_value = true, -- this is the initial state
+                            --unchecked_value = false,
+                        },
+                    })
+                }),
+                -- Source folder
+                f:row({
+                    f:static_text({
+                        title = bind("oneSourceTitle"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    f:checkbox {
+                        title = LOC("$$$/LRPureRaw/Settings/OneSourceForceTitle=Force unique folder"),
+                        value = LrView.bind("forceOneSource"),
+                        --checked_value = true, -- this is the initial state
+                        --unchecked_value = false,
                     },
                 }),
             }
@@ -227,6 +346,7 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
 
                 }),
                 f:row({
+
                     f:static_text({
                         title = bind("resetMetaData_Title"),
                         width_in_chars = 19,
@@ -237,6 +357,8 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         title = LOC("$$$/LRPureRaw/Reset/label=Color Label"),
                         fill_horizontal = 1,
                         spacing = f:control_spacing(),
+                        size = "regular",
+
                         f:popup_menu {
                             value = bind("resetColorLabel"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
@@ -254,6 +376,8 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         title = LOC("$$$/LRPureRaw/Reset/rating=Rating"),
                         fill_horizontal = 1,
                         spacing = f:control_spacing(),
+                        size = "regular",
+
                         f:popup_menu {
                             value = bind("resetRating"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
@@ -271,6 +395,8 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         title = LOC("$$$/LRPureRaw/Reset/pickstatus=Flag"),
                         fill_horizontal = 1,
                         spacing = f:control_spacing(),
+                        size = "regular",
+
                         f:popup_menu {
                             value = bind("resetPickStatus"), -- current value bound to same key as static text
                             items = { -- the menu items and their values
@@ -282,6 +408,110 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         },
                     },
                 }),
+                -- Path to Scripts
+                f:row({
+                    f:static_text({
+                        title = bind("scriptsTitle"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    f:group_box({
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Before export"),
+                        fill_horizontal = 2,
+                        spacing = f:control_spacing(),
+                        size = "regular",
+                        f:row({
+                            f:edit_field({
+                                value = LrView.bind("scriptBefore"),
+                                fill_horizontal = 1,
+                                enabled = false
+                            }),
+                            f:push_button({
+                                title = "...",
+                                action = function()
+                                    local startDir
+                                    startDir = prefs.scriptBeforePath
+                                    local scriptBeforeFile = LrDialogs.runOpenPanel({
+                                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeSelect=Select script before export"),
+                                        prompt = LOC("$$$/LRPureRaw/Settings/ScriptBeforeSelect=Select script before export"),
+                                        canChooseFiles = true,
+                                        canChooseDirectories = false,
+                                        allowsMultipleSelection = false,
+                                        initialDirectory = startDir
+                                    })
+
+                                    if type(scriptBeforeFile) == "table" and #scriptBeforeFile > 0 then
+                                        prefs.scriptBefore = LrPathUtils.leafName(scriptBeforeFile[1])
+                                        prefs.scriptBeforePath = LrPathUtils.parent(scriptBeforeFile[1])
+                                    end
+                                end
+                            })
+                        }),
+                        f:checkbox {
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export"),
+                            value = LrView.bind("scriptBeforeExecute"),
+                            --checked_value = true, -- this is the initial state
+                            --unchecked_value = false,
+                        },
+                   }),
+                    f:group_box({
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=After export"),
+                        fill_horizontal = 2,
+                        spacing = f:control_spacing(),
+                        size = "regular",
+                        f:row({
+                            f:edit_field({
+                                value = LrView.bind("scriptAfter"),
+                                fill_horizontal = 1,
+                                enabled = false
+                            }),
+                            f:push_button({
+                                title = "...",
+                                action = function()
+                                    local startDir
+                                    startDir = prefs.scriptAfterPath
+                                    local scriptAfterFile = LrDialogs.runOpenPanel({
+                                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterSelect=Select script after export"),
+                                        prompt = LOC("$$$/LRPureRaw/Settings/ScriptAfterSelect=Select script after export"),
+                                        canChooseFiles = true,
+                                        canChooseDirectories = false,
+                                        allowsMultipleSelection = false,
+                                        initialDirectory = startDir
+                                    })
+
+                                    if type(scriptAfterFile) == "table" and #scriptAfterFile > 0 then
+                                        prefs.scriptAfter = LrPathUtils.leafName(scriptAfterFile[1])
+                                        prefs.scriptAfterPath = LrPathUtils.parent(scriptAfterFile[1])
+                                    end
+                                end
+                            })
+                        }),
+                        f:checkbox {
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export"),
+                            value = LrView.bind("scriptAfterExecute"),
+
+                            --checked_value = true, -- this is the initial state
+                            --unchecked_value = false,
+                        },
+                    })
+                }),
+                -- Source folder
+                f:row({
+                    f:static_text({
+                        title = bind("oneSourceTitle"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    f:checkbox {
+                        title = LOC("$$$/LRPureRaw/Settings/OneSourceForceTitle=Force unique folder"),
+                        value = LrView.bind("forceOneSource"),
+                        --checked_value = true, -- this is the initial state
+                        --unchecked_value = false,
+                    },
+                }),
+
             }
         }
     end

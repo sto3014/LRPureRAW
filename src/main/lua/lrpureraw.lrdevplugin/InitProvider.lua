@@ -4,12 +4,14 @@
 -- Date: 02.05.21
 -- To change this template use File | Settings | File Templates.
 --
+local LrDialogs = import("LrDialogs")
+
 local logger = require("Logger")
 
 InitProvider = {
     vInfo = require("Info.lua")
 }
-local function resetPrefs()
+function resetPrefs()
     local LrPrefs = import("LrPrefs")
     local prefs = LrPrefs.prefsForPlugin()
     prefs.hasErrors = nil
@@ -36,9 +38,13 @@ local function resetPrefs()
     prefs.scriptBeforeExecute = nil
     prefs.scriptAfterExecute = nil
     prefs.forceOneSource = nil
+    prefs.scriptBefore = nil
+    prefs.scriptAfter = nil
+    prefs.scriptBeforePath = nil
+    prefs.scriptAfterPath = nil
 end
 
-local function init()
+function init()
     local LrPrefs = import "LrPrefs"
     local LrFileUtils = import "LrFileUtils"
     local LrDialogs = import "LrDialogs"
@@ -153,6 +159,25 @@ local function init()
     end
     if (prefs.forceOneSource == nil) then
         prefs.forceOneSource = false
+    end
+
+    if (prefs.scriptBefore == nil) then
+        if (WIN_ENV) then
+            prefs.scriptBefore = "BeforeExport-Cleanup.cmd"
+            prefs.scriptBeforePath = _PLUGIN.path .. "\\bin\\win"
+        else
+            prefs.scriptBefore = "BeforeExport-Cleanup.sh"
+            prefs.scriptBeforePath = _PLUGIN.path .. "/bin/mac"
+        end
+    end
+    if (prefs.scriptAfter == nil) then
+        if (WIN_ENV) then
+            prefs.scriptAfter = "AfterExport-CreateLink.cmd"
+            prefs.scriptAfterPath = _PLUGIN.path .. "\\bin\\win"
+        else
+            prefs.scriptAfter = "AfterExport-CreateLink.sh"
+            prefs.scriptAfterPath = _PLUGIN.path .. "/bin/mac"
+        end
     end
 
     logger.trace("Init done.")

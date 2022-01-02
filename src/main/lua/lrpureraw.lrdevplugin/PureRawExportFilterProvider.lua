@@ -6,7 +6,7 @@
 -------------------------------------------------------------------------------
 
 local LrApplication = import 'LrApplication'
-local LrPrefs = import("LrPrefs")
+
 
 local logger = require("Logger")
 
@@ -40,32 +40,16 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
 
     -- skipp if already processed
     local software = photo:getFormattedMetadata('software')
-    if (software == nil) then
+    if (software ~= nil) then
+        logger.trace("Software: " .. software)
+        if ( software == "DxO PureRAW" ) then
+            return false
+        end
+     else
         logger.trace("Software is not set. So it is be expected to be not yet processed by DxO PureRAW.")
-        return true
     end
 
-    -- force one source
-    prefs = LrPrefs.prefsForPlugin()
-    if prefs.hasErrors then
-        return false
-    end
-    if (prefs.forceOneSource) then
-        local catalog = LrApplication.activeCatalog()
-        local photos = catalog:getTargetPhotos()
-        local lastFolder = ""
-        for _, photo in ipairs(photos) do
-            local currentFolder = photo:getFormattedMetadata("folderName")
-            logger.trace("Folder=" .. currentFolder)
-            if (currentFolder ~= lastFolder) then
-                logger.trace("Error: More than one source folder.")
-                return false
-            end
-        end
-    end
-    logger.trace("Software: " .. software)
-    shouldRender = software ~= "DxO PureRAW"
-    return shouldRender
+    return true
 end
 
 -------------------------------------------------------------------------------
