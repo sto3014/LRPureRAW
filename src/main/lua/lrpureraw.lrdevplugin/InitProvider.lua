@@ -71,6 +71,14 @@ function init()
             prefs.PureRawExe = "PureRawv1"
         end
         prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
+        if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
+            for i=1,2,1 do
+                local tempPath = prefs.PureRawDir .. "/Contents/MacOS/" .. "PureRawv" .. tostring(i)
+                if (LrFileUtils.exists(tempPath) == "file") then
+                    prefs.PureRawExe = "PureRawv" .. tostring(i)
+                end
+            end
+        end
     else
         --
         -- winOS
@@ -83,6 +91,14 @@ function init()
             prefs.PureRawExe = "PureRawv1.exe"
         end
         prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
+        if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
+            for i=1,2,1 do
+                local tempPath = prefs.PureRawDir .. "\\" .. "PureRawv" .. tostring(i) .. ".exe"
+                if (LrFileUtils.exists(tempPath) == "file") then
+                    prefs.PureRawExe = "PureRawv" .. tostring(i) .. ".exe"
+                end
+            end
+        end
     end
 
     logger.trace("PureRawPath: " .. prefs.PureRawPath .. " (" .. tostring(LrFileUtils.exists(prefs.PureRawPath)) .. ")")

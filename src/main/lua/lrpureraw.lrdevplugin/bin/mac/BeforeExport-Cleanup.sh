@@ -18,34 +18,34 @@ PHOTOS=$*
 #
 LOG_FILE=$SOURCE_DIR/LRPureRaw.log
 #
-echo ----------------------------------------------------------------------------------------------->>$LOG_FILE
-date>>$LOG_FILE
-echo Before export start>>$LOG_FILE
-echo ERROR_FILE = $ERROR_FILE>>$LOG_FILE
-echo SOURCE_DIR = $SOURCE_DIR>>$LOG_FILE
-echo TARGET_DIR = $TARGET_DIR>>$LOG_FILE
-echo PHOTOS_COUNT = $PHOTOS_COUNT>>$LOG_FILE
-echo PHOTOS = $PHOTOS>>$LOG_FILE
+echo ----------------------------------------------------------------------------------------------->>"$LOG_FILE"
+date>>"$LOG_FILE"
+echo Before export start>>"$LOG_FILE"
+echo ERROR_FILE = $ERROR_FILE>>"$LOG_FILE"
+echo SOURCE_DIR = $SOURCE_DIR>>"$LOG_FILE"
+echo TARGET_DIR = $TARGET_DIR>>"$LOG_FILE"
+echo PHOTOS_COUNT = $PHOTOS_COUNT>>"$LOG_FILE"
+echo PHOTOS = $PHOTOS>>"$LOG_FILE"
 #
-if [ -d $TARGET_DIR ];
+if [ -d "$TARGET_DIR" ];
 then
-  if [ -f $TARGET_DIR/LRPureRaw.log ];
+  if [ -f "$TARGET_DIR/LRPureRaw.log" ];
   then
-    echo TARGET_DIR is equal to SOURCE_DIR. Cleanup is skipped.>>$LOG_FILE
+    echo TARGET_DIR is equal to SOURCE_DIR. Cleanup is skipped.>>"$LOG_FILE"
   else
-    echo Remove files from TARGET_DIR:>>$LOG_FILE
-    ls $TARGET_DIR/*.*>>$LOG_FILE
-    rm -f $TARGET_DIR/*.* 2>$ERROR_FILE
-    if [ -d $TARGET_DIR/DxO ];
+    echo Remove files from TARGET_DIR:>>"$LOG_FILE"
+    ls "$TARGET_DIR/*.*">>"$LOG_FILE"
+    rm -f "$TARGET_DIR/*.*" 2>$ERROR_FILE
+    if [ -L "$TARGET_DIR/DxO" ];
     then
-      echo unlink DxO>>$LOG_FILE
-      unlink $TARGET_DIR/DxO 2>$ERROR_FILE
+      echo unlink DxO>>"$LOG_FILE"
+      unlink "$TARGET_DIR/DxO" 2>$ERROR_FILE
     fi
   fi
 else
   echo Export directory $TARGET_DIR not found.>$ERROR_FILE
   exit 1
 fi
-echo Before export end>>$LOG_FILE
+echo Before export end>>"$LOG_FILE"
 
 
