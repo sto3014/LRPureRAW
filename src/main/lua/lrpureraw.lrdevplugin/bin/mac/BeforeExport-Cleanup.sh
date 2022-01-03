@@ -13,13 +13,26 @@ ERROR_FILE=$1
 SOURCE_DIR=$2
 TARGET_DIR=$3
 PHOTOS_COUNT=$4
-
+#
+LOG_FILE=$SOURCE_DIR/LRPureRaw.log
+#
+echo ----------------------------------------------------------------------------------------------->>$LOG_FILE
+date>>$LOG_FILE
+echo Command line: $*>>$LOG_FILE
 if [ -d $TARGET_DIR ];
 then
-  rm -f $TARGET_DIR/*.* 2>$ERROR_FILE
-  if [ -d $TARGET_DIR/DxO ];
+  if [ -f $TARGET_DIR/LRPureRaw.log ];
   then
-    unlink $TARGET_DIR/DxO 2>$ERROR_FILE
+    echo TARGET_DIR is equal to SOURCE_DIR. Cleanup is skipped.>>$LOG_FILE
+  else
+    echo Remove files from TARGET_DIR:>>$LOG_FILE
+    ls $TARGET_DIR/*.*>>$LOG_FILE
+    rm -f $TARGET_DIR/*.* 2>$ERROR_FILE
+    if [ -d $TARGET_DIR/DxO ];
+    then
+      echo unlink DxO>>$LOG_FILE
+      unlink $TARGET_DIR/DxO 2>$ERROR_FILE
+    fi
   fi
 else
   echo Export directory $TARGET_DIR not found.>$ERROR_FILE
