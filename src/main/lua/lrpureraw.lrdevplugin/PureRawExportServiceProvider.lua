@@ -60,13 +60,13 @@ end
 --[[----------------------------------------------------------------------------
 local function getPhotosList()
 -------------------------------------------------------------------------------]]
-local function getPhotosList(photos)
+local function getPhotoList(photos)
     local list = ""
     for _, photo in ipairs(photos) do
         if (list == "") then
-            list = photo:getFormattedMetadata("fileName")
+            list = '"' .. photo:getRawMetadata("path") .. '"'
         else
-            list = list .. ' ' .. photo:getFormattedMetadata("fileName")
+            list = list .. ' ' .. '"' .. photo:getRawMetadata("path") .. '"'
         end
     end
     return list
@@ -74,13 +74,13 @@ end
 --[[----------------------------------------------------------------------------
 local function getImagesList()
 -------------------------------------------------------------------------------]]
-local function getImagesList(images)
+local function getImageList(images)
     local list = ""
     for _, image in ipairs(images) do
         if (list == "") then
-            list = LrPathUtils.leafName(image)
+            list = '"' .. image .. '"'
         else
-            list = list .. ' ' .. LrPathUtils.leafName(image)
+            list = list .. ' ' .. '"' .. image .. '"'
         end
     end
     return list
@@ -89,39 +89,46 @@ end
 local function hasSeveralSourceFolders()
 -------------------------------------------------------------------------------]]
 local function hasSeveralSourceFolders(photos)
-    local lastFolder = ""
+    logger.trace("hasSeveralSourceFolders() start")
+
+    local lastFolder
     for _, photo in ipairs(photos) do
-        local currentFolder = photo:getRawMetadata("path")
-        logger.trace("Folder=" .. currentFolder)
-        if (currentFolder ~= lastFolder) then
+        local currentFolder = LrPathUtils.parent(photo:getRawMetadata("path"))
+        logger.trace("folder=" .. currentFolder)
+        if (lastFolder ~= nil and currentFolder ~= lastFolder) then
             local errorMessage = LOC("$$$/LRPureRaw/Errors/OneSource=Selected photos must reside to the same folder.")
             logger.trace(errorMessage)
             LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."), errorMessage, "critical")
             return true
         end
+        lastFolder = currentFolder
     end
+    logger.trace("hasSeveralSourceFolders() end")
+
     return false
 end
 --[[----------------------------------------------------------------------------
 local function executeBefore()
 -------------------------------------------------------------------------------]]
-local function executeBefore(photos, errorFile, sourceFolder, targetFolder)
+local function executeBefore(photos, cmdParams)
+    logger.trace("executeBefore() start")
+
     local prefs = LrPrefs.prefsForPlugin()
-    local photosList = getPhotosList(photos)
+    local photosList = getPhotoList(photos)
     local cmd
     if (WIN_ENV) then
         cmd = 'cmd  '
                 .. '\"' .. prefs.scriptBeforePath .. "/" .. prefs.scriptBefore + '\" '
-                .. '\"' .. errorFile .. '\" '
-                .. '\"' .. sourceFolder .. '\" '
-                .. '\"' .. targetFolder .. '\" '
+                .. '\"' .. cmdParams["errorFile"] .. '\" '
+                .. '\"' .. cmdParams["sourceFolder"] .. '\" '
+                .. '\"' .. cmdParams["targetFolder"] .. '\" '
                 .. #photos .. ' '
                 .. photosList
     else
         cmd = '\"' .. prefs.scriptBeforePath .. "/" .. prefs.scriptBefore .. '\" '
-                .. '\"' .. errorFile .. '\" '
-                .. '\"' .. sourceFolder .. '\" '
-                .. '\"' .. targetFolder .. '\" '
+                .. '\"' .. cmdParams["errorFile"] .. '\" '
+                .. '\"' .. cmdParams["sourceFolder"] .. '\" '
+                .. '\"' .. cmdParams["targetFolder"] .. '\" '
                 .. #photos .. ' '
                 .. photosList
     end
@@ -130,37 +137,40 @@ local function executeBefore(photos, errorFile, sourceFolder, targetFolder)
     local status = LrTasks.execute(cmd)
     logger.trace("status=" .. tostring(status))
     if (status ~= 0) then
-        if (LrFileUtils.exists(errorFile)) then
-            local data = readfile(errorFile)
+        if (LrFileUtils.exists(cmdParams["errorFile"])) then
+            local data = readfile(cmdParams["errorFile"])
             LrDialogs.message(LOC("$$$/LRPureRaw/Errors/scriptBefore=Error executing before script ^n^1", prefs.scriptBeforePath .. "/" .. prefs.scriptBefore), data, 'critical')
         else
             LrDialogs.message(LOC("$$$/LRPureRaw/Errors/scriptBefore=Error executing before script ^n^1", prefs.scriptBeforePath .. "/" .. prefs.scriptBefore),
-                    LOC("$$$/LRPureRaw/Errors/scriptBeforeUnknownError=Unknown error, because error message file ^1 not found.", errorFile), 'critical')
+                    LOC("$$$/LRPureRaw/Errors/scriptBeforeUnknownError=Unknown error, because error message file ^1 not found.", cmdParams["errorFile"]), 'critical')
         end
         return false
     end
+    logger.trace("executeBefore() end")
     return true
 end
 --[[----------------------------------------------------------------------------
 local function executeAfter()
 -------------------------------------------------------------------------------]]
-local function executeAfter(images, errorFile, sourceFolder, targetFolder)
+local function executeAfter(images, cmdParams)
+    logger.trace("executeAfter() start")
+
     local prefs = LrPrefs.prefsForPlugin()
-    local imagesList = getImagesList(images)
+    local imagesList = getImageList(images)
     local cmd
     if (WIN_ENV) then
         cmd = 'cmd  '
                 .. '\"' .. prefs.scriptAfterPath .. "/" .. prefs.scriptAfter + '\" '
-                .. '\"' .. errorFile .. '\" '
-                .. '\"' .. sourceFolder .. '\" '
-                .. '\"' .. targetFolder .. '\" '
+                .. '\"' .. cmdParams["errorFile"] .. '\" '
+                .. '\"' .. cmdParams["sourceFolder"] .. '\" '
+                .. '\"' .. cmdParams["targetFolder"] .. '\" '
                 .. #images .. ' '
                 .. imagesList
     else
         cmd = '\"' .. prefs.scriptAfterPath .. "/" .. prefs.scriptAfter .. '\" '
-                .. '\"' .. errorFile .. '\" '
-                .. '\"' .. sourceFolder .. '\" '
-                .. '\"' .. targetFolder .. '\" '
+                .. '\"' .. cmdParams["errorFile"] .. '\" '
+                .. '\"' .. cmdParams["sourceFolder"] .. '\" '
+                .. '\"' .. cmdParams["targetFolder"] .. '\" '
                 .. #images .. ' '
                 .. imagesList
     end
@@ -169,47 +179,47 @@ local function executeAfter(images, errorFile, sourceFolder, targetFolder)
     local status = LrTasks.execute(cmd)
     logger.trace("status=" .. tostring(status))
     if (status ~= 0) then
-        if (LrFileUtils.exists(errorFile)) then
-            local data = readfile(errorFile)
+        if (LrFileUtils.exists(cmdParams["errorFile"])) then
+            local data = readfile(cmdParams["errorFile"])
             LrDialogs.message(LOC("$$$/LRPureRaw/Errors/script=Error executing script ^n^1", prefs.scriptAfterPath .. "/" .. prefs.scriptAfter), data, 'critical')
         else
             LrDialogs.message(LOC("$$$/LRPureRaw/Errors/script=Error executing script ^n^1", prefs.scriptAfterPath .. "/" .. prefs.scriptAfter),
-                    LOC("$$$/LRPureRaw/Errors/scriptUnknownError=Unknown error, because error message file ^1 not found.", errorFile), 'critical')
+                    LOC("$$$/LRPureRaw/Errors/scriptUnknownError=Unknown error, because error message file ^1 not found.", cmdParams["errorFile"]), 'critical')
         end
         return false
     end
+    logger.trace("executeAfter() end")
     return true
 end
 --[[----------------------------------------------------------------------------
-
+local function defineCommandLineParams()
 -------------------------------------------------------------------------------]]
---[[----------------------------------------------------------------------------
-PureRawExportServiceProvider
--------------------------------------------------------------------------------]]
-function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
-                                                            exportContext)
-
-    -- LrMobdebug.on()
-    logger.trace("Start processRenderedPhotos")
-
+local function getCmdParams()
+    logger.trace("getCmdParams() start")
     local prefs = LrPrefs.prefsForPlugin()
-    if prefs.hasErrors then
-        return
-    end
-
-    local catalog = LrApplication.activeCatalog()
-    local photos = catalog:getTargetPhotos()
-
-    -- force one source
-    if (prefs.forceOneSource) then
-        if (hasSeveralSourceFolders(photos)) then
-            return
+    local cmdParams = {}
+    cmdParams["errorFile"] = os.tmpname()
+    local photo = LrApplication.activeCatalog():getTargetPhoto()
+    cmdParams["sourceFolder"] = LrPathUtils.parent(photo:getRawMetadata("path"))
+    cmdParams["targetFolder"] = prefs.export_destinationPathPrefix
+    if (prefs.export_destinationPathSuffix ~= nil) then
+        if (WIN_ENV) then
+            cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "\\" .. prefs.export_destinationPathSuffix
+        else
+            cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "/" .. prefs.export_destinationPathSuffix
         end
     end
-
-    pureRawPath = prefs.PureRawPath
-    pureRawExe = prefs.PureRawExe
-    pureRawDir = prefs.PureRawDir
+    logger.trace("errorFile=" .. cmdParams["errorFile"])
+    logger.trace("sourceFolder=" .. cmdParams["sourceFolder"])
+    logger.trace("targetFolder" .. cmdParams["targetFolder"])
+    logger.trace("getCmdParams() end")
+    return cmdParams
+end
+--[[----------------------------------------------------------------------------
+local function initExportProgress()
+-------------------------------------------------------------------------------]]
+local function initExportProgress(exportContext)
+    logger.trace("initExportProgress() start")
 
     local exportSession = exportContext.exportSession
     local exportSettings = assert(exportContext.propertyTable)
@@ -221,32 +231,32 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     }
     logger.trace("Export format is " .. exportSettings.LR_format)
     logger.trace("Renditions: " .. exportSession:countRenditions())
+    logger.trace("initExportProgress() end")
+end
+--[[----------------------------------------------------------------------------
+local function startDxoPureRAW()
+-------------------------------------------------------------------------------]]
+local function startDxoPureRAW(images)
+    local prefs = LrPrefs.prefsForPlugin()
 
-    -- export scripts variables
-
-    local errorFile = os.tmpname()
-    local photo = catalog:getTargetPhoto()
-    local sourceFolder = LrPathUtils.parent(photo:getRawMetadata("path"))
-    local targetFolder = prefs.export_destinationPathPrefix
-    if (prefs.export_destinationPathSuffix ~= nil) then
+    local cmd
+    if ( #images > 0) then
         if (WIN_ENV) then
-            targetFolder = targetFolder .. "\\" .. prefs.export_destinationPathSuffix
+            cmd = 'start /D ' .. '"' .. prefs.PureRawDir .. '"' .. ' ' .. prefs.PureRawExe .. ' ' .. getImageList(images)
         else
-            targetFolder = targetFolder .. "/" .. prefs.export_destinationPathSuffix
+            cmd = 'open -a ' .. '"' .. prefs.PureRawPath .. '"' .. ' ' .. getImageList(images)
         end
+        logger.trace("Command line length: " .. cmd:len())
+        logger.trace("Execute: " .. cmd)
+        local status = LrTasks.execute(cmd)
     end
-    logger.trace("sourceFolder=" .. tostring(sourceFolder))
-    logger.trace("targetFolder" .. tostring(targetFolder))
 
-    -- before export execute
-    if (prefs.scriptBeforeExecute) then
-        if (not executeBefore(photos, errorFile, sourceFolder, targetFolder)) then
-            return
-        end
-    end
-    --
-    -- reset metadata
-    local imagesForCommandLine = ""
+end
+--[[----------------------------------------------------------------------------
+local function resetMetadata()
+-------------------------------------------------------------------------------]]
+local function resetMetadata(catalog, exportContext)
+    local prefs = LrPrefs.prefsForPlugin()
     local images = {}
     catalog:withWriteAccessDo("Reset meta data", function()
         for i, rendition in exportContext:renditions { stopIfCanceled = true } do
@@ -254,7 +264,6 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
             local success, pathOrMessage = rendition:waitForRender()
             if success then
                 logger.trace("Exported " .. pathOrMessage .. " successfully")
-                imagesForCommandLine = imagesForCommandLine .. ' "' .. pathOrMessage .. '"'
 
                 images[#images + 1] = pathOrMessage
 
@@ -276,25 +285,58 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
             end
         end
     end)
+    return images
+end
+--[[----------------------------------------------------------------------------
+PureRawExportServiceProvider
+-------------------------------------------------------------------------------]]
+function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
+                                                            exportContext)
 
-    if (prefs.scriptAfterExecute) then
-        if ( not executeAfter(images, errorFile, sourceFolder, targetFolder) ) then
+    -- LrMobdebug.on()
+    logger.trace("processRenderedPhotos() start")
+
+    local prefs = LrPrefs.prefsForPlugin()
+    if prefs.hasErrors then
+        return
+    end
+
+    local catalog = LrApplication.activeCatalog()
+    local photos = catalog:getTargetPhotos()
+
+    -- force one source
+    if (prefs.forceOneSource) then
+        if (hasSeveralSourceFolders(photos)) then
             return
         end
     end
 
-    if (imagesForCommandLine ~= "") then
-        -- local cmd = '"' .. pureRawPath .. '"' .. images
-        if (WIN_ENV) then
-            cmd = 'start /D ' .. '"' .. pureRawDir .. '"' .. ' ' .. pureRawExe .. imagesForCommandLine
-        else
-            cmd = 'open -a ' .. '"' .. pureRawPath .. '"' .. imagesForCommandLine
+    initExportProgress(exportContext)
+
+    -- command line params
+    local cmdParams = getCmdParams()
+
+    -- execut before script
+    if (prefs.scriptBeforeExecute) then
+        if (not executeBefore(photos, cmdParams)) then
+            return
         end
-        logger.trace("Command line length: " .. cmd:len())
-        logger.trace("Execute: " .. cmd)
-        local status = LrTasks.execute(cmd)
     end
-end
+
+    -- reset metadata
+    local images = resetMetadata(catalog, exportContext)
+
+    -- execute after script
+    if (prefs.scriptAfterExecute and #images > 0) then
+        if (not executeAfter(images, cmdParams)) then
+            return
+        end
+    end
+
+    startDxoPureRAW(images)
+    logger.trace("processRenderedPhotos() end")
+
+ end
 
 -------------------------------------------------------------------------------
 

@@ -11,13 +11,25 @@
 ERROR_FILE=$1
 SOURCE_DIR=$2
 TARGET_DIR=$3
-PHOTOS_COUNT=$4
-
+IMAGES_COUNT=$4
+shift 4
+IMAGES=$*
+#
+LOG_FILE=$SOURCE_DIR/LRPureRaw.log
+#
+echo After export start>>$LOG_FILE
+echo ERROR_FILE = $ERROR_FILE>>$LOG_FILE
+echo SOURCE_DIR = $SOURCE_DIR>>$LOG_FILE
+echo TARGET_DIR = $TARGET_DIR>>$LOG_FILE
+echo IMAGES_COUNT = $IMAGES_COUNT>>$LOG_FILE
+echo IMAGES = $IMAGES>>$LOG_FILE
+#
 if [ -d $TARGET_DIR ];
 then
   if [ -d $SOURCE_DIR ];
   then
-    ln -s "$TARGET_DIR" "$TARGET_DIR/DxO" 2>$ERROR_FILE
+    echo Create link: ln -s "$SOURCE_DIR" "$TARGET_DIR/DxO">>$LOG_FILE
+    ln -s "$SOURCE_DIR" "$TARGET_DIR/DxO" 2>$ERROR_FILE
   else
      echo Source directory $SOURCE_DIR not found.>$ERROR_FILE
      exit 2
@@ -26,4 +38,5 @@ else
   echo Export directory $SOURCE_DIR not found.>$ERROR_FILE
   exit 1
 fi
+echo After export end>>$LOG_FILE
 
