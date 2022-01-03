@@ -35,6 +35,7 @@ local PureRawExportServiceProvider = {}
 -------------------------------------------------------------------------------
 
 function PureRawExportServiceProvider.updateExportSettings (exportSettings)
+    logger.trace("*** Start export process ***")
     logger.trace("updateExportSettings")
     if (exportSettings.LR_format ~= "ORIGINAL" and exportSettings.LR_format ~= "DNG") then
         logger.trace("Init export format with value ORIGINAL")
@@ -201,13 +202,12 @@ local function getCmdParams()
     cmdParams["errorFile"] = os.tmpname()
     local photo = LrApplication.activeCatalog():getTargetPhoto()
     cmdParams["sourceFolder"] = LrPathUtils.parent(photo:getRawMetadata("path"))
+    -- destination type specific folder und use subfolder checked are mandatory
     cmdParams["targetFolder"] = prefs.export_destinationPathPrefix
-    if (prefs.export_destinationPathSuffix ~= nil) then
-        if (WIN_ENV) then
-            cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "\\" .. prefs.export_destinationPathSuffix
-        else
-            cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "/" .. prefs.export_destinationPathSuffix
-        end
+    if (WIN_ENV) then
+        cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "\\" .. prefs.export_destinationPathSuffix
+    else
+        cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "/" .. prefs.export_destinationPathSuffix
     end
     logger.trace("errorFile=" .. cmdParams["errorFile"])
     logger.trace("sourceFolder=" .. cmdParams["sourceFolder"])
@@ -240,7 +240,7 @@ local function startDxoPureRAW(images)
     local prefs = LrPrefs.prefsForPlugin()
 
     local cmd
-    if ( #images > 0) then
+    if (#images > 0) then
         if (WIN_ENV) then
             cmd = 'start /D ' .. '"' .. prefs.PureRawDir .. '"' .. ' ' .. prefs.PureRawExe .. ' ' .. getImageList(images)
         else
@@ -255,9 +255,10 @@ end
 --[[----------------------------------------------------------------------------
 local function resetMetadata()
 -------------------------------------------------------------------------------]]
-local function resetMetadata(catalog, exportContext)
+local function resetMetadata(exportContext)
     local prefs = LrPrefs.prefsForPlugin()
     local images = {}
+    local catalog = LrApplication.activeCatalog()
     catalog:withWriteAccessDo("Reset meta data", function()
         for i, rendition in exportContext:renditions { stopIfCanceled = true } do
             -- Wait for the upstream task to finish its work on this photo.
@@ -288,12 +289,66 @@ local function resetMetadata(catalog, exportContext)
     return images
 end
 --[[----------------------------------------------------------------------------
+local function validateExclude()
+-------------------------------------------------------------------------------]]
+local function validateExclude()
+    local prefs = LrPrefs.prefsForPlugin()
+    if (prefs.processCountExcluded > 0) then
+        if (prefs.processCountExcluded == prefs.processCountPhotos) then
+            LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."), nil, "critical")
+            return false
+        else
+            if (LrDialogs.confirm(LOC("$$$/LRPureRaw/Errors/ErrorSomeExcluded=Some photos were exclude."),
+                    LOC("$$$/LRPureRaw/Errors/ErrorExcluded=Wrong file format: ^1^nAlready processed: ^2^nVirtual copy: ^3^nContinue?",
+                            prefs.processCountPhotos,
+                            prefs.processCountExcludedFileFormat,
+                            prefs.processCountExcludedAlreadyProcessed,
+                            prefs.processCountExcludedVirtualCopies)) == "cancel") then
+                return false
+            else
+                return true
+            end
+        end
+    else
+        return true
+    end
+end
+--[[----------------------------------------------------------------------------
+local function validateDestinationType()
+-------------------------------------------------------------------------------]]
+local function validateDestinationType()
+    local prefs = LrPrefs.prefsForPlugin()
+    if (prefs.export_destinationType ~= "specificFolder") then
+        LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
+                LOC("$$$/LRPureRaw/Errors/ErrorDestinationType=When scripts are executed the \"Export to\" must be set to \"Specific folder\"."), "critical")
+        return false
+    end
+    if (prefs.export_destinationPathPrefix == nil) then
+        LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
+                LOC("$$$/LRPureRaw/Errors/ErrorDestinationType=When scripts are executed the \"Export to\" must be set to \"Specific folder\"."), "critical")
+        return false
+    end
+    if (not prefs.export_useSubfolder) then
+        LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
+                LOC("$$$/LRPureRaw/Errors/ErrorUseSubfolder=When scripts are executed \"Put in subfolder\" must be checked and a value must be defined for the subfolder.")
+        , "critical")
+        return false
+    end
+    if (prefs.export_destinationPathSuffix == nill) then
+        LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
+                LOC("$$$/LRPureRaw/Errors/ErrorUseSubfolder=When scripts are executed \"Put in subfolder\" must be checked and a value must be defined for the subfolder.")
+        , "critical")
+        return false
+    end
+    return true
+
+end
+--[[----------------------------------------------------------------------------
 PureRawExportServiceProvider
 -------------------------------------------------------------------------------]]
 function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
                                                             exportContext)
 
-    -- LrMobdebug.on()
     logger.trace("processRenderedPhotos() start")
 
     local prefs = LrPrefs.prefsForPlugin()
@@ -301,8 +356,11 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
         return
     end
 
-    local catalog = LrApplication.activeCatalog()
-    local photos = catalog:getTargetPhotos()
+    if (not validateExclude()) then
+        return
+    end
+
+    local photos = prefs.processPhotos
 
     -- force one source
     if (prefs.forceOneSource) then
@@ -313,8 +371,14 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
 
     initExportProgress(exportContext)
 
-    -- command line params
-    local cmdParams = getCmdParams()
+    local cmdParams
+    if (prefs.scriptBeforeExecute or prefs.scriptAfterExecute) then
+        if (not validateDestinationType()) then
+            return false
+        end
+        -- command line params
+        cmdParams = getCmdParams()
+    end
 
     -- execut before script
     if (prefs.scriptBeforeExecute) then
@@ -324,7 +388,7 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     end
 
     -- reset metadata
-    local images = resetMetadata(catalog, exportContext)
+    local images = resetMetadata(exportContext)
 
     -- execute after script
     if (prefs.scriptAfterExecute and #images > 0) then
@@ -336,7 +400,7 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     startDxoPureRAW(images)
     logger.trace("processRenderedPhotos() end")
 
- end
+end
 
 -------------------------------------------------------------------------------
 

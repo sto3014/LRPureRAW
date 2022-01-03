@@ -40,7 +40,7 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
     prefs.scriptAfterExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export:")
 
     prefs.oneSourceTitle = LOC("$$$/LRPureRaw/Settings/OneSourceTitle=Source folder:")
-
+    prefs.virtualCopiesTitle = LOC("$$$/LRPureRaw/Settings/VirtualCopiesTitle=Virtual copies:")
     local bind = LrView.bind
     --
     -- Windows
@@ -232,6 +232,21 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                             --unchecked_value = false,
                         },
                     })
+                }),
+                -- Virtual copy
+                f:row({
+                    f:static_text({
+                        title = bind("virtualCopiesTitle"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    f:checkbox {
+                        title = LOC("$$$/LRPureRaw/Settings/VirtualCopiesExclude=Exclude virtual copies"),
+                        value = LrView.bind("excludeVirtualCopies"),
+                        --checked_value = true, -- this is the initial state
+                        --unchecked_value = false,
+                    },
                 }),
                 -- Source folder
                 f:row({
@@ -495,6 +510,21 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                             --unchecked_value = false,
                         },
                     })
+                }),
+                -- Virtual copy
+                f:row({
+                    f:static_text({
+                        title = bind("virtualCopiesTitle"),
+                        width_in_chars = 19,
+                        -- fill_horizontal = 1,
+                        -- height_in_lines = -1
+                    }),
+                    f:checkbox {
+                        title = LOC("$$$/LRPureRaw/Settings/VirtualCopiesExclude=Exclude virtual copies"),
+                        value = LrView.bind("excludeVirtualCopies"),
+                        --checked_value = true, -- this is the initial state
+                        --unchecked_value = false,
+                    },
                 }),
                 -- Source folder
                 f:row({

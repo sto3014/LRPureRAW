@@ -42,6 +42,7 @@ function resetPrefs()
     prefs.scriptAfter = nil
     prefs.scriptBeforePath = nil
     prefs.scriptAfterPath = nil
+    prefs.excludeVirtualCopies = nil
 end
 
 function init()
@@ -180,6 +181,18 @@ function init()
         end
     end
 
+    if (prefs.excludeVirtualCopies == nil) then
+        prefs.excludeVirtualCopies = false
+    end
+
+    prefs.processIsRunning = false
+    prefs.processCountExcluded = 0
+    prefs.processCurrent = 0
+    prefs.processIsLatest = false
+    prefs.processPhotos = {}
+    prefs.processCountExcludedVirtualCopies = 0
+    prefs.processCountExcludedAlreadyProcessed = 0
+    prefs.processCountExcludedFileFormat = 0
     logger.trace("Init done.")
 end
 

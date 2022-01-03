@@ -49,5 +49,11 @@
 "$$$/LRPureRaw/Errors/OneSource=Gewählte Fotos müssen aus dem selben Verzeichnis kommen."
 "$$$/LRPureRaw/Errors/script=Fehler bei der Ausführung des Scripts ^n^1"
 "$$$/LRPureRaw/Errors/scriptUnknownError=Unbekannter Fehler, weil die Fehler-Datei ^1 nicht gefunden wurde."
-
+"$$$/LRPureRaw/Errors/ErrorAllExcluded=All Fotos wurde ausgeschlossen."
+"$$$/LRPureRaw/Settings/VirtualCopiesTitle=Virtuelle Kopien:"
+"$$$/LRPureRaw/Settings/VirtualCopiesExclude=Schließe virtuelle Kopien aus"
+"$$$/LRPureRaw/Errors/ErrorSomeExcluded=Einige Fotos wurden ausgeschlossen."
+"$$$/LRPureRaw/Errors/ErrorExcluded=Ausgewählt: ^1^n^nFalsches Datei Format: ^2^nBereits behandelt: ^3^nVirtuelle Kopie: ^4^n^nWeiter?"
+"$$$/LRPureRaw/Errors/ErrorDestinationType=Wenn Scripts ausgeführt werden, muss \"Exportieren in\" auf \"Spezieller Ordner\" gesetzt werden.")
+"$$$/LRPureRaw/Errors/ErrorUseSubfolder=Wenn Scripts ausgeführt werden, muss \"In Unterordner ablegen\" ausgewählt sein und es muss der Unterordner definiert worden sein.")
 

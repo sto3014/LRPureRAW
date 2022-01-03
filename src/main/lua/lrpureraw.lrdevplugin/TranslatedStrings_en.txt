@@ -48,4 +48,11 @@
 "$$$/LRPureRaw/Errors/OneSource=Selected photos must reside to the same folder."
 "$$$/LRPureRaw/Errors/script=Error executing script ^n^1"
 "$$$/LRPureRaw/Errors/scriptUnknownError=Unknown error, because error message file ^1 not found."
+"$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."
+"$$$/LRPureRaw/Settings/VirtualCopiesTitle=Virtual copies:"
+"$$$/LRPureRaw/Settings/VirtualCopiesExclude=Exclude virtual copies"
+"$$$/LRPureRaw/Errors/ErrorSomeExcluded=Some photos were exclude."
+"$$$/LRPureRaw/Errors/ErrorExcluded=Selected: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4^n^nContinue?"
+"$$$/LRPureRaw/Errors/ErrorDestinationType=When scripts are executed the \"Export to\" must be set to \"Specific folder\".")
+"$$$/LRPureRaw/Errors/ErrorUseSubfolder=When scripts are executed \"Put in subfolder\" must be checked and a value must be defined for the subfolder.")
 
