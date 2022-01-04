@@ -19,7 +19,7 @@ return {
     LrExportFilterProvider = {
         title = LOC("$$$/LRPurePath/Filter=Valid photos"),
         file = 'PureRawExportFilterProvider.lua', -- name of the file containing the filter definition script
-        id = "noRejected", -- unique identifier for export filter
+        id = "at.homebrew.lrpureraw", -- unique identifier for export filter
     },
 
     VERSION = { major = 1, minor = 1, revision = 0, build = 0, },

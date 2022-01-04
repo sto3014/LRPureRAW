@@ -226,7 +226,7 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                         }),
                         f:checkbox {
                             title = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export"),
-                            value = LrView.bind("scriptBeforeExecute"),
+                            value = LrView.bind("scriptAfterExecute"),
 
                             --checked_value = true, -- this is the initial state
                             --unchecked_value = false,

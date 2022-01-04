@@ -11,31 +11,29 @@ set ERROR_FILE=%1
 set SOURCE_DIR=%2
 set TARGET_DIR=%3
 set IMAGES_COUNT=%4
-shift 4
-set IMAGES=%*
+::shift 4
+set CMD_LINE=%*
 ::
-LOG_FILE=%SOURCE_DIR/LRPureRaw.log
+set LOG_FILE=%SOURCE_DIR%\LRPureRaw.log
 ::
-echo After export start>>"%LOG_FILE%"
-echo ERROR_FILE = %ERROR_FILE%%>>"%LOG_FILE%"
-echo SOURCE_DIR = %SOURCE_DIR%>>"%LOG_FILE%"
-echo TARGET_DIR = %TARGET_DIR%>>"%LOG_FILE%"
-echo IMAGES_COUNT = %IMAGES_COUNT%>>"%LOG_FILE%"
-echo IMAGES = %IMAGES%>>"%LOG_FILE%"
+echo After export start>>%LOG_FILE%
+echo ERROR_FILE = %ERROR_FILE%>>%LOG_FILE%
+echo SOURCE_DIR = %SOURCE_DIR%>>%LOG_FILE%
+echo TARGET_DIR = %TARGET_DIR%>>%LOG_FILE%
+echo IMAGES_COUNT = %IMAGES_COUNT% >>%LOG_FILE%
+echo CMD_LINE = %CMD_LINE%>>%LOG_FILE%
 ::
-if exist "%TARGET_DIR%"
-then
-  if exist "%SOURCE_DIR%"
-  then
-    echo Create link: ln -s "%SOURCE_DIR%" "%TARGET_DIR%/DxO">>"%LOG_FILE%"
-    mklink /d  "%TARGET_DIR%/DxO" "%SOURCE_DIR%"2>"%ERROR_FILE%"
-  else
-     echo Source directory %SOURCE_DIR% not found.>"%ERROR_FILE%"
+if exist %TARGET_DIR% (
+  if exist %SOURCE_DIR% (
+    echo Create link: mklink /D %TARGET_DIR%\DxO %SOURCE_DIR%>>%LOG_FILE%
+    mklink /d  %TARGET_DIR%\DxO %SOURCE_DIR% 2>%ERROR_FILE%
+  ) else (
+     echo Source directory %SOURCE_DIR% not found. >%ERROR_FILE%
      exit 2
-  endif
-else
-  echo Export directory %TARGET_DIR% not found.>"%ERROR_FILE%"
+  )
+) else (
+  echo Export directory %TARGET_DIR% not found.>%ERROR_FILE%
   exit 1
-endif
-echo After export end>>"%LOG_FILE%"
+)
+echo After export end>>%LOG_FILE%
 

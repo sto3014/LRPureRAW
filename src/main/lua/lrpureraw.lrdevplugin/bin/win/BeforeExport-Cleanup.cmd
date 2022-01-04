@@ -12,39 +12,36 @@ set ERROR_FILE=%1
 set SOURCE_DIR=%2
 set TARGET_DIR=%3
 set PHOTOS_COUNT=%4
-shift 4
-set PHOTOS=%*
+set CMD_LINE=%*
 ::
-set LOG_FILE=%SOURCE_DIR%/LRPureRaw.log
+set LOG_FILE=%SOURCE_DIR%\LRPureRaw.log
 ::
-echo ----------------------------------------------------------------------------------------------->>"%LOG_FILE%"
-date>>"%LOG_FILE%"
-echo Before export start>>"%LOG_FILE%"
-echo ERROR_FILE = "%ERROR_FILE%">>"%LOG_FILE%"
-echo SOURCE_DIR = %SOURCE_DIR%>>"%LOG_FILE%"
-echo TARGET_DIR = %TARGET_DIR%>>"%LOG_FILE%"
-echo PHOTOS_COUNT = %PHOTOS_COUNT%>>"%LOG_FILE%"
-echo PHOTOS = %PHOTOS%>>"%LOG_FILE%"
+echo ----------------------------------------------------------------------------------------------->>%LOG_FILE%
+date /t>>%LOG_FILE%
+time /t>>%LOG_FILE%
+echo Before export start>>%LOG_FILE%
+echo ERROR_FILE = %ERROR_FILE%>>%LOG_FILE%
+echo SOURCE_DIR = %SOURCE_DIR%>>%LOG_FILE%
+echo TARGET_DIR = %TARGET_DIR%>>%LOG_FILE%
+echo PHOTOS_COUNT = %PHOTOS_COUNT% >>%LOG_FILE%
+echo CMD_LINE = %CMD_LINE%>>%LOG_FILE%
 ::
-if exist "%TARGET_DIR%"
-then
-  if exit "%TARGET_DIR%/LRPureRaw.log"
-  then
-    echo TARGET_DIR is equal to SOURCE_DIR. Cleanup is skipped.>>"%LOG_FILE%"
-  else
-    echo Remove files from TARGET_DIR:>>"%LOG_FILE%"
-    ls "%TARGET_DIR%/*.*">>"%LOG_FILE%"
-    del /q "%TARGET_DIR%/*.*" 2>"%ERROR_FILE%"
-    if exist "%TARGET_DIR%/DxO"
-    then
-      echo unlink DxO>>"%LOG_FILE%"
-      del "%TARGET_DIR/DxO%" 2>"%ERROR_FILE%"
-    endif
-  endif
-else
-  echo Export directory %TARGET_DIR% not found.>"%ERROR_FILE%"
+if exist %TARGET_DIR% (
+  if exist %TARGET_DIR%\LRPureRaw.log (
+    echo TARGET_DIR is equal to SOURCE_DIR. Cleanup is skipped.>>%LOG_FILE%
+  ) else (
+    echo Remove files from TARGET_DIR:>>%LOG_FILE%
+    dir /b  %TARGET_DIR%\*.*>>%LOG_FILE%
+    del /Q %TARGET_DIR%\*.* 2>%ERROR_FILE%
+    if exist %TARGET_DIR%\DxO (
+      echo unlink DxO>>%LOG_FILE%
+      del %TARGET_DIR\DxO% 2>%ERROR_FILE%
+    )
+  )
+) else (
+  echo Export directory %TARGET_DIR% not found.>%ERROR_FILE%
   exit 1
-endif
-echo Before export end>>"%LOG_FILE%"
+)
+echo Before export end>>%LOG_FILE%
 
 
