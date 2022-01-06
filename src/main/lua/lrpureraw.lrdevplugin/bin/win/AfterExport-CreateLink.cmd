@@ -7,17 +7,18 @@
 :: 2. Source directory - if more than one, only the first one is passed.
 :: 3. Target directory
 :: 4. Count exported images
-:: 5+ Image(s) - Name only, without path but with suffix: ANY-PHOTO.DNG
+:: 5. Plugin Path
+:: 6+ Image(s) - Name only, without path but with suffix: ANY-PHOTO.DNG
+::
 ::
 :: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/create-symbolic-links
 :: https://docs.microsoft.com/en-us/sysinternals/downloads/junction
-:: Path to junction installation point:
-set JUNCTION_DIR=%APPDATA%\..\Local\Programs\Junction
 ::
 set ERROR_FILE=%1
 set SOURCE_DIR=%2
 set TARGET_DIR=%3
 set IMAGES_COUNT=%4
+set PLUGIN_PATH=%5
 set CMD_LINE=%*
 ::
 set LOG_FILE=%SOURCE_DIR%\LRPureRaw.log
@@ -27,7 +28,10 @@ echo ERROR_FILE = %ERROR_FILE%>>%LOG_FILE%
 echo SOURCE_DIR = %SOURCE_DIR%>>%LOG_FILE%
 echo TARGET_DIR = %TARGET_DIR%>>%LOG_FILE%
 echo IMAGES_COUNT = %IMAGES_COUNT% >>%LOG_FILE%
+echo PLUGIN_PATH = %PLUGIN_PATH% >>%LOG_FILE%
 echo CMD_LINE = %CMD_LINE%>>%LOG_FILE%
+::
+set JUNCTION_EXE=%PLUGIN_PATH%\bin\win\junction\junction.exe
 ::
 if exist %TARGET_DIR% (
   if exist %SOURCE_DIR% (
@@ -36,7 +40,7 @@ if exist %TARGET_DIR% (
       exit 3
     ) else (
        echo Create junction %TARGET_DIR%\DxO to %SOURCE_DIR%>>%LOG_FILE%
-       %JUNCTION_DIR%\junction.exe %TARGET_DIR%\DxO %SOURCE_DIR% 2>%ERROR_FILE%
+       %JUNCTION_EXE% %TARGET_DIR%\DxO %SOURCE_DIR% 2>%ERROR_FILE%
     )
   ) else (
      echo Source directory %SOURCE_DIR% not found. >%ERROR_FILE%

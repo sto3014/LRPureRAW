@@ -8,17 +8,18 @@
 :: 2. Source directory - if more than one, only the first one is passed.
 :: 3. Target directory
 :: 4. Count photos which will be exported.
-:: 5+ Photo(s) - Name only, without path but with suffix: ANY-PHOTO.NEF
+:: 5. Plugin Path
+:: 6+ Photo(s) - Name only, without path but with suffix: ANY-PHOTO.NEF
 ::
 :: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/create-symbolic-links
 :: https://docs.microsoft.com/en-us/sysinternals/downloads/junction
 :: Path to junction installation point:
-set JUNCTION_DIR=%APPDATA%\..\Local\Programs\Junction
 ::
 set ERROR_FILE=%1
 set SOURCE_DIR=%2
 set TARGET_DIR=%3
 set PHOTOS_COUNT=%4
+set PLUGIN_PATH=%5
 set CMD_LINE=%*
 ::
 set LOG_FILE=%SOURCE_DIR%\LRPureRaw.log
@@ -31,9 +32,11 @@ echo ERROR_FILE = %ERROR_FILE%>>%LOG_FILE%
 echo SOURCE_DIR = %SOURCE_DIR%>>%LOG_FILE%
 echo TARGET_DIR = %TARGET_DIR%>>%LOG_FILE%
 echo PHOTOS_COUNT = %PHOTOS_COUNT% >>%LOG_FILE%
+echo PLUGIN_PATH = %PLUGIN_PATH% >>%LOG_FILE%
 echo CMD_LINE = %CMD_LINE%>>%LOG_FILE%
 ::
-rem fsutil behavior set symlinkEvaluation L2L:1 L2R:0
+set JUNCTION_EXE=%PLUGIN_PATH%\bin\win\junction\junction.exe
+
 rem https://docs.microsoft.com/en-us/sysinternals/downloads/junction
 if not exist %TARGET_DIR% mkdir %TARGET_DIR% 2>%ERROR_FILE%
 if exist %TARGET_DIR% (
@@ -45,7 +48,7 @@ if exist %TARGET_DIR% (
     del /Q /A-D %TARGET_DIR% 2>%ERROR_FILE%
     if exist %TARGET_DIR%\DxO (
       echo Delete junction DxO>>%LOG_FILE%
-      %JUNCTION_DIR%\junction.exe /D %TARGET_DIR%\DxO 2>%ERROR_FILE%
+      %JUNCTION_EXE% /D %TARGET_DIR%\DxO 2>%ERROR_FILE%
     )
   )
 ) else (

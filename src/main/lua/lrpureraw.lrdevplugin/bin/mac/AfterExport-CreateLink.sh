@@ -7,12 +7,14 @@
 # 2. Source directory - if more than one, only the first one is passed.
 # 3. Target directory
 # 4. Count exported images
-# 5+ Image(s) - Name only, without path but with suffix: ANY-PHOTO.DNG
+# 5. Plugin Path
+# 6+ Image(s) - Name only, without path but with suffix: ANY-PHOTO.DNG
 ERROR_FILE=$1
 SOURCE_DIR=$2
 TARGET_DIR=$3
 IMAGES_COUNT=$4
-shift 4
+PLUGIN_PATH=$5
+shift 5
 IMAGES=$*
 #
 LOG_FILE=$SOURCE_DIR/LRPureRaw.log
@@ -22,6 +24,7 @@ echo ERROR_FILE = $ERROR_FILE>>"$LOG_FILE"
 echo SOURCE_DIR = $SOURCE_DIR>>"$LOG_FILE"
 echo TARGET_DIR = $TARGET_DIR>>"$LOG_FILE"
 echo IMAGES_COUNT = $IMAGES_COUNT>>"$LOG_FILE"
+echo PLUGIN_PATH= $PLUGIN_PATH>>"$LOG_FILE"
 echo IMAGES = $IMAGES>>"$LOG_FILE"
 #
 if [ -d "$TARGET_DIR" ];

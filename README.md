@@ -18,19 +18,19 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 ## Installation
 
 ---
-1. Download the zip archive for your operating system from [GitHub](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.0.2.3.zip).
+1. Download the zip archive for your operating system from [GitHub](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.0.0.zip).
 2. Extract the archive in the download folder
 3. Copy plug-in and resources into the configuration folder of Lightroom
     1. On Windows  
-       Goto ```Downloads/LRPureRAW-1.0.2.3``` and execute install.bat.
+       Goto ```Downloads/LRPureRAW-1.5.0.0``` and execute install.bat.
        Install.bat copies the plug-in into:
        ```
        <User Home>\AppData\Roaming\Adobe\Lightroom\Modules\LRPureRAW.lrplugin
        ```
     2. On macOS
-       Open a terminal window, change to ```Downloads/LRPureRAW-1.0.2.3``` and execute install.sh:
+       Open a terminal window, change to ```Downloads/LRPureRAW-1.5.0.0``` and execute install.sh:
         ```
-        -> ~ cd Downloads/LRPureRAW-1.0.2.3
+        -> ~ cd Downloads/LRPureRAW-1.5.0.0
         -> ./install.sh 
         ```
         Install.sh copies the plug-in into:
@@ -71,16 +71,39 @@ The selected photos are exported and retrieved in _DxO PureRAW_.
 Only unprocessed DNG and RAW photos are sent to _DxO PureRAW_. If you select other types as well, they are 
 just ignored.
 
+### Plugin Settings
+
+#### DxO PureRAW
+* On Windows
+    * DxO PureRAW Executeable  
+    Path to the exe file. The default value is ```C:\Program Files\DxO\DxO PureRAW\PureRawv1.exe```   
+      If DxO PureRAW was installed in a different place you have to select the executable by yourself.
+* On macOS
+    * DxO PureRAW Application
+      Path to the application. The default value is ```/Applications/DxO PureRAW.app```   
+      If DxO PureRAW was installed in a different place you have to select the executable by yourself.
+    * DxO PureRAW Executeable  
+    The name of the executable. The default value is ```PureRawv1```
+      
+#### Set after export
 In the plugin settings (_Plug-in Manager_) you can configure metadata which is set before the export.
 This configuration supports:
 * Color labels
 * Ratings
-* Flags 
+* Flags
 
 This data is set after the export has finished. I.e., the re-imported photos have the  
-original metadata. 
+original metadata.
+
+#### Scripts
 
 
+
+
+
+### Export Preset
+
+### Filter Preset
 Additionally, there are three filter presets which may support your workflow:
 * PureRAW (candidate)  
   Displays only photos which can be exported by the _PureRAW Original_ preset.

@@ -45,4 +45,13 @@ Only the documentation has changed. No need to update.
 ### Fixed
 Fix installation chapter in README.md 
 
+## [1.5.0.0] - 2022-01-06
+### Added
+* Execute custom scripts before/after export.
+* Example implementation of custom scripts: Processed photos are exported in the original photo folder.
+* Add additional filter/validation for export preset
+    * Exclude virtual copies
+    * Force one source
+### Changed
+### Fixed
 

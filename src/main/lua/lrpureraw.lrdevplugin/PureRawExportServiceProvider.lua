@@ -102,6 +102,7 @@ local function executeBefore(photos, cmdParams)
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
+                .. '\"' .. _PLUGIN.path .. '\" '
                 .. #photos .. ' '
                 .. photosList .. '\"'
     else
@@ -109,6 +110,7 @@ local function executeBefore(photos, cmdParams)
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
+                .. '\"' .. _PLUGIN.path .. '\" '
                 .. #photos .. ' '
                 .. photosList
     end
