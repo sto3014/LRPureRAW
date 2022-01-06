@@ -118,13 +118,13 @@ local function executeBefore(photos, cmdParams)
     local photosList = getPhotoList(photos)
     local cmd
     if (WIN_ENV) then
-        cmd = 'cmd  /C '
+        cmd = 'cmd  /C \"'
                 .. '\"' .. prefs.scriptBeforePath .. "\\" .. prefs.scriptBefore .. '\" '
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
                 .. #photos .. ' '
-                .. photosList
+                .. photosList .. '\"'
     else
         cmd = '\"' .. prefs.scriptBeforePath .. "/" .. prefs.scriptBefore .. '\" '
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
@@ -160,13 +160,13 @@ local function executeAfter(images, cmdParams)
     local imagesList = getImageList(images)
     local cmd
     if (WIN_ENV) then
-        cmd = 'cmd  /C '
+        cmd = 'cmd  /C \"'
                 .. '\"' .. prefs.scriptAfterPath .. "\\" .. prefs.scriptAfter .. '\" '
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
                 .. #images .. ' '
-                .. imagesList
+                .. imagesList .. '\"'
     else
         cmd = '\"' .. prefs.scriptAfterPath .. "/" .. prefs.scriptAfter .. '\" '
                 .. '\"' .. cmdParams["errorFile"] .. '\" '

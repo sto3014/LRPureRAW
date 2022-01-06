@@ -1,3 +1,4 @@
+@echo off
 :: Will be executed before Lightroom starts to export the photos
 :: If this script returns an error (i.e. exit 1) the photos are not exported.
 :: If an error is returned Lightroom looks for a file named %ERROR_FILE% and displays it's content
@@ -8,6 +9,12 @@
 :: 3. Target directory
 :: 4. Count photos which will be exported.
 :: 5+ Photo(s) - Name only, without path but with suffix: ANY-PHOTO.NEF
+::
+:: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/create-symbolic-links
+:: https://docs.microsoft.com/en-us/sysinternals/downloads/junction
+:: Path to junction installation point:
+set JUNCTION_DIR=%APPDATA%\..\Local\Programs\Junction
+::
 set ERROR_FILE=%1
 set SOURCE_DIR=%2
 set TARGET_DIR=%3
@@ -26,20 +33,23 @@ echo TARGET_DIR = %TARGET_DIR%>>%LOG_FILE%
 echo PHOTOS_COUNT = %PHOTOS_COUNT% >>%LOG_FILE%
 echo CMD_LINE = %CMD_LINE%>>%LOG_FILE%
 ::
+rem fsutil behavior set symlinkEvaluation L2L:1 L2R:0
+rem https://docs.microsoft.com/en-us/sysinternals/downloads/junction
+if not exist %TARGET_DIR% mkdir %TARGET_DIR% 2>%ERROR_FILE%
 if exist %TARGET_DIR% (
   if exist %TARGET_DIR%\LRPureRaw.log (
     echo TARGET_DIR is equal to SOURCE_DIR. Cleanup is skipped.>>%LOG_FILE%
   ) else (
     echo Remove files from TARGET_DIR:>>%LOG_FILE%
-    dir /b  %TARGET_DIR%\*.*>>%LOG_FILE%
-    del /Q %TARGET_DIR%\*.* 2>%ERROR_FILE%
+    dir /B  /A-D %TARGET_DIR%>>%LOG_FILE%
+    del /Q /A-D %TARGET_DIR% 2>%ERROR_FILE%
     if exist %TARGET_DIR%\DxO (
-      echo unlink DxO>>%LOG_FILE%
-      del %TARGET_DIR\DxO% 2>%ERROR_FILE%
+      echo Delete junction DxO>>%LOG_FILE%
+      %JUNCTION_DIR%\junction.exe /D %TARGET_DIR%\DxO 2>%ERROR_FILE%
     )
   )
 ) else (
-  echo Export directory %TARGET_DIR% not found.>%ERROR_FILE%
+  echo Export directory %TARGET_DIR% not found.>>%ERROR_FILE%
   exit 1
 )
 echo Before export end>>%LOG_FILE%
