@@ -8,8 +8,8 @@ local LrFileUtils = import("LrFileUtils")
 -------------------------------------------------------------------------------
 
 local logger = require("Logger")
---local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
---LrMobdebug.start()
+local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
+LrMobdebug.start()
 
 --[[---------------------------------------------------------------------------
 readfile
@@ -35,6 +35,7 @@ local PureRawExportServiceProvider = {}
 -------------------------------------------------------------------------------
 
 function PureRawExportServiceProvider.updateExportSettings (exportSettings)
+    LrMobdebug.on()
     logger.trace("*** Start export process ***")
     logger.trace("updateExportSettings")
     if (exportSettings.LR_format ~= "ORIGINAL" and exportSettings.LR_format ~= "DNG") then
@@ -85,28 +86,6 @@ local function getImageList(images)
         end
     end
     return list
-end
---[[----------------------------------------------------------------------------
-local function hasSeveralSourceFolders()
--------------------------------------------------------------------------------]]
-local function hasSeveralSourceFolders(photos)
-    logger.trace("hasSeveralSourceFolders() start")
-
-    local lastFolder
-    for _, photo in ipairs(photos) do
-        local currentFolder = LrPathUtils.parent(photo:getRawMetadata("path"))
-        logger.trace("folder=" .. currentFolder)
-        if (lastFolder ~= nil and currentFolder ~= lastFolder) then
-            local errorMessage = LOC("$$$/LRPureRaw/Errors/OneSource=Selected photos must reside to the same folder.")
-            logger.trace(errorMessage)
-            LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."), errorMessage, "critical")
-            return true
-        end
-        lastFolder = currentFolder
-    end
-    logger.trace("hasSeveralSourceFolders() end")
-
-    return false
 end
 --[[----------------------------------------------------------------------------
 local function executeBefore()
@@ -289,17 +268,45 @@ local function resetMetadata(exportContext)
     return images
 end
 --[[----------------------------------------------------------------------------
+local function hasSeveralSourceFolders()
+-------------------------------------------------------------------------------]]
+local function hasSeveralSourceFolders(photos)
+    logger.trace("hasSeveralSourceFolders() start")
+
+    local lastFolder
+    for _, photo in ipairs(photos) do
+        local currentFolder = LrPathUtils.parent(photo:getRawMetadata("path"))
+        logger.trace("folder=" .. currentFolder)
+        if (lastFolder ~= nil and currentFolder ~= lastFolder) then
+            local errorMessage = LOC("$$$/LRPureRaw/Errors/OneSource=Selected photos must reside to the same folder.")
+            logger.trace(errorMessage)
+            LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."), errorMessage, "critical")
+            return true
+        end
+        lastFolder = currentFolder
+    end
+    logger.trace("hasSeveralSourceFolders() end")
+
+    return false
+end
+
+--[[----------------------------------------------------------------------------
 local function validateExclude()
 -------------------------------------------------------------------------------]]
 local function validateExclude()
     local prefs = LrPrefs.prefsForPlugin()
     if (prefs.processCountExcluded > 0) then
         if (prefs.processCountExcluded == prefs.processCountPhotos) then
-            LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."), nil, "critical")
+            LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."),
+                    LOC("$$$/LRPureRaw/Errors/ErrorAllExcludedDetails=Total: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4",
+                    prefs.processCountPhotos,
+                    prefs.processCountExcludedFileFormat,
+                    prefs.processCountExcludedAlreadyProcessed,
+                    prefs.processCountExcludedVirtualCopies), "critical")
             return false
         else
             if (LrDialogs.confirm(LOC("$$$/LRPureRaw/Errors/ErrorSomeExcluded=Some photos were exclude."),
-                    LOC("$$$/LRPureRaw/Errors/ErrorExcluded=Wrong file format: ^1^nAlready processed: ^2^nVirtual copy: ^3^nContinue?",
+                    LOC("$$$/LRPureRaw/Errors/ErrorAllExcludedDetails=Total: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4",
                             prefs.processCountPhotos,
                             prefs.processCountExcludedFileFormat,
                             prefs.processCountExcludedAlreadyProcessed,
@@ -356,10 +363,6 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
         return
     end
 
-    if (not validateExclude()) then
-        return
-    end
-
     local photos = prefs.processPhotos
 
     -- force one source
@@ -367,6 +370,10 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
         if (hasSeveralSourceFolders(photos)) then
             return
         end
+    end
+
+    if (not validateExclude()) then
+        return
     end
 
     initExportProgress(exportContext)

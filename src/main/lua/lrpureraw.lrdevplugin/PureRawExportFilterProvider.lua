@@ -7,6 +7,8 @@
 
 local LrApplication = import 'LrApplication'
 local LrPrefs = import("LrPrefs")
+local LrView = import("LrView")
+
 
 local logger = require("Logger")
 
@@ -42,7 +44,7 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
     end
 
     -- only DNG and RAW are allowed
-    if (not excluded) then
+    if (not excluded and prefs.excludeNoneDNG) then
         local fileFormat = photo:getRawMetadata("fileFormat")
         if (fileFormat == nil) then
             logger.trace("fileFormat is not set. So it seems not to be a DNG or RAW.")
@@ -59,7 +61,7 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
         end
     end
     -- skipp if already processed
-    if (not excluded) then
+    if (not excluded and prefs.excludeAlreadyProcessed) then
         local software = photo:getFormattedMetadata('software')
         if (software ~= nil) then
             logger.trace("Software: " .. software)
@@ -75,7 +77,7 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
     if (not excluded and prefs.excludeVirtualCopies) then
         local virtualCopy = photo:getRawMetadata('isVirtualCopy')
         logger.trace("Virtual copy: " .. tostring(virtualCopy))
-        if ( virtualCopy) then
+        if (virtualCopy) then
             logger.trace("Photo is virtual copy. Skipped.")
             prefs.processCountExcludedVirtualCopies = prefs.processCountExcludedVirtualCopies + 1
             excluded = true
@@ -85,7 +87,7 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
     if (excluded) then
         prefs.processCountExcluded = prefs.processCountExcluded + 1
     else
-        prefs.processPhotos[ #prefs.processPhotos + 1] = photo
+        prefs.processPhotos[#prefs.processPhotos + 1] = photo
     end
     logger.trace("countExcluded=" .. prefs.processCountExcluded)
     logger.trace("processPhotos=" .. tostring(#prefs.processPhotos))
@@ -108,15 +110,83 @@ end
 -------------------------------------------------------------------------------
 
 function PureRawExportFilterProvider.sectionForFilterInDialog(f, propertyTable)
+    local prefs = LrPrefs.prefsForPlugin()
+    prefs.noneDNGTitle = LOC("$$$/LRPureRaw/Settings/NoneDNGTitle=Other formats:")
+    prefs.alreadyProcessedTitle = LOC("$$$/LRPureRaw/Settings/AlreadyProcessedTitle=Already processed:")
+
     return {
         title = LOC("$$$/LRPurePath/Filter/Title=Filter for valid photos"),
-        f:row {
+        bind_to_object = prefs,
+        f:row({
             spacing = f:control_spacing(),
             f:static_text {
-                title = LOC("$$$/LRPureRaw/Filter/Descr=Only unprocessed RAW and DNG photos will pass."),
+                title = LOC("$$$/LRPureRaw/Filter/Descr=Only valid photos will be exported."),
                 fill_horizontal = 1,
             },
-        }
+        }),
+
+        -- Other formats
+        f:row({
+            f:static_text({
+                title = LrView.bind("noneDNGTitle"),
+                width_in_chars = 19,
+                -- fill_horizontal = 1,
+                -- height_in_lines = -1
+            }),
+            f:checkbox {
+                title = LOC("$$$/LRPureRaw/Settings/NoneDNGExclude=Exclude formats, which are not of type DNG and RAW"),
+                value = LrView.bind("excludeNoneDNG"),
+                enabled = false,
+                --checked_value = true, -- this is the initial state
+                --unchecked_value = false,
+            },
+        }),
+        -- Already processed
+        f:row({
+            f:static_text({
+                title = LrView.bind("alreadyProcessedTitle"),
+                width_in_chars = 19,
+                -- fill_horizontal = 1,
+                -- height_in_lines = -1
+            }),
+            f:checkbox {
+                title = LOC("$$$/LRPureRaw/Settings/AlreadyProcessedExclude=Exclude photos which are already processed"),
+                value = LrView.bind("excludeAlreadyProcessed"),
+                enabled = false,
+                --checked_value = true, -- this is the initial state
+                --unchecked_value = false,
+            },
+        }),
+        -- Virtual copy
+        f:row({
+            f:static_text({
+                title = LrView.bind("virtualCopiesTitle"),
+                width_in_chars = 19,
+                -- fill_horizontal = 1,
+                -- height_in_lines = -1
+            }),
+            f:checkbox {
+                title = LOC("$$$/LRPureRaw/Settings/VirtualCopiesExclude=Exclude virtual copies"),
+                value = LrView.bind("excludeVirtualCopies"),
+                --checked_value = true, -- this is the initial state
+                --unchecked_value = false,
+            },
+        }),
+        -- Source folder
+        f:row({
+            f:static_text({
+                title = LrView.bind("oneSourceTitle"),
+                width_in_chars = 19,
+                -- fill_horizontal = 1,
+                -- height_in_lines = -1
+            }),
+            f:checkbox {
+                title = LOC("$$$/LRPureRaw/Settings/OneSourceForceTitle=Force unique folder"),
+                value = LrView.bind("forceOneSource"),
+                --checked_value = true, -- this is the initial state
+                --unchecked_value = false,
+            },
+        })
     }
 end
 

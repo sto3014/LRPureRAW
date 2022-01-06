@@ -27,6 +27,10 @@ echo TARGET_DIR = $TARGET_DIR>>"$LOG_FILE"
 echo PHOTOS_COUNT = $PHOTOS_COUNT>>"$LOG_FILE"
 echo PHOTOS = $PHOTOS>>"$LOG_FILE"
 #
+if [ ! -d "$TARGET_DIR" ];
+then
+  md "$TARGET_DIR"
+fi
 if [ -d "$TARGET_DIR" ];
 then
   if [ -f "$TARGET_DIR/LRPureRaw.log" ];
