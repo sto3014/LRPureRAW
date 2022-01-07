@@ -90,7 +90,7 @@ this for you, so it must be done by the plug-in itself.
     3. Do not forget to update ```PureRAW Original``` or even better, create a new preset. 
     
 
-<img src="img/pureraw-preset.png" alt="PureRAW Preset" width="600"/>
+<img src="img/pureraw-preset.png" alt="PureRAW Preset" width="800"/>
 
 2. In the Plug-in Manager
     1. Section ```Plug-in Settings```
@@ -99,7 +99,8 @@ this for you, so it must be done by the plug-in itself.
        2. Check ```Execute``` under ```After export```  
           Verify that the script AfterExport-CreateLink script is used.
 
-![Plug-in Manager](img/plug-in-manager.png)
+<img src="img/plug-in-manager.png" alt="Plug-in Manager width="800"/>
+
 With these settings the workflow is as follows:
 1. You
     1. Select (RAW/DNG) photos from one folder
@@ -132,8 +133,6 @@ module.
 * For creating symbolik links, we use the tool [Junction](https://docs.microsoft.com/en-us/sysinternals/downloads/junction)
   from Sysinternals/Microsoft. Therefore, when you do the first export a dialog-box with a license agreement pops up, and you must agree:   
   ![Junction EULA](img/junction-eula.png)  
-   
-
 
 
 #### Caution
