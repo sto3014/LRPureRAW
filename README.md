@@ -6,8 +6,8 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 ## Features
 
 ---
-* Export provider (export preset) to send photos to DxO PureRAW
-* New in 1.5: Processed photos can be automatically send back into the original folder -
+* Export provider (export preset) to send photos to _DxO PureRAW_.
+* New in 1.5: Processed photos can automatically be sent back into the original folder -
   see [Export Location](#export-location)
 * New in 1.5: Export filter - see [Filter for valid photos](#filter-for-valid-photos):
     * for virtual copies
@@ -41,19 +41,19 @@ The plug-in and presets are now available for your user.
 
 ---
 Same as installation. Be aware, that the export preset ```PureRAW Original```will be overwritten.
-So maybe you want to make a copy of your changed preset and store it in the ```User Preset```
+If you changed this preset make a copy of it and store it in the ```User Presets```
 
 ## Usage
 
 ---
 The basic workflow works roughly as follows:
 * Select one or more photos
-* Select File/Export…  
-* Choose the _PureRAW Original_ preset  
+* Select ```File / Export…```  
+* Choose the ```PureRAW Original``` preset  
 * Select Export  
   
 The selected photos are exported and retrieved in _DxO PureRAW_. 
-* In _DxO PureRAW_ develop the photos.
+* In _DxO PureRAW_ process the photos.
 * After the photos are processed, export them back to _Lightroom Classic_.  
 
 Only unprocessed DNG and RAW photos are sent to _DxO PureRAW_. If you select other types as well, they are 
@@ -62,10 +62,10 @@ just ignored.
 ## Custom scripts
 
 ---
-You can create scripts files (CMD files on Windows, shell scripts on macOS) which are executed before and/or after 
+You can create script files (CMD files on Windows, shell scripts on macOS) which are executed before and/or after 
 the Lightroom export.  
-One example implementation is used for cleaning up the export location and create the DxO directory as symbolic link
-to the original photo folder.
+One example implementation exits in the plug-in folder. Is used for cleaning up the export location and create the 
+DxO directory as symbolic link to the original photo folder.
 For details see comments in example scripts:
 * On Windows
   ```
@@ -84,9 +84,9 @@ To choose your own scripts see [Scripts](#scripts)
 
 ---
 ###  Export Location
-A lot of discussions were around the export location. Most of the time, it is wanted to get rid of the exported files 
-and send the processed photos back into the same folder as the original photos. As it is not possible to tell DxO PureRAW to do 
-this for you, it must be done by the plug-in itself.
+Often it is wanted to get rid of the exported files and that the processed photos are sent back into the same 
+folder as the original photos. As it is not possible to tell DxO PureRAW to do 
+so, it must be done by the plug-in itself.
 1. In the ```PureRAW Original``` preset
    1. Section ```Export location```
       1. Set ```Export to``` to ```Specific folder```
@@ -122,12 +122,12 @@ With these settings the workflow is as follows:
 4. Lightroom
     1. Lightroom exports the selected photos into the export location. E.g. _\<Picture folder>/LR2PureRAW_
 5. AfterExport-CreateLink Script
-    1. The script creates a symbolic link DxO in the export location which points to the original folder.  
+    1. The script creates the symbolic link _DxO_ in the export location which points to the original folder.  
     E.g. _\<Picture folder>/LR2PureRAW/DxO_ <---> _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_
 6. Lightroom  
-    1. Lightroom starts/activates _DxO PureRAW_
+    1. Lightroom starts / activates _DxO PureRAW_
 7. You
-    1. You process your photos by choosing the DxO folder as your target folder.  
+    1. You process your photos by choosing the _DxO_ folder as your target folder.  
     See figure _DxO PureRAW Process start_
 8. DxO PureRAW
     1. DxO PureRAW processes the photos and store these into _\<Picture folder>/LR2PureRAW/DxO_ respectively 
@@ -148,35 +148,50 @@ _Figure: Lightroom import via synchronize folder:_
 
 
 Remarks:  
-* Under macOS you can even use the DxO Export functionality (step 9.1). You have to use the ```Add``` import option in Lightroom, because the photos are already where they should.  
-Under Windows this does not work.  
-  If you would use the DxO Export functionality, a new Folder _DxO_ would be created in the folder section of the library module.
-* For creating symbolik links, we use the tool [Junction](https://docs.microsoft.com/en-us/sysinternals/downloads/junction)
-  from Sysinternals/Microsoft. Therefore, when you do the first export a dialog-box with a license agreement pops up, and you must agree:   
+* Under macOS it is possible to use the DxO Export functionality (step 9.1). During Lightroom import you have to choose
+  the ```Add``` option, because the photos are already in the right place.  
+Under Windows, it does not work. The Windows version of Lightroom is not aware of symbolic links.  
+  If you use the DxO Export functionality in Windows, a new Folder _DxO_ is created in the folder section of the library module.
+* For creating symbolic links, we use the tool [Junction](https://docs.microsoft.com/en-us/sysinternals/downloads/junction)
+  from Sysinternals / Microsoft. Therefore, when you do the first export a dialog-box with a license agreement pops up, 
+  and you must agree:   
   ![Junction EULA](img/junction-eula.png)  
 
 
 #### Caution
 For those people which are not used to symbolic links, keep in mind:  
 The _DxO_ folder in your export location is such a link. You may delete it at any time, but do not 
-delete it's content. If you do so, you delete your original photos.
+delete it's content. If you delete the content, you delete your original photos.
 
 ### Validation
-DxO PureRAW only supports RAW files
-* from [cameras and lenses which are supported](https://www.dxo.com/supported-cameras/)
-* RAW files and none linear DNG files  
+In general, _DxO PureRAW_ only supports  
+* RAW and DNG files from [cameras and lenses which are supported](https://www.dxo.com/supported-cameras/)
+* none linear DNG files  
   The RAW or DNG which comes out of your camera are none linear. But if you create a panorama in Lightroom you get 
   a linear DNG. Also, an output file from DxO PureRAW is a linear DNG.  
+  
+Any other formats are not supported.  
 
-This plug-in can support your workflow by filtering not valid photos and inform you during export that some photos 
-were rejected. See [Filter for valid photos](#filter-for-valid-photos).
+This plug-in can support your workflow by filtering the selected photos and reject photos which are not valid.
+This includes photos which are virtual copies or photos which comes from different folders.  
+See [Filter for valid photos](#filter-for-valid-photos).
 
+### Set metadata after export
+
+After DxO processing the processed photos and the original ones resides normally in the same folder. Depending on  
+your sorting settings they maybe stand side by side. For clearness, it might make sense to set metadata like the color
+during export. See [Set after export](#set-after-export) for possible settings.
+
+### Stacking processed and original photos
+
+This plug-in can't do this. But the processed, and the original photo have the same capture time. By this it is easy to stack 
+them automatically: ```Photo / Stacking / Auto-Stack by Capture time…```   
 
 ## Plugin Settings
 
 ---
 ### DxO PureRAW
-In this section the pathes for the DxO PureRAW executable are defined.
+In this section the paths for the _DxO PureRAW_ executable are defined.
 * On Windows
     * DxO PureRAW Executeable  
     Path to the exe file. The default value is ```C:\Program Files\DxO\DxO PureRAW\PureRawv1.exe```   
@@ -194,8 +209,8 @@ In this section you can configure metadata which is set before the export. This 
 * Ratings
 * Flags
 
-This data is set after the export has finished. I.e., the re-imported photos have the  
-original metadata.
+This metadata is set on the original photos after the export has finished. I.e., re-imported photos have the  
+original metadata before the metadata was set.
 
 ### Scripts
 In the script section you can define scripts which run before or directly after the Lightroom export.
