@@ -82,7 +82,7 @@ DxO PureRAW only supports RAW files
   a linear DNG. Also, an output file from DxO PureRAW is a linear DNG.  
 
 This plug-in can support your workflow by filtering not valid photos and inform you during export that some photos 
-were rejected. See [Filter for valid photos](#Filter_for_valid_photos)
+were rejected. See [Filter for valid photos](#filter-for-valid-photos)
 
   
 
