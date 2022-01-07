@@ -23,6 +23,9 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
     local catalog = LrApplication.activeCatalog()
 
     local prefs = LrPrefs.prefsForPlugin()
+    -- InitProvider set this pref to false. If the export preset does not use the filter it is false.
+    prefs.processFilterIsActive=true
+
     if (not prefs.processIsRunning) then
         prefs.processIsRunning = true
         prefs.processCountPhotos = #catalog:getTargetPhotos()

@@ -18,20 +18,6 @@ function resetPrefs()
     prefs.PureRawPath = nil
     prefs.PureRawDir = nil
     prefs.PureRawExe = nil
-    prefs.export_destinationPathPrefix = nil
-    prefs.export_destinationPathSuffix = nil
-    prefs.export_destinationType = nil
-    prefs.export_useParentFolder = nil
-    prefs.export_useSubfolder = nil
-    prefs.format = nil
-    prefs.DNG_compatibilityV3 = nil
-    prefs.DNG_conversionMethod = nil
-    prefs.DNG_previewSize = nil
-    prefs.DNG_compressed = nil
-    prefs.DNG_embedCache = nil
-    prefs.DNG_embedRAW = nil
-    prefs.DNG_lossyCompression = nil
-    prefs.collisionHandling = nil
     prefs.resetColorLabel = nil
     prefs.resetRating = nil
     prefs.resetPickStatus = nil
@@ -47,14 +33,33 @@ function resetPrefs()
     prefs.excludeAlreadyProcessed = nil
 end
 
+local function resetOldPrefs()
+    local LrPrefs = import("LrPrefs")
+    local prefs = LrPrefs.prefsForPlugin()
+    prefs.export_destinationPathPrefix = nil
+    prefs.export_destinationPathSuffix = nil
+    prefs.export_destinationType = nil
+    prefs.export_useParentFolder = nil
+    prefs.export_useSubfolder = nil
+    prefs.format = nil
+    prefs.DNG_compatibilityV3 = nil
+    prefs.DNG_conversionMethod = nil
+    prefs.DNG_previewSize = nil
+    prefs.DNG_compressed = nil
+    prefs.DNG_embedCache = nil
+    prefs.DNG_embedRAW = nil
+    prefs.DNG_lossyCompression = nil
+    prefs.collisionHandling = nil
+end
 function init()
     local LrPrefs = import "LrPrefs"
     local LrFileUtils = import "LrFileUtils"
     local LrDialogs = import "LrDialogs"
 
     -- resetPrefs()
+    -- resetOldPrefs()
 
-    logger.trace("Init...")
+    logger.trace("init() start *****************************************************************")
     local prefs = LrPrefs.prefsForPlugin()
     prefs.hasErrors = false
 
@@ -117,48 +122,48 @@ function init()
         LrDialogs.message(LOC("$$$/LRPurePath/Init/Failed=PureRaw could not be initialised."), LOC("$$$/LRPurePath/Settings/BadSettings/message=One more more settings have wrong values:^1", errorMessage), "critical")
     end
 
-    if (prefs.export_destinationPathPrefix == nil or prefs.export_destinationPathPrefix:len() == 0) then
-        prefs.export_destinationPathPrefix = ""
-    end
-    if (prefs.export_destinationPathSuffix == nil or prefs.export_destinationPathSuffix:len() == 0) then
-        prefs.export_destinationPathSuffix = "LR2PureRAW"
-    end
-    if (prefs.export_destinationType == nil or prefs.export_destinationType:len() == 0) then
-        prefs.export_destinationType = "pictures"
-    end
-    if (prefs.export_useParentFolder == nil) then
-        prefs.export_useParentFolder = false
-    end
-    if (prefs.export_useSubfolder == nil) then
-        prefs.export_useSubfolder = true
-    end
-    if (prefs.format == nil or prefs.format:len() == 0) then
-        prefs.format = "ORIGINAL"
-    end
-    if (prefs.DNG_compatibilityV3 == nil) then
-        prefs.DNG_compatibilityV3 = 201588736
-    end
-    if (prefs.DNG_conversionMethod == nil or prefs.DNG_conversionMethod:len() == 0) then
-        prefs.DNG_conversionMethod = "preserveRAW"
-    end
-    if (prefs.DNG_previewSize == nil or prefs.DNG_previewSize:len() == 0) then
-        prefs.DNG_previewSize = "medium"
-    end
-    if (prefs.DNG_compressed == nil) then
-        prefs.DNG_compressed = true
-    end
-    if (prefs.DNG_embedCache == nil) then
-        prefs.DNG_embedCache = true
-    end
-    if (prefs.DNG_embedRAW == nil) then
-        prefs.DNG_embedRAW = false
-    end
-    if (prefs.DNG_lossyCompression == nil) then
-        prefs.DNG_lossyCompression = true
-    end
-    if (prefs.collisionHandling == nil or prefs.collisionHandling:len() == 0) then
-        prefs.collisionHandling = "overwrite"
-    end
+    --if (prefs.export_destinationPathPrefix == nil or prefs.export_destinationPathPrefix:len() == 0) then
+    --    prefs.export_destinationPathPrefix = ""
+    --end
+    --if (prefs.export_destinationPathSuffix == nil or prefs.export_destinationPathSuffix:len() == 0) then
+    --    prefs.export_destinationPathSuffix = "LR2PureRAW"
+    --end
+    --if (prefs.export_destinationType == nil or prefs.export_destinationType:len() == 0) then
+    --    prefs.export_destinationType = "pictures"
+    --end
+    --if (prefs.export_useParentFolder == nil) then
+    --    prefs.export_useParentFolder = false
+    --end
+    --if (prefs.export_useSubfolder == nil) then
+    --    prefs.export_useSubfolder = true
+    --end
+    --if (prefs.format == nil or prefs.format:len() == 0) then
+    --    prefs.format = "ORIGINAL"
+    --end
+    --if (prefs.DNG_compatibilityV3 == nil) then
+    --    prefs.DNG_compatibilityV3 = 201588736
+    --end
+    --if (prefs.DNG_conversionMethod == nil or prefs.DNG_conversionMethod:len() == 0) then
+    --    prefs.DNG_conversionMethod = "preserveRAW"
+    --end
+    --if (prefs.DNG_previewSize == nil or prefs.DNG_previewSize:len() == 0) then
+    --    prefs.DNG_previewSize = "medium"
+    --end
+    --if (prefs.DNG_compressed == nil) then
+    --    prefs.DNG_compressed = true
+    --end
+    --if (prefs.DNG_embedCache == nil) then
+    --    prefs.DNG_embedCache = true
+    --end
+    --if (prefs.DNG_embedRAW == nil) then
+    --    prefs.DNG_embedRAW = false
+    --end
+    --if (prefs.DNG_lossyCompression == nil) then
+    --    prefs.DNG_lossyCompression = true
+    --end
+    --if (prefs.collisionHandling == nil or prefs.collisionHandling:len() == 0) then
+    --    prefs.collisionHandling = "overwrite"
+    --end
 
     if (prefs.resetColorLabel == nil or prefs.resetColorLabel:len() == 0) then
         prefs.resetColorLabel = "off"
@@ -209,6 +214,7 @@ function init()
     if ( prefs.excludeNoneDNG == nil) then
         prefs.excludeNoneDNG = true
     end
+    prefs.processFilterIsActive = false
     prefs.processIsRunning = false
     prefs.processCountExcluded = 0
     prefs.processCurrent = 0

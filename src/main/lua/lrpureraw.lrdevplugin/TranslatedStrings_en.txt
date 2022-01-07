@@ -48,7 +48,7 @@
 "$$$/LRPureRaw/Errors/OneSource=Selected photos must reside to the same folder."
 "$$$/LRPureRaw/Errors/script=Error executing script ^n^1"
 "$$$/LRPureRaw/Errors/scriptUnknownError=Unknown error, because error message file ^1 not found."
-"$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."
+"$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were excluded."
 "$$$/LRPureRaw/Errors/ErrorAllExcludedDetails=Selected: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4"
 "$$$/LRPureRaw/Settings/VirtualCopiesTitle=Virtual copies:"
 "$$$/LRPureRaw/Settings/VirtualCopiesExclude=Exclude virtual copies"

@@ -11,11 +11,7 @@ return {
         title = "DxO PureRAW",
         file = "PureRawExportServiceProvider.lua",
     },
-    LrExportMenuItems = {
-        title = "$$$/LRPureRaw/MenuAction/Export=Export to DxO PureRAW",
-        file = "ExportToDxOPureRAWMenuAction.lua",
-        enabledWhen = "photosSelected",
-    },
+
     LrExportFilterProvider = {
         title = LOC("$$$/LRPurePath/Filter=Valid photos"),
         file = 'PureRawExportFilterProvider.lua', -- name of the file containing the filter definition script

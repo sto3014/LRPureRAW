@@ -5,12 +5,19 @@ local LrDialogs = import("LrDialogs")
 local LrPathUtils = import("LrPathUtils")
 local LrFileUtils = import("LrFileUtils")
 
--------------------------------------------------------------------------------
-
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 local logger = require("Logger")
--- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
--- LrMobdebug.start()
 
+--local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
+--LrMobdebug.start()
+
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
+
+local PureRawExportServiceProvider = {}
+
+-------------------------------------------------------------------------------
 --[[---------------------------------------------------------------------------
 readfile
 -----------------------------------------------------------------------------]]
@@ -27,36 +34,6 @@ local function readfile(path)
     f:close()
     logger.trace("read_file end")
     return data
-end
--------------------------------------------------------------------------------
-
-local PureRawExportServiceProvider = {}
-
--------------------------------------------------------------------------------
-
-function PureRawExportServiceProvider.updateExportSettings (exportSettings)
---    LrMobdebug.on()
-    logger.trace("*** Start export process ***")
-    logger.trace("updateExportSettings")
-    if (exportSettings.LR_format ~= "ORIGINAL" and exportSettings.LR_format ~= "DNG") then
-        logger.trace("Init export format with value ORIGINAL")
-        exportSettings.LR_format = "ORIGINAL"
-    end
-    prefs = LrPrefs.prefsForPlugin()
-    prefs.export_destinationPathPrefix = exportSettings.LR_export_destinationPathPrefix
-    prefs.export_destinationPathSuffix = exportSettings.LR_export_destinationPathSuffix
-    prefs.export_destinationType = exportSettings.LR_export_destinationType
-    prefs.export_useParentFolder = exportSettings.LR_export_useParentFolder
-    prefs.export_useSubfolder = exportSettings.LR_export_useSubfolder
-    prefs.format = exportSettings.LR_format
-    prefs.DNG_compatibilityV3 = exportSettings.LR_DNG_compatibilityV3
-    prefs.DNG_conversionMethod = exportSettings.LR_DNG_conversionMethod
-    prefs.DNG_previewSize = exportSettings.LR_DNG_previewSize
-    prefs.DNG_compressed = exportSettings.LR_DNG_compressed
-    prefs.DNG_embedCache = exportSettings.LR_DNG_embedCache
-    prefs.DNG_embedRAW = exportSettings.LR_DNG_embedRAW
-    prefs.DNG_lossyCompression = exportSettings.LR_DNG_lossyCompression
-    prefs.collisionHandling = exportSettings.LR_collisionHandling
 end
 
 --[[----------------------------------------------------------------------------
@@ -178,19 +155,20 @@ end
 --[[----------------------------------------------------------------------------
 local function defineCommandLineParams()
 -------------------------------------------------------------------------------]]
-local function getCmdParams()
+local function getCmdParams(exportContext)
     logger.trace("getCmdParams() start")
-    local prefs = LrPrefs.prefsForPlugin()
+    local exportSettings = assert(exportContext.propertyTable)
+
     local cmdParams = {}
     cmdParams["errorFile"] = os.tmpname()
     local photo = LrApplication.activeCatalog():getTargetPhoto()
     cmdParams["sourceFolder"] = LrPathUtils.parent(photo:getRawMetadata("path"))
     -- destination type specific folder und use subfolder checked are mandatory
-    cmdParams["targetFolder"] = prefs.export_destinationPathPrefix
+    cmdParams["targetFolder"] = exportSettings.LR_export_destinationPathPrefix
     if (WIN_ENV) then
-        cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "\\" .. prefs.export_destinationPathSuffix
+        cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "\\" .. exportSettings.LR_export_destinationPathSuffix
     else
-        cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "/" .. prefs.export_destinationPathSuffix
+        cmdParams["targetFolder"] = cmdParams["targetFolder"] .. "/" .. exportSettings.LR_export_destinationPathSuffix
     end
     logger.trace("errorFile=" .. cmdParams["errorFile"])
     logger.trace("sourceFolder=" .. cmdParams["sourceFolder"])
@@ -299,6 +277,9 @@ local function validateExclude()
 -------------------------------------------------------------------------------]]
 local function validateExclude()
     local prefs = LrPrefs.prefsForPlugin()
+    if ( not prefs.processFilterIsActive ) then
+        return true
+    end
     if (prefs.processCountExcluded > 0) then
         if (prefs.processCountExcluded == prefs.processCountPhotos) then
             LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."),
@@ -327,25 +308,26 @@ end
 --[[----------------------------------------------------------------------------
 local function validateDestinationType()
 -------------------------------------------------------------------------------]]
-local function validateDestinationType()
-    local prefs = LrPrefs.prefsForPlugin()
-    if (prefs.export_destinationType ~= "specificFolder") then
+local function validateDestinationType(exportContext)
+    local exportSettings = assert(exportContext.propertyTable)
+
+    if (exportSettings.LR_export_destinationType ~= "specificFolder") then
         LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
                 LOC("$$$/LRPureRaw/Errors/ErrorDestinationType=When scripts are executed the \"Export to\" must be set to \"Specific folder\"."), "critical")
         return false
     end
-    if (prefs.export_destinationPathPrefix == nil) then
+    if (exportSettings.LR_export_destinationPathPrefix == nil) then
         LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
                 LOC("$$$/LRPureRaw/Errors/ErrorDestinationType=When scripts are executed the \"Export to\" must be set to \"Specific folder\"."), "critical")
         return false
     end
-    if (not prefs.export_useSubfolder) then
+    if (not exportSettings.LR_export_useSubfolder) then
         LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
                 LOC("$$$/LRPureRaw/Errors/ErrorUseSubfolder=When scripts are executed \"Put in subfolder\" must be checked and a value must be defined for the subfolder.")
         , "critical")
         return false
     end
-    if (prefs.export_destinationPathSuffix == nill) then
+    if (exportSettings.LR_export_destinationPathSuffix == nil) then
         LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorExport=Error during export."),
                 LOC("$$$/LRPureRaw/Errors/ErrorUseSubfolder=When scripts are executed \"Put in subfolder\" must be checked and a value must be defined for the subfolder.")
         , "critical")
@@ -360,23 +342,28 @@ PureRawExportServiceProvider
 function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
                                                             exportContext)
 
-    logger.trace("processRenderedPhotos() start")
+    logger.trace("processRenderedPhotos() start" )
 
     local prefs = LrPrefs.prefsForPlugin()
     if prefs.hasErrors then
         return
     end
 
-    local photos = prefs.processPhotos
+    local photos
+    if ( prefs.processFilterIsActive) then
+        photos = prefs.processPhotos
+    else
+        photos = LrApplication.activeCatalog():getTargetPhotos()
+    end
 
     -- force one source
-    if (prefs.forceOneSource) then
+    if (prefs.processFilterIsActive and prefs.forceOneSource) then
         if (hasSeveralSourceFolders(photos)) then
             return
         end
     end
 
-    if (not validateExclude()) then
+    if (prefs.processFilterIsActive and (not validateExclude())) then
         return
     end
 
@@ -384,11 +371,11 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
 
     local cmdParams
     if (prefs.scriptBeforeExecute or prefs.scriptAfterExecute) then
-        if (not validateDestinationType()) then
+        if (not validateDestinationType(exportContext)) then
             return false
         end
         -- command line params
-        cmdParams = getCmdParams()
+        cmdParams = getCmdParams(exportContext)
     end
 
     -- execut before script

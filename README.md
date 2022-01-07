@@ -71,6 +71,22 @@ The selected photos are exported and retrieved in _DxO PureRAW_.
 Only unprocessed DNG and RAW photos are sent to _DxO PureRAW_. If you select other types as well, they are 
 just ignored.
 
+## Best practice
+
+---
+### Validation
+DxO PureRAW only supports RAW files
+* from [cameras and lenses which are supported](https://www.dxo.com/supported-cameras/)
+* RAW files and none linear DNG files  
+  The RAW or DNG which comes out of your camera are none linear. But if you create a panorama in Lightroom you get 
+  a linear DNG. Also, an output file from DxO PureRAW is a linear DNG.  
+
+This plug-in can support your workflow by filtering not valid photos and inform you during export that some photos 
+were rejected. See [Filter for valid photos](#Filter_for_valid_photos)
+
+  
+
+
 ### Plugin Settings
 
 #### DxO PureRAW
@@ -103,19 +119,55 @@ respectively ```AfterExport-CreateLink```.
 The ```Execute``` check-box activates/deactivates the corresponding script.
 
 ### Export Preset
-The PureRAW Original preset is responsible for the export. The ```Export Location``` decides to where the files are
+The ```PureRAW Original``` preset is responsible for the export. It uses the service provider ```DxO PureRAW``` 
+(```Export to``` field on top of page).  
+It provides 3 sections
+* [Export location](#Export_location)  
+  This is a standard Lightroom section.
+* [File settings](#File_settings)
+  This is a standard Lightroom section.
+* [Filter for valid photos](#Filter_for_valid_photos)  
+  Post Process-Action "PureRAW / Valid Photos"
+
+If you change this export preset you should add it as a new preset, because the ```PureRAW Original``` may be 
+overwritten on subsequent updates.
+
+If you create an export preset from the scratch and use the service provider ```DxO PureRAW``` you must add the post 
+process-action ```Valid Photos``` as well, if you want to use it.  
+
+#### Export location`
+The ```Export Location``` decides to where the files are
 exported. The possible settings are the same as for other presets. There is only one restriction: If any script is running
 during export, the location must be set to ```Special folder```, ```Export to``` must be checked, and the folder must have a
 value. 
 
+#### File settings
 The file settings are restricted to two image formats: ```Original``` and ```DNG```
+Best is to work with ```Original```, just because of the nameing of the files. E.g, if you work with NEF or CRW files
+the exported files keep the suffix as well as the processed file which come from DxO PureRAW. This makes life a bit less 
+confusing.
+By the way, if your camera ist not supported, it does not help to convert it to an DNG file. DxO PureRAW will reject it
+anyway.
 
+#### Filter for valid photos
 The ```Filter for valid photos``` register defines 4 filter options:  
 * Other formats  
-  Only DNGs or RAW files pass this filter. 
+  Only DNGs or RAW files will pass this filter. The RAW filter does not differentiate between camera types. I.e., even
+  if DxO PureRAW does not support a camera type, the RAW file of this camera type will be exported.
+  The filter is always set to true and you can't change it. It is displayed just for clearness.
 * Already processed
+  A photo which was already exported by DxO PureRAW will be ignored. This filter compares the (EXIF) property 
+  ```Software```. If the value is ```DxO PureRAW``` it will be rejected.
+  The filter is always set to true and you can't change it. It is displayed just for clearness.
 * Exclude virtual copies
-* Force one source
+  A virtual copy may probably not what you want to be exported. It might make more sense to process the original photo
+  make a virtual copy of the processed photo and sync the settings.
+* Force one source  
+If you select photos which reside in multiple folders it makes it hard to import the processed photos back to Lightroom.
+  It is even more confusing if you use the ```AfterExport-CreateLink``` script. In this case the processed photos will be 
+  stored into any of the original folders.  
+  Therefore, it is a good idea for the most workflows to check this option.
+
 
 ### Filter Preset
 Additionally, there are three filter presets which may support your workflow:
