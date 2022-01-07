@@ -89,9 +89,10 @@ this for you, so it must be done by the plug-in itself.
       For details see _force once source_ in [Filter for valid photos](#filter-for-valid-photos)
     3. Do not forget to update ```PureRAW Original``` or even better, create a new preset. 
     
-
+<figure> 
 <img src="img/pureraw-preset.png" alt="PureRAW Preset" width="800"/>
-
+<figcaption>PureRAW Original preset</figcaption>
+</figure>
 2. In the Plug-in Manager
     1. Section ```Plug-in Settings```
        1. Check ```Execute``` under ```Before export```  
@@ -125,8 +126,9 @@ With these settings the workflow is as follows:
     2. Go back to Lightroom and synchronize your folder, i.e.,
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.
 
-|<img src="img/dxo-process.png" alt="DxO process" width="400"/>|<img src="img/dxo-done.png" alt="DxO done" width="400"/>|  
-||<img src="img/lr-sync.png" alt="LR sync" width="400"/>|
+<img src="img/dxo-process.png" alt="DxO process" width="400"/>  
+<img src="img/dxo-done.png" alt="DxO done" width="400"/>    
+<img src="img/lr-sync.png" alt="LR sync" width="400"/>  
 
 
 Remarks:  
