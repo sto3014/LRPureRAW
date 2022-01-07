@@ -87,7 +87,10 @@ this for you, so it must be done by the plug-in itself.
    2. Section ```Filter for valid photos```
       1. Check the option ```Force one source```. 
       For details see _force once source_ in [Filter for valid photos](#filter-for-valid-photos)
-    3. Do not forget to update ```PureRAW Original``` or even better, create a new preset.          
+    3. Do not forget to update ```PureRAW Original``` or even better, create a new preset. 
+    
+
+<img src="img/pureraw-preset.png" alt="PureRAW Preset" width="600"/>
 
 2. In the Plug-in Manager
     1. Section ```Plug-in Settings```
@@ -96,6 +99,7 @@ this for you, so it must be done by the plug-in itself.
        2. Check ```Execute``` under ```After export```  
           Verify that the script AfterExport-CreateLink script is used.
 
+![Plug-in Manager](img/plug-in-manager.png)
 With these settings the workflow is as follows:
 1. You
     1. Select (RAW/DNG) photos from one folder
@@ -120,10 +124,17 @@ With these settings the workflow is as follows:
     2. Go back to Lightroom and synchronize your folder, i.e.,
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.
       
-Under macOS, in the last step you can even use the DxO Export functionallity. You have to use the ```Add``` import 
+Remarks:  
+* Under macOS, in the last step you can even use the DxO Export functionallity. You have to use the ```Add``` import 
 option in Lightroom, because the photos are already where they should.  
 Under Windows this does not work. If you do so, the new Folder _DxO_ is created in teh folder section of the library 
 module.
+* For creating symbolik links, we use the tool [Junction](https://docs.microsoft.com/en-us/sysinternals/downloads/junction)
+  from Sysinternals/Microsoft. Therefore, when you do the first export a dialog-box with a license agreement pops up, and you must agree:   
+  ![Junction EULA](img/junction-eula.png)  
+   
+
+
 
 #### Caution
 For those people which are not used to symbolic links, keep in mind:  
