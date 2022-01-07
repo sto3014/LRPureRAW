@@ -88,11 +88,10 @@ this for you, so it must be done by the plug-in itself.
       1. Check the option ```Force one source```. 
       For details see _force once source_ in [Filter for valid photos](#filter-for-valid-photos)
     3. Do not forget to update ```PureRAW Original``` or even better, create a new preset. 
-    
-<figure> 
+
+
+_Figure: PureRAW Original preset steps:_  
 <img src="img/pureraw-preset.png" alt="PureRAW Preset" width="800"/>
-<figcaption>PureRAW Original preset</figcaption>
-</figure>  
 
 2. In the Plug-in Manager
     1. Section ```Plug-in Settings```
@@ -101,6 +100,7 @@ this for you, so it must be done by the plug-in itself.
        2. Check ```Execute``` under ```After export```  
           Verify that the script AfterExport-CreateLink script is used.
 
+_Figure: Plug-in Manager steps:_  
 <img src="img/plug-in-manager.png" alt="Plug-in Manager" width="800"/>
 
 With these settings the workflow is as follows:
@@ -118,17 +118,23 @@ With these settings the workflow is as follows:
 6. Lightroom  
     1. Starts or activates _DxO PureRAW_
 7. You
-    1. Process your photos by choosing the DxO folder as your target folder.
+    1. Process your photos by choosing the DxO folder as your target folder.  
+    See figure below.
 8. DxO PureRAW
     1. Processes the photos and store these into _\<Picture folder>/LR2PureRAW/DxO_ respectively 
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_
 9. You
-    1. After DxO has processed you photos, do _NOT_ use _DxO PureRAW_ for exporting.
+    1. After DxO has processed you photos, do _NOT_ use _DxO PureRAW_ for exporting.  
+       See figure below.
     2. Go back to Lightroom and synchronize your folder, i.e.,
-      _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.
+      _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.  
+       See figure below.
 
+_Figure: DxO PureRAW Process start:_  
 <img src="img/dxo-process.png" alt="DxO process" width="400"/>  
+_Figure: DxO PureRAW Process done:_  
 <img src="img/dxo-done.png" alt="DxO done" width="400"/>    
+_Figure: Lightroom import via snychronize folder:_  
 <img src="img/lr-sync.png" alt="LR sync" width="400"/>  
 
 
