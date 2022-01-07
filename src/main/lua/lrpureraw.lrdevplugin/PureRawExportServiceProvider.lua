@@ -146,6 +146,7 @@ local function executeAfter(images, cmdParams)
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
+                .. '\"' .. _PLUGIN.path.. '\" '
                 .. #images .. ' '
                 .. imagesList .. '\"'
     else
@@ -153,6 +154,7 @@ local function executeAfter(images, cmdParams)
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
+                .. '\"' .. _PLUGIN.path.. '\" '
                 .. #images .. ' '
                 .. imagesList
     end

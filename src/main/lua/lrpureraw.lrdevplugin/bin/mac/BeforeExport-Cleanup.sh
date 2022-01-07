@@ -7,14 +7,14 @@
 # 1. Error file - Error message which should be displayed in Lightroom
 # 2. Source directory - if more than one, only the first one is passed.
 # 3. Target directory
-# 4. Count photos which will be exported.
-# 5. Plugin Path
+# 4. Plugin Path
+# 5. Count photos which will be exported.
 # 6+ Photo(s) - Name only, without path but with suffix: ANY-PHOTO.NEF
 ERROR_FILE=$1
 SOURCE_DIR=$2
 TARGET_DIR=$3
-PHOTOS_COUNT=$4
-PLUGIN_PATH=$5
+PLUGIN_PATH=$4
+PHOTOS_COUNT=$5
 shift 5
 PHOTOS=$*
 #
@@ -26,8 +26,8 @@ echo Before export start>>"$LOG_FILE"
 echo ERROR_FILE = $ERROR_FILE>>"$LOG_FILE"
 echo SOURCE_DIR = $SOURCE_DIR>>"$LOG_FILE"
 echo TARGET_DIR = $TARGET_DIR>>"$LOG_FILE"
-echo PHOTOS_COUNT = $PHOTOS_COUNT>>"$LOG_FILE"
 echo PLUGIN_PATH= $PLUGIN_PATH>>"$LOG_FILE"
+echo PHOTOS_COUNT = $PHOTOS_COUNT>>"$LOG_FILE"
 echo PHOTOS = $PHOTOS>>"$LOG_FILE"
 #
 if [ ! -d "$TARGET_DIR" ];
@@ -41,8 +41,9 @@ then
     echo TARGET_DIR is equal to SOURCE_DIR. Cleanup is skipped.>>"$LOG_FILE"
   else
     echo Remove files from TARGET_DIR:>>"$LOG_FILE"
-    ls "$TARGET_DIR/*.*">>"$LOG_FILE"
-    rm -f "$TARGET_DIR/*.*" 2>$ERROR_FILE
+    cd "$TARGET_DIR"
+    ls *.*>>"$LOG_FILE"
+    rm -f *.* 2>$ERROR_FILE
     if [ -L "$TARGET_DIR/DxO" ];
     then
       echo unlink DxO>>"$LOG_FILE"

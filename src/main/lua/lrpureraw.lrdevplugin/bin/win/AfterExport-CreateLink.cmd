@@ -6,8 +6,8 @@
 :: 1. Error file - Error message which should be displayed in Lightroom
 :: 2. Source directory - if more than one, only the first one is passed.
 :: 3. Target directory
-:: 4. Count exported images
-:: 5. Plugin Path
+:: 4. Plugin Path
+:: 5. Count exported images
 :: 6+ Image(s) - Name only, without path but with suffix: ANY-PHOTO.DNG
 ::
 ::
@@ -17,8 +17,8 @@
 set ERROR_FILE=%1
 set SOURCE_DIR=%2
 set TARGET_DIR=%3
-set IMAGES_COUNT=%4
-set PLUGIN_PATH=%5
+set PLUGIN_PATH=%4
+set IMAGES_COUNT=%5
 set CMD_LINE=%*
 ::
 set LOG_FILE=%SOURCE_DIR%\LRPureRaw.log
@@ -27,8 +27,8 @@ echo After export start>>%LOG_FILE%
 echo ERROR_FILE = %ERROR_FILE%>>%LOG_FILE%
 echo SOURCE_DIR = %SOURCE_DIR%>>%LOG_FILE%
 echo TARGET_DIR = %TARGET_DIR%>>%LOG_FILE%
-echo IMAGES_COUNT = %IMAGES_COUNT% >>%LOG_FILE%
 echo PLUGIN_PATH = %PLUGIN_PATH% >>%LOG_FILE%
+echo IMAGES_COUNT = %IMAGES_COUNT% >>%LOG_FILE%
 echo CMD_LINE = %CMD_LINE%>>%LOG_FILE%
 ::
 set JUNCTION_EXE=%PLUGIN_PATH%\bin\win\junction\junction.exe

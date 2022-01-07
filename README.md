@@ -74,6 +74,7 @@ just ignored.
 ### Plugin Settings
 
 #### DxO PureRAW
+In this section the pathes for the DxO PureRAW executable are defined.
 * On Windows
     * DxO PureRAW Executeable  
     Path to the exe file. The default value is ```C:\Program Files\DxO\DxO PureRAW\PureRawv1.exe```   
@@ -86,8 +87,7 @@ just ignored.
     The name of the executable. The default value is ```PureRawv1```
       
 #### Set after export
-In the plugin settings (_Plug-in Manager_) you can configure metadata which is set before the export.
-This configuration supports:
+In this section you can configure metadata which is set before the export. This configuration supports:
 * Color labels
 * Ratings
 * Flags
@@ -96,12 +96,26 @@ This data is set after the export has finished. I.e., the re-imported photos hav
 original metadata.
 
 #### Scripts
-
-
-
-
+In the script section you can define scripts which run before or directly after the Lightroom export.
+The standard script which can be executed before the export is ```BeforeExport-Cleanup.cmd``` on Windows and 
+```BeforeExport-Cleanup.sh``` on macOS. For after export it is ```AfterExport-CreateLink.bat``` 
+respectively ```AfterExport-CreateLink```.  
+The ```Execute``` check-box activates/deactivates the corresponding script.
 
 ### Export Preset
+The PureRAW Original preset is responsible for the export. The ```Export Location``` decides to where the files are
+exported. The possible settings are the same as for other presets. There is only one restriction: If any script is running
+during export, the location must be set to ```Special folder```, ```Export to``` must be checked, and the folder must have a
+value. 
+
+The file settings are restricted to two image formats: ```Original``` and ```DNG```
+
+The ```Filter for valid photos``` register defines 4 filter options:  
+* Other formats  
+  Only DNGs or RAW files pass this filter. 
+* Already processed
+* Exclude virtual copies
+* Force one source
 
 ### Filter Preset
 Additionally, there are three filter presets which may support your workflow:
