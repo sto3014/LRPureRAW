@@ -125,7 +125,9 @@ With these settings the workflow is as follows:
     2. Go back to Lightroom and synchronize your folder, i.e.,
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.
 
-<img src="img/dxo-process.png" alt="DxO process" width="400"/>
+|<img src="img/dxo-process.png" alt="DxO process" width="400"/>|<img src="img/dxo-done.png" alt="DxO done" width="400"/>|  
+||<img src="img/lr-sync.png" alt="LR sync" width="400"/>|
+
 
 Remarks:  
 * Under macOS, in the last step you can even use the DxO Export functionallity. You have to use the ```Add``` import 
