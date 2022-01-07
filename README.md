@@ -22,8 +22,8 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 2. Extract the archive in the download folder
 3. Copy plug-in and resources into the configuration folder of Lightroom
     1. On Windows  
-       Goto ```Downloads/LRPureRAW-1.5.0.0``` and execute install.bat.
-       Install.bat copies the plug-in into:
+       Goto ```Downloads/LRPureRAW-1.5.0.0``` and double click install.bat.  
+       This copies the plug-in into:
        ```
        <User Home>\AppData\Roaming\Adobe\Lightroom\Modules\LRPureRAW.lrplugin
        ```
@@ -33,7 +33,7 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
         -> ~ cd Downloads/LRPureRAW-1.5.0.0
         -> ./install.sh 
         ```
-        Install.sh copies the plug-in into:
+        This copies the plug-in into:
         ``` 
         ~/Library/Application Support/Adobe/Lightroom/Modules/LRPureRAW.lrplugin
         ```
@@ -163,11 +163,11 @@ DxO PureRAW only supports RAW files
 This plug-in can support your workflow by filtering not valid photos and inform you during export that some photos 
 were rejected. See [Filter for valid photos](#filter-for-valid-photos).
 
-### Export 
 
-### Plugin Settings
+## Plugin Settings
 
-#### DxO PureRAW
+---
+### DxO PureRAW
 In this section the pathes for the DxO PureRAW executable are defined.
 * On Windows
     * DxO PureRAW Executeable  
@@ -180,7 +180,7 @@ In this section the pathes for the DxO PureRAW executable are defined.
     * DxO PureRAW Executeable  
     The name of the executable. The default value is ```PureRawv1```
       
-#### Set after export
+### Set after export
 In this section you can configure metadata which is set before the export. This configuration supports:
 * Color labels
 * Ratings
@@ -189,14 +189,16 @@ In this section you can configure metadata which is set before the export. This 
 This data is set after the export has finished. I.e., the re-imported photos have the  
 original metadata.
 
-#### Scripts
+### Scripts
 In the script section you can define scripts which run before or directly after the Lightroom export.
 The standard script which can be executed before the export is ```BeforeExport-Cleanup.cmd``` on Windows and 
 ```BeforeExport-Cleanup.sh``` on macOS. For after export it is ```AfterExport-CreateLink.bat``` 
 respectively ```AfterExport-CreateLink```.  
 The ```Execute``` check-box activates/deactivates the corresponding script.
 
-### Export Preset
+## Export Preset
+
+---
 The ```PureRAW Original``` preset is responsible for the export. It uses the service provider ```DxO PureRAW``` 
 (```Export to``` field on top of page).  
 It provides 3 sections
@@ -213,13 +215,13 @@ overwritten on subsequent updates.
 If you create an export preset from the scratch and use the service provider ```DxO PureRAW``` you must add the post 
 process-action ```Valid Photos``` as well, if you want to use it.  
 
-#### Export location`
+### Export location`
 The ```Export Location``` decides to where the files are
 exported. The possible settings are the same as for other presets. There is only one restriction: If any script is running
 during export, the location must be set to ```Special folder```, ```Export to``` must be checked, and the folder must have a
 value. 
 
-#### File settings
+### File settings
 The file settings are restricted to two image formats: ```Original``` and ```DNG```
 Best is to work with ```Original```, just because of the nameing of the files. E.g, if you work with NEF or CRW files
 the exported files keep the suffix as well as the processed file which come from DxO PureRAW. This makes life a bit less 
@@ -227,7 +229,7 @@ confusing.
 By the way, if your camera ist not supported, it does not help to convert it to an DNG file. DxO PureRAW will reject it
 anyway.
 
-#### Filter for valid photos
+### Filter for valid photos
 The ```Filter for valid photos``` register defines 4 filter options:  
 * Other formats  
   Only DNGs or RAW files will pass this filter. The RAW filter does not differentiate between camera types. I.e., even
@@ -247,7 +249,9 @@ If you select photos which reside in multiple folders it makes it hard to import
   Therefore, it is a good idea for the most workflows to check this option.
 
 
-### Filter Preset
+## Filter Preset
+
+---
 Additionally, there are three filter presets which may support your workflow:
 * PureRAW (candidate)  
   Displays only photos which can be exported by the _PureRAW Original_ preset.
@@ -256,6 +260,7 @@ Additionally, there are three filter presets which may support your workflow:
 * PureRAW (only)  
 Displays only processed photos.
   
+
 ## Troubleshooting
 
 ---
