@@ -6,7 +6,13 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 ## Features
 
 ---
-* Export photos and start DxO PureRAW
+* Export provider (export preset) to send photos to DxO PureRAW
+* New in 1.5: Processed photos can be automatically send back into the original folder -
+  see [Export Location](#export-location)
+* New in 1.5: Export filter - see [Filter for valid photos](#filter-for-valid-photos):
+    * for virtual copies
+    * which forces a single source folder
+* New in 1.5: Ability to execute custom scripts before/after export - see [Custom scripts](#custom-scripts)
 * Set metadata (color, rating, flags) after export to identify the processed photos
 * Predefined filters for PureRAW specific attributes
 
@@ -18,29 +24,18 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 ## Installation
 
 ---
-1. Download the zip archive for your operating system from [GitHub](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.0.0.zip).
-2. Extract the archive in the download folder
-3. Copy plug-in and resources into the configuration folder of Lightroom
+1. [Download](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.0.0.zip) the zip archive for version 1.5.0.0.
+2. Extract the archive in the download folder. 
+3. Install plug-in
     1. On Windows  
-       Goto ```Downloads/LRPureRAW-1.5.0.0``` and double click install.bat.  
-       This copies the plug-in into:
-       ```
-       <User Home>\AppData\Roaming\Adobe\Lightroom\Modules\LRPureRAW.lrplugin
-       ```
-    2. On macOS
-       Open a terminal window, change to ```Downloads/LRPureRAW-1.5.0.0``` and execute install.sh:
-        ```
-        -> ~ cd Downloads/LRPureRAW-1.5.0.0
-        -> ./install.sh 
-        ```
-        This copies the plug-in into:
-        ``` 
-        ~/Library/Application Support/Adobe/Lightroom/Modules/LRPureRAW.lrplugin
-        ```
-
+       In Explore goto ```Downloads\LRPureRAW-1.5.0.0``` and double click ```Install-Plugin.bat```.
+    2. On macOS  
+       In Finder goto ```Downloads/LRPureRAW-1.5.0.0``` and double click ```Install-Plugin```  
+       Remarks: It is necessary that you use Finder and not another file manager.
 4. Restart Lightroom
 
 The plug-in and presets are now available for your user.
+
 
 ## Update
 
@@ -64,13 +59,34 @@ The selected photos are exported and retrieved in _DxO PureRAW_.
 Only unprocessed DNG and RAW photos are sent to _DxO PureRAW_. If you select other types as well, they are 
 just ignored.
 
+## Custom scripts
+
+---
+You can create scripts files (CMD files on Windows, shell scripts on macOS) which are executed before and/or after 
+the Lightroom export.  
+One example implementation is used for cleaning up the export location and create the DxO directory as symbolic link
+to the original photo folder.
+For details see comments in example scripts:
+* On Windows
+  ```
+    %APPDATA%\Adobe\Lightroom\Modules\LRPureRAW.lrplugin\bin\win\AfterExport-CreateLink.cmd
+    %APPDATA%\Adobe\Lightroom\Modules\LRPureRAW.lrplugin\bin\win\BeforeExport-Cleanup.cmd
+  ```
+* On macOS 
+    ```
+    ~/Library/Application Support/Adobe/Lightroom/Modules/LRPureRAW.lrplugin/bin/mac/AfterExport-CreateLink.sh
+    ~/Library/Application Support/Adobe/Lightroom/Modules/LRPureRAW.lrplugin/bin/mac/BeforeExport-Cleanup.sh
+    ```
+To choose your own scripts see [Scripts](#scripts)
+
+
 ## Best practice
 
 ---
 ###  Export Location
-A lot of discussions are around the export location. Most of the time, you want to get rid of the exported files 
-and have the processed photos in the same folder as the original ones. It is not possible to tell DxO PureRAW to do 
-this for you, so it must be done by the plug-in itself.
+A lot of discussions were around the export location. Most of the time, it is wanted to get rid of the exported files 
+and send the processed photos back into the same folder as the original photos. As it is not possible to tell DxO PureRAW to do 
+this for you, it must be done by the plug-in itself.
 1. In the ```PureRAW Original``` preset
    1. Section ```Export location```
       1. Set ```Export to``` to ```Specific folder```
@@ -98,28 +114,28 @@ _Figure: Plug-in Manager steps:_
 
 With these settings the workflow is as follows:
 1. You
-    1. Select (RAW/DNG) photos from one folder
+    1. You select (RAW/DNG) photos from one folder
 2. You
-    1. Select ```File / Export with preset… / PureRAW Original```
+    1. You select ```File / Export with preset… / PureRAW Original```
 3.  BeforeExport-Cleanup Script
-    1. Deletes all files in your export location. E.g. _\<Picture folder>/LR2PureRAW_
+    1. The script deletes all files in your export location. E.g. _\<Picture folder>/LR2PureRAW_
 4. Lightroom
-    1. exports the selected photos into the export location. E.g. _\<Picture folder>/LR2PureRAW_
+    1. Lightroom exports the selected photos into the export location. E.g. _\<Picture folder>/LR2PureRAW_
 5. AfterExport-CreateLink Script
-    1. Creates a symbolic link DxO in the export location which points to the original folder.  
+    1. The script creates a symbolic link DxO in the export location which points to the original folder.  
     E.g. _\<Picture folder>/LR2PureRAW/DxO_ <---> _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_
 6. Lightroom  
-    1. Starts or activates _DxO PureRAW_
+    1. Lightroom starts/activates _DxO PureRAW_
 7. You
-    1. Process your photos by choosing the DxO folder as your target folder.  
+    1. You process your photos by choosing the DxO folder as your target folder.  
     See figure _DxO PureRAW Process start_
 8. DxO PureRAW
-    1. Processes the photos and store these into _\<Picture folder>/LR2PureRAW/DxO_ respectively 
+    1. DxO PureRAW processes the photos and store these into _\<Picture folder>/LR2PureRAW/DxO_ respectively 
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_
 9. You
-    1. After DxO has processed you photos, do _NOT_ use _DxO PureRAW_ for exporting.  
+    1. After DxO has processed your photos, you may _NOT_ use _DxO PureRAW_ for exporting.  
        See figure _DxO PureRAW Process done_.
-    2. Go back to Lightroom and synchronize your folder, i.e.,
+    2. Instead you go back to Lightroom and synchronize your folder, i.e.,
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.  
        See figure _Lightroom import via synchronize folder_.
 
@@ -132,10 +148,9 @@ _Figure: Lightroom import via synchronize folder:_
 
 
 Remarks:  
-* Under macOS, in the last step you can even use the DxO Export functionallity. You have to use the ```Add``` import 
-option in Lightroom, because the photos are already where they should.  
-Under Windows this does not work. If you do so, the new Folder _DxO_ is created in teh folder section of the library 
-module.
+* Under macOS you can even use the DxO Export functionality (step 9.1). You have to use the ```Add``` import option in Lightroom, because the photos are already where they should.  
+Under Windows this does not work.  
+  If you would use the DxO Export functionality, a new Folder _DxO_ would be created in the folder section of the library module.
 * For creating symbolik links, we use the tool [Junction](https://docs.microsoft.com/en-us/sysinternals/downloads/junction)
   from Sysinternals/Microsoft. Therefore, when you do the first export a dialog-box with a license agreement pops up, and you must agree:   
   ![Junction EULA](img/junction-eula.png)  
@@ -208,7 +223,7 @@ overwritten on subsequent updates.
 If you create an export preset from the scratch and use the service provider ```DxO PureRAW``` you must add the post 
 process-action ```Valid Photos``` as well, if you want to use it.  
 
-### Export location`
+### Export location
 The ```Export Location``` decides to where the files are
 exported. The possible settings are the same as for other presets. There is only one restriction: If any script is running
 during export, the location must be set to ```Special folder```, ```Export to``` must be checked, and the folder must have a
@@ -225,16 +240,17 @@ anyway.
 ### Filter for valid photos
 The ```Filter for valid photos``` register defines 4 filter options:  
 * Other formats  
-  Only DNGs or RAW files will pass this filter. The RAW filter does not differentiate between camera types. I.e., even
-  if DxO PureRAW does not support a camera type, the RAW file of this camera type will be exported.
-  The filter is always set to true and you can't change it. It is displayed just for clearness.
-* Already processed
+  Only DNGs or RAW files will pass this filter.  
+  Limitation: The RAW filter does not differentiate between camera types. I.e., even
+  if _DxO PureRAW_ does not support the camera type, the RAW file of this camera will be exported.  
+  This filter is always active and you can't change it. It is displayed just for clearness.
+* Already processed  
   A photo which was already exported by DxO PureRAW will be ignored. This filter compares the (EXIF) property 
-  ```Software```. If the value is ```DxO PureRAW``` it will be rejected.
-  The filter is always set to true and you can't change it. It is displayed just for clearness.
-* Exclude virtual copies
-  A virtual copy may probably not what you want to be exported. It might make more sense to process the original photo
-  make a virtual copy of the processed photo and sync the settings.
+  ```Software```. If the value is ```DxO PureRAW``` it will be rejected.  
+  This filter is always set to true and you can't change it. It is displayed just for clearness.
+* Exclude virtual copies  
+  A virtual copy may probably not what you want to be exported. It might make more sense to process the original photo,
+  make a virtual copy of the processed photo, and sync the settings.
 * Force one source  
 If you select photos which reside in multiple folders it makes it hard to import the processed photos back to Lightroom.
   It is even more confusing if you use the ```AfterExport-CreateLink``` script. In this case the processed photos will be 
@@ -264,7 +280,7 @@ _LRPureRAW_ expects that _DxO PureRAW_ 1.0 is installed in the following directo
   /Applications/DxO PureRaw.app    
   
 If _DxO PureRAW_ is installed in a different place or is of different version, you must configure the installation directory 
-  in the plugin settings of PureRAW in the Plug-in Manager.
+  in the plugin settings of PureRAW in the [Plug-in Manager](#dxo-pureraw).
   
 ## Known Issues
 
@@ -283,3 +299,8 @@ Lightroom's import dialog will not be open. It seems to be a DxO PureRAW issue, 
 any photo from this folder to Lightroom. 
 Therefore, the default export path was changed to _Same folder as original photo_ in 1.0.2.2.
 At the time this issue is documented only for Windows systems.
+
+## Acknowledgements
+Thanks to [Mark Russinovich](https://docs.microsoft.com/de-de/archive/blogs/markrussinovich/) for his brilliant tools 
+in general and in details for [Junction](https://docs.microsoft.com/en-us/sysinternals/downloads/junction) which I used 
+to create symbolic links.

@@ -10,7 +10,6 @@
 :: 5. Count exported images
 :: 6+ Image(s) - Name only, without path but with suffix: ANY-PHOTO.DNG
 ::
-::
 :: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/create-symbolic-links
 :: https://docs.microsoft.com/en-us/sysinternals/downloads/junction
 ::

@@ -13,7 +13,6 @@
 ::
 :: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/create-symbolic-links
 :: https://docs.microsoft.com/en-us/sysinternals/downloads/junction
-:: Path to junction installation point:
 ::
 set ERROR_FILE=%1
 set SOURCE_DIR=%2
