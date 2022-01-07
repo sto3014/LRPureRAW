@@ -8,8 +8,8 @@ local LrFileUtils = import("LrFileUtils")
 -------------------------------------------------------------------------------
 
 local logger = require("Logger")
-local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
-LrMobdebug.start()
+-- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
+-- LrMobdebug.start()
 
 --[[---------------------------------------------------------------------------
 readfile
@@ -35,7 +35,7 @@ local PureRawExportServiceProvider = {}
 -------------------------------------------------------------------------------
 
 function PureRawExportServiceProvider.updateExportSettings (exportSettings)
-    LrMobdebug.on()
+--    LrMobdebug.on()
     logger.trace("*** Start export process ***")
     logger.trace("updateExportSettings")
     if (exportSettings.LR_format ~= "ORIGINAL" and exportSettings.LR_format ~= "DNG") then

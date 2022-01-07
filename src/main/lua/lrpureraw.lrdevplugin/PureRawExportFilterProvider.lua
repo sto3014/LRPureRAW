@@ -18,6 +18,7 @@ local PureRawExportFilterProvider = {}
 
 -------------------------------------------------------------------------------
 function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
+
     logger.trace("shouldRenderPhoto() start")
     local catalog = LrApplication.activeCatalog()
 
