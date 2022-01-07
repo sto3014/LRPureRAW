@@ -99,7 +99,7 @@ this for you, so it must be done by the plug-in itself.
        2. Check ```Execute``` under ```After export```  
           Verify that the script AfterExport-CreateLink script is used.
 
-<img src="img/plug-in-manager.png" alt="Plug-in Manager width="800"/>
+<img src="img/plug-in-manager.png" alt="Plug-in Manager" width="800"/>
 
 With these settings the workflow is as follows:
 1. You
