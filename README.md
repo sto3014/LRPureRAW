@@ -93,6 +93,7 @@ this for you, so it must be done by the plug-in itself.
 <img src="img/pureraw-preset.png" alt="PureRAW Preset" width="800"/>
 <figcaption>PureRAW Original preset</figcaption>
 </figure>  
+
 2. In the Plug-in Manager
     1. Section ```Plug-in Settings```
        1. Check ```Execute``` under ```Before export```  
