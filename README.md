@@ -74,6 +74,62 @@ just ignored.
 ## Best practice
 
 ---
+###  Export Location
+A lot of discussions are around the export location. Most of the time, you want to get rid of the exported files 
+and have the processed photos in the same folder as the original ones. It is not possible to tell DxO PureRAW to do 
+this for you, so it must be done by the plug-in itself.
+1. In the ```PureRAW Original``` preset
+   1. Section ```Export location```
+      1. Set ```Export to``` to ```Specific folder```
+      2. Choose a folder, e.g. your picture folder
+      3. Check ```Put in subfolder```
+      4. Set a value for subfolder, e.g. LR2PureRAW
+   2. Section ```Filter for valid photos```
+      1. Check the option ```Force one source```. 
+      For details see _force once source_ in [Filter for valid photos](#filter-for-valid-photos)
+    3. Do not forget to update ```PureRAW Original``` or even better, create a new preset.          
+
+2. In the Plug-in Manager
+    1. Section ```Plug-in Settings```
+       1. Check ```Execute``` under ```Before export```  
+          Verify that the script BeforeExport-Cleanup script is used.
+       2. Check ```Execute``` under ```After export```  
+          Verify that the script AfterExport-CreateLink script is used.
+
+With these settings the workflow is as follows:
+1. You
+    1. Select (RAW/DNG) photos from one folder
+2. You
+    1. Select ```File / Export with preset… / PureRAW Original```
+3.  BeforeExport-Cleanup Script
+    1. Deletes all files in your export location. E.g. _\<Picture folder>/LR2PureRAW_
+4. Lightroom
+    1. exports the selected photos into the export location. E.g. _\<Picture folder>/LR2PureRAW_
+5. AfterExport-CreateLink Script
+    1. Creates a symbolic link DxO in the export location which points to the original folder.  
+    E.g. _\<Picture folder>/LR2PureRAW/DxO_ <---> _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_
+6. Lightroom  
+    1. Starts or activates _DxO PureRAW_
+7. You
+    1. Process your photos by choosing the DxO folder as your target folder.
+8. DxO PureRAW
+    1. Processes the photos and store these into _\<Picture folder>/LR2PureRAW/DxO_ respectively 
+      _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_
+9. You
+    1. After DxO has processed you photos, do _NOT_ use _DxO PureRAW_ for exporting.
+    2. Go back to Lightroom and synchronize your folder, i.e.,
+      _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.
+      
+Under macOS, in the last step you can even use the DxO Export functionallity. You have to use the ```Add``` import 
+option in Lightroom, because the photos are already where they should.  
+Under Windows this does not work. If you do so, the new Folder _DxO_ is created in teh folder section of the library 
+module.
+
+#### Caution
+For those people which are not used to symbolic links, keep in mind:  
+The _DxO_ folder in your export location is such a link. You may delete it at any time, but do not 
+delete it's content. If you do so, you delete your original photos.
+
 ### Validation
 DxO PureRAW only supports RAW files
 * from [cameras and lenses which are supported](https://www.dxo.com/supported-cameras/)
@@ -82,10 +138,9 @@ DxO PureRAW only supports RAW files
   a linear DNG. Also, an output file from DxO PureRAW is a linear DNG.  
 
 This plug-in can support your workflow by filtering not valid photos and inform you during export that some photos 
-were rejected. See [Filter for valid photos](#filter-for-valid-photos)
+were rejected. See [Filter for valid photos](#filter-for-valid-photos).
 
-  
-
+### Export 
 
 ### Plugin Settings
 
@@ -122,11 +177,11 @@ The ```Execute``` check-box activates/deactivates the corresponding script.
 The ```PureRAW Original``` preset is responsible for the export. It uses the service provider ```DxO PureRAW``` 
 (```Export to``` field on top of page).  
 It provides 3 sections
-* [Export location](#Export_location)  
+* [Export location](#export-location)  
   This is a standard Lightroom section.
-* [File settings](#File_settings)
+* [File settings](#file-settings)
   This is a standard Lightroom section.
-* [Filter for valid photos](#Filter_for_valid_photos)  
+* [Filter for valid photos](#filter-for-valid-photos)  
   Post Process-Action "PureRAW / Valid Photos"
 
 If you change this export preset you should add it as a new preset, because the ```PureRAW Original``` may be 
