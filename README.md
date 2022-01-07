@@ -45,15 +45,8 @@ The plug-in and presets are now available for your user.
 ## Update
 
 ---
-Same as installation. Be aware, that the export preset will be overwritten. So maybe you want to make a
-backup and restore it after the update. You can find your the export preset in:
-* Windows  
-%APPDATA%\Adobe\Lightroom\Export Presets\PureRAW   
-  Example: C:\users\janedoe\AppData\Roaming\Adobe\Lightroom\Export Presets\PureRAW   
-  
-* Mac   
-~/Library/Application Support/Adobe/Lightroom/Export Presets/PureRAW   
-  Example: /Users/janedoe/Library/Application Support/Adobe/Lightroom/Export Presets/PureRAW
+Same as installation. Be aware, that the export preset ```PureRAW Original```will be overwritten.
+So maybe you want to make a copy of your changed preset and store it in the ```User Preset```
 
 ## Usage
 
@@ -119,22 +112,22 @@ With these settings the workflow is as follows:
     1. Starts or activates _DxO PureRAW_
 7. You
     1. Process your photos by choosing the DxO folder as your target folder.  
-    See figure below.
+    See figure _DxO PureRAW Process start_
 8. DxO PureRAW
     1. Processes the photos and store these into _\<Picture folder>/LR2PureRAW/DxO_ respectively 
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_
 9. You
     1. After DxO has processed you photos, do _NOT_ use _DxO PureRAW_ for exporting.  
-       See figure below.
+       See figure _DxO PureRAW Process done_.
     2. Go back to Lightroom and synchronize your folder, i.e.,
       _\<Picture folder>/Lightroom/Photos/2022/2022-01/2022-01-06-Wedding_ in our example.  
-       See figure below.
+       See figure _Lightroom import via synchronize folder_.
 
 _Figure: DxO PureRAW Process start:_  
 <img src="img/dxo-process.png" alt="DxO process" width="400"/>  
 _Figure: DxO PureRAW Process done:_  
 <img src="img/dxo-done.png" alt="DxO done" width="400"/>    
-_Figure: Lightroom import via snychronize folder:_  
+_Figure: Lightroom import via synchronize folder:_  
 <img src="img/lr-sync.png" alt="LR sync" width="400"/>  
 
 
