@@ -59,7 +59,7 @@ function init()
     -- resetPrefs()
     -- resetOldPrefs()
 
-    logger.trace("init() start *****************************************************************")
+    logger.trace("init() start")
     local prefs = LrPrefs.prefsForPlugin()
     prefs.hasErrors = false
 
@@ -173,16 +173,7 @@ function init()
     if ( prefs.excludeNoneDNG == nil) then
         prefs.excludeNoneDNG = true
     end
-    prefs.processFilterIsActive = false
-    prefs.processIsRunning = false
-    prefs.processCountExcluded = 0
-    prefs.processCurrent = 0
-    prefs.processIsLatest = false
-    prefs.processPhotos = {}
-    prefs.processCountExcludedVirtualCopies = 0
-    prefs.processCountExcludedAlreadyProcessed = 0
-    prefs.processCountExcludedFileFormat = 0
-    prefs.processDiffFoldersCount =0
+
     logger.trace("Init done.")
 end
 

@@ -17,7 +17,26 @@ local logger = require("Logger")
 
 local PureRawExportServiceProvider = {}
 
--------------------------------------------------------------------------------
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
+
+function PureRawExportServiceProvider.updateExportSettings (exportSettings)
+    logger.trace("********** Start service provider DxO PureRAW **********")
+    logger.trace("updateExportSettings() start")
+    prefs = LrPrefs.prefsForPlugin()
+    logger.trace("Init process preferences.")
+    prefs.processFilterIsActive = false
+    prefs.processIsRunning = false
+    prefs.processCountExcluded = 0
+    prefs.processCurrent = 0
+    prefs.processIsLatest = false
+    prefs.processPhotos = {}
+    prefs.processCountExcludedVirtualCopies = 0
+    prefs.processCountExcludedAlreadyProcessed = 0
+    prefs.processCountExcludedFileFormat = 0
+    prefs.processDiffFoldersCount =0
+    logger.trace("updateExportSettings() end")
+end
 --[[---------------------------------------------------------------------------
 readfile
 -----------------------------------------------------------------------------]]
