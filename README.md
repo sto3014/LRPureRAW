@@ -28,10 +28,13 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 2. Extract the archive in the download folder. 
 3. Install plug-in
     1. On Windows  
-       In Explore goto ```Downloads\LRPureRAW-1.5.0.0``` and double click ```Install-Plugin.bat```.
+       In Explore goto ```Downloads\LRPureRAW-1.5.0.0``` and double click ```install.bat```.
     2. On macOS  
-       In Finder goto ```Downloads/LRPureRAW-1.5.0.0``` and double click ```Install-Plugin```  
-       Remarks: It is necessary that you use Finder and not another file manager.
+       Open a terminal window, change to ```Downloads/LRPureRAW-1.5.0.0``` and execute install.sh:
+        ```
+        -> ~ cd Downloads/LRPureRAW-1.5.0.0
+        -> ./install.sh 
+        ```
 4. Restart Lightroom
 
 The plug-in and presets are now available for the current user.
