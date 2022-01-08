@@ -79,16 +79,17 @@ function init()
         end
         prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
         if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
-            for i=1,2,1 do
+            for i=1,5,1 do
                 local tempPath = prefs.PureRawDir .. "/Contents/MacOS/" .. "PureRawv" .. tostring(i)
                 if (LrFileUtils.exists(tempPath) == "file") then
                     prefs.PureRawExe = "PureRawv" .. tostring(i)
+                    prefs.PureRawPath = tempPath
                 end
             end
         end
     else
         --
-        -- winOS
+        -- Windows
         --
         if prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 then
             pureRawDir = 'C:\\Program Files\\DxO\\DxO PureRAW'
@@ -99,10 +100,11 @@ function init()
         end
         prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
         if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
-            for i=1,2,1 do
+            for i=1,5,1 do
                 local tempPath = prefs.PureRawDir .. "\\" .. "PureRawv" .. tostring(i) .. ".exe"
                 if (LrFileUtils.exists(tempPath) == "file") then
                     prefs.PureRawExe = "PureRawv" .. tostring(i) .. ".exe"
+                    prefs.PureRawPath = tempPath
                 end
             end
         end
@@ -121,49 +123,6 @@ function init()
         logger.trace("Has errors: \n" .. errorMessage)
         LrDialogs.message(LOC("$$$/LRPurePath/Init/Failed=PureRaw could not be initialised."), LOC("$$$/LRPurePath/Settings/BadSettings/message=One more more settings have wrong values:^1", errorMessage), "critical")
     end
-
-    --if (prefs.export_destinationPathPrefix == nil or prefs.export_destinationPathPrefix:len() == 0) then
-    --    prefs.export_destinationPathPrefix = ""
-    --end
-    --if (prefs.export_destinationPathSuffix == nil or prefs.export_destinationPathSuffix:len() == 0) then
-    --    prefs.export_destinationPathSuffix = "LR2PureRAW"
-    --end
-    --if (prefs.export_destinationType == nil or prefs.export_destinationType:len() == 0) then
-    --    prefs.export_destinationType = "pictures"
-    --end
-    --if (prefs.export_useParentFolder == nil) then
-    --    prefs.export_useParentFolder = false
-    --end
-    --if (prefs.export_useSubfolder == nil) then
-    --    prefs.export_useSubfolder = true
-    --end
-    --if (prefs.format == nil or prefs.format:len() == 0) then
-    --    prefs.format = "ORIGINAL"
-    --end
-    --if (prefs.DNG_compatibilityV3 == nil) then
-    --    prefs.DNG_compatibilityV3 = 201588736
-    --end
-    --if (prefs.DNG_conversionMethod == nil or prefs.DNG_conversionMethod:len() == 0) then
-    --    prefs.DNG_conversionMethod = "preserveRAW"
-    --end
-    --if (prefs.DNG_previewSize == nil or prefs.DNG_previewSize:len() == 0) then
-    --    prefs.DNG_previewSize = "medium"
-    --end
-    --if (prefs.DNG_compressed == nil) then
-    --    prefs.DNG_compressed = true
-    --end
-    --if (prefs.DNG_embedCache == nil) then
-    --    prefs.DNG_embedCache = true
-    --end
-    --if (prefs.DNG_embedRAW == nil) then
-    --    prefs.DNG_embedRAW = false
-    --end
-    --if (prefs.DNG_lossyCompression == nil) then
-    --    prefs.DNG_lossyCompression = true
-    --end
-    --if (prefs.collisionHandling == nil or prefs.collisionHandling:len() == 0) then
-    --    prefs.collisionHandling = "overwrite"
-    --end
 
     if (prefs.resetColorLabel == nil or prefs.resetColorLabel:len() == 0) then
         prefs.resetColorLabel = "off"
