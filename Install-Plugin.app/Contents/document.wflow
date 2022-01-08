@@ -51,7 +51,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>source</key>
-					<string>on run {input, parameters}	set PLUGIN_NAME to "LRPureRAW"	set PLUGIN_VERSION to "1.5.0.0"	tell application "Finder" to set currentDir to (target of front Finder window) as text	set targetDir to quoted form of (POSIX path of currentDir &amp; "target/")	do shell script "cd " &amp; targetDir &amp; ";unzip -o " &amp; PLUGIN_NAME &amp; PLUGIN_VERSION &amp; "_mac.zip -d ~;"	return inputend run</string>
+					<string>on run {input, parameters}	set PLUGIN_NAME to "LRPureRAW"	set PLUGIN_VERSION to "1.5.0.0"	tell application "Finder" to set currentDir to (target of front Finder window) as text	set targetDir to quoted form of (POSIX path of currentDir &amp; "/")	do shell script "cd " &amp; targetDir &amp; ";unzip -o " &amp; PLUGIN_NAME &amp; PLUGIN_VERSION &amp; "_mac.zip -d ~;"	return inputend run</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.RunScript</string>
