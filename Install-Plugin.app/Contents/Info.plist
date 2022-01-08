@@ -34,11 +34,11 @@
 	<key>CFBundleIconFile</key>
 	<string>ApplicationStub</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.automator.Install</string>
+	<string>com.apple.automator.Install-Plugin</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Install</string>
+	<string>Install-Plugin</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
