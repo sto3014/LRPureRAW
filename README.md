@@ -24,13 +24,13 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO RureRAW_.
 ## Installation
 
 ---
-1. [Download](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.0.0-alpha.1.zip) the zip archive for version 1.5.0.0.
+1. [Download](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.0.0.zip) the zip archive for version 1.5.0.0.
 2. Extract the archive in the download folder. 
 3. Install plug-in
     1. On Windows  
        In Explore goto ```Downloads\LRPureRAW-1.5.0.0``` and double click ```install.bat```.
     2. On macOS  
-       Open a terminal window, change to ```Downloads/LRPureRAW-1.5.0.0``` and execute install.sh:
+       Open a terminal window, change to ```Downloads/LRPureRAW-1.5.0.0``` and execute ```install.sh```:
         ```
         -> ~ cd Downloads/LRPureRAW-1.5.0.0
         -> ./install.sh 
@@ -249,8 +249,12 @@ process-action ```Valid Photos``` as well, if you want to use it.
 ### Export location
 The ```Export Location``` decides to where the files are
 exported. The possible settings are the same as for other presets. There is only one restriction: If any script is running
-during export (see [Scripts](#scripts) chapter), the location must be set to ```Special folder```, the option ```Export to``` 
-must be checked, and the subfolder field must have a value. 
+during export (see [Scripts](#scripts) chapter):  
+* The location must be set to ```Special folder```. The physical folder which you choose may be any folder where you 
+  have write-access. E.g., you may select your picture folder.
+* The option ```Export to``` must be checked
+* The subfolder field must have a value.  
+
 
 ### File settings
 The file settings are limited to two image formats: ```Original``` and ```DNG```
