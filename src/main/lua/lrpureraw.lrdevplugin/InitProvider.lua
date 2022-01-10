@@ -4,63 +4,30 @@
 -- Date: 02.05.21
 -- To change this template use File | Settings | File Templates.
 --
-local LrDialogs = import("LrDialogs")
+local LrPrefs = import "LrPrefs"
+local LrFileUtils = import "LrFileUtils"
+local LrDialogs = import "LrDialogs"
 
 local logger = require("Logger")
+-- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
+-- LrMobdebug.start()
+
 
 InitProvider = {
     vInfo = require("Info.lua")
 }
-function resetPrefs()
-    local LrPrefs = import("LrPrefs")
-    local prefs = LrPrefs.prefsForPlugin()
-    prefs.hasErrors = nil
-    prefs.PureRawPath = nil
-    prefs.PureRawDir = nil
-    prefs.PureRawExe = nil
-    prefs.resetColorLabel = nil
-    prefs.resetRating = nil
-    prefs.resetPickStatus = nil
-    prefs.scriptBeforeExecute = nil
-    prefs.scriptAfterExecute = nil
-    prefs.forceOneSource = nil
-    prefs.scriptBefore = nil
-    prefs.scriptAfter = nil
-    prefs.scriptBeforePath = nil
-    prefs.scriptAfterPath = nil
-    prefs.excludeVirtualCopies = nil
-    prefs.excludeNoneDNG = nil
-    prefs.excludeAlreadyProcessed = nil
-end
 
-local function resetOldPrefs()
-    local LrPrefs = import("LrPrefs")
-    local prefs = LrPrefs.prefsForPlugin()
-    prefs.export_destinationPathPrefix = nil
-    prefs.export_destinationPathSuffix = nil
-    prefs.export_destinationType = nil
-    prefs.export_useParentFolder = nil
-    prefs.export_useSubfolder = nil
-    prefs.format = nil
-    prefs.DNG_compatibilityV3 = nil
-    prefs.DNG_conversionMethod = nil
-    prefs.DNG_previewSize = nil
-    prefs.DNG_compressed = nil
-    prefs.DNG_embedCache = nil
-    prefs.DNG_embedRAW = nil
-    prefs.DNG_lossyCompression = nil
-    prefs.collisionHandling = nil
-end
+
 function init()
-    local LrPrefs = import "LrPrefs"
-    local LrFileUtils = import "LrFileUtils"
-    local LrDialogs = import "LrDialogs"
-
-    -- resetPrefs()
-    -- resetOldPrefs()
+    --    LrMobdebug.on()
 
     logger.trace("init() start")
     local prefs = LrPrefs.prefsForPlugin()
+    --[[
+        for key,value in pairs(prefs["< contents >"]) do
+            prefs[key]=nil
+        end
+    --]]
     prefs.hasErrors = false
 
     local errorMessage = '\n'
@@ -170,10 +137,22 @@ function init()
     if ( prefs.excludeAlreadyProcessed == nil) then
         prefs.excludeAlreadyProcessed = true
     end
+
     if ( prefs.excludeNoneDNG == nil) then
         prefs.excludeNoneDNG = true
     end
 
+    if ( prefs.excludeMissing == nil) then
+        prefs.excludeMissing = true
+    end
+
+    logger.trace("Preferences:")
+    local tkeys = {}
+    for k in pairs(prefs["< contents >"]) do table.insert(tkeys, k) end
+    table.sort(tkeys)
+    for _,key in ipairs(tkeys) do
+        logger.trace("   " .. tostring(key) .. "=" .. tostring(prefs["< contents >"][key]))
+    end
     logger.trace("Init done.")
 end
 

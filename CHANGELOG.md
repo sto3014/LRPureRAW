@@ -50,8 +50,17 @@ Fix installation chapter in README.md
 * Execute custom scripts before/after export.
 * Example implementation of custom scripts: Processed photos are exported in the original photo folder.
 * Add additional filter/validation for export preset
-    * Exclude virtual copies
-    * Force one source
+  * Exclude virtual copies
+  * Force one source
 ### Changed
 ### Fixed
+
+## [1.5.1.0] - 2022
+### Added
+* New standard filter: Missing photos are excluded.
+### Changed
+### Fixed
+* Fixed missing titles in export filter.
+* Fixed error when only missing photos were exported.
+
 

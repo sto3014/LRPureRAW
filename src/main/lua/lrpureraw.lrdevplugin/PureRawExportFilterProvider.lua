@@ -12,12 +12,15 @@ local LrView = import("LrView")
 
 local logger = require("Logger")
 
+-- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
+-- LrMobdebug.start()
 -------------------------------------------------------------------------------
 
 local PureRawExportFilterProvider = {}
 
 -------------------------------------------------------------------------------
 function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
+-- LrMobdebug.on()
 
     logger.trace("shouldRenderPhoto() start")
     local catalog = LrApplication.activeCatalog()
@@ -88,6 +91,16 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
         end
     end
 
+    if (not excluded and prefs.excludeMissing) then
+        if ( photo:checkPhotoAvailability()) then
+            logger.trace("Photo missing: " .. tostring(false))
+        else
+            logger.trace("Photo missing: " .. tostring(true))
+            prefs.processCountMissing = prefs.processCountMissing + 1
+            excluded = true
+        end
+    end
+
     if (excluded) then
         prefs.processCountExcluded = prefs.processCountExcluded + 1
     else
@@ -115,9 +128,11 @@ end
 
 function PureRawExportFilterProvider.sectionForFilterInDialog(f, propertyTable)
     local prefs = LrPrefs.prefsForPlugin()
+    prefs.missingTitle = LOC("$$$/LRPureRaw/Settings/MissingTitle=Missing:")
     prefs.noneDNGTitle = LOC("$$$/LRPureRaw/Settings/NoneDNGTitle=Other formats:")
     prefs.alreadyProcessedTitle = LOC("$$$/LRPureRaw/Settings/AlreadyProcessedTitle=Already processed:")
-
+    prefs.oneSourceTitle = LOC("$$$/LRPureRaw/Settings/OneSourceTitle=Source folder:")
+    prefs.virtualCopiesTitle = LOC("$$$/LRPureRaw/Settings/VirtualCopiesTitle=Virtual copies:")
     return {
         title = LOC("$$$/LRPurePath/Filter/Title=Filter for valid photos"),
         bind_to_object = prefs,
@@ -129,6 +144,22 @@ function PureRawExportFilterProvider.sectionForFilterInDialog(f, propertyTable)
             },
         }),
 
+        -- Missing
+        f:row({
+            f:static_text({
+                title = LrView.bind("missingTitle"),
+                width_in_chars = 19,
+                -- fill_horizontal = 1,
+                -- height_in_lines = -1
+            }),
+            f:checkbox {
+                title = LOC("$$$/LRPureRaw/Settings/MissingExclude=Exclude missing photos"),
+                value = LrView.bind("excludeMissing"),
+                enabled = false,
+                --checked_value = true, -- this is the initial state
+                --unchecked_value = false,
+            },
+        }),
         -- Other formats
         f:row({
             f:static_text({

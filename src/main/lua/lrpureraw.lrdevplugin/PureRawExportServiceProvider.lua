@@ -34,7 +34,8 @@ function PureRawExportServiceProvider.updateExportSettings (exportSettings)
     prefs.processCountExcludedVirtualCopies = 0
     prefs.processCountExcludedAlreadyProcessed = 0
     prefs.processCountExcludedFileFormat = 0
-    prefs.processDiffFoldersCount =0
+    prefs.processCountMissing = 0
+    prefs.processDiffFoldersCount = 0
     logger.trace("updateExportSettings() end")
 end
 --[[---------------------------------------------------------------------------
@@ -142,7 +143,7 @@ local function executeAfter(images, cmdParams)
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
-                .. '\"' .. _PLUGIN.path.. '\" '
+                .. '\"' .. _PLUGIN.path .. '\" '
                 .. #images .. ' '
                 .. imagesList .. '\"'
     else
@@ -150,7 +151,7 @@ local function executeAfter(images, cmdParams)
                 .. '\"' .. cmdParams["errorFile"] .. '\" '
                 .. '\"' .. cmdParams["sourceFolder"] .. '\" '
                 .. '\"' .. cmdParams["targetFolder"] .. '\" '
-                .. '\"' .. _PLUGIN.path.. '\" '
+                .. '\"' .. _PLUGIN.path .. '\" '
                 .. #images .. ' '
                 .. imagesList
     end
@@ -296,25 +297,27 @@ local function validateExclude()
 -------------------------------------------------------------------------------]]
 local function validateExclude()
     local prefs = LrPrefs.prefsForPlugin()
-    if ( not prefs.processFilterIsActive ) then
+    if (not prefs.processFilterIsActive) then
         return true
     end
     if (prefs.processCountExcluded > 0) then
         if (prefs.processCountExcluded == prefs.processCountPhotos) then
-            LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were exclude."),
-                    LOC("$$$/LRPureRaw/Errors/ErrorAllExcludedDetails=Total: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4",
-                    prefs.processCountPhotos,
-                    prefs.processCountExcludedFileFormat,
-                    prefs.processCountExcludedAlreadyProcessed,
-                    prefs.processCountExcludedVirtualCopies), "critical")
-            return false
-        else
-            if (LrDialogs.confirm(LOC("$$$/LRPureRaw/Errors/ErrorSomeExcluded=Some photos were exclude."),
-                    LOC("$$$/LRPureRaw/Errors/ErrorAllExcludedDetails=Total: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4",
+            LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were excluded."),
+                    LOC("$$$/LRPureRaw/Errors/ErrorAllExcludedDetails=Total: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4^nMissing: ^5",
                             prefs.processCountPhotos,
                             prefs.processCountExcludedFileFormat,
                             prefs.processCountExcludedAlreadyProcessed,
-                            prefs.processCountExcludedVirtualCopies)) == "cancel") then
+                            prefs.processCountExcludedVirtualCopies,
+                    prefs.processCountMissing, "critical"))
+            return false
+        else
+            if (LrDialogs.confirm(LOC("$$$/LRPureRaw/Errors/ErrorSomeExcluded=Some photos were excluded."),
+                    LOC("$$$/LRPureRaw/Errors/ErrorExcludedDetails=Selected: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4^nMissing: ^5^n^nContinue?",
+                            prefs.processCountPhotos,
+                            prefs.processCountExcludedFileFormat,
+                            prefs.processCountExcludedAlreadyProcessed,
+                            prefs.processCountExcludedVirtualCopies,
+                            prefs.processCountMissing)) == "cancel") then
                 return false
             else
                 return true
@@ -361,7 +364,7 @@ PureRawExportServiceProvider
 function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
                                                             exportContext)
 
-    logger.trace("processRenderedPhotos() start" )
+    logger.trace("processRenderedPhotos() start")
 
     local prefs = LrPrefs.prefsForPlugin()
     if prefs.hasErrors then
@@ -369,7 +372,7 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     end
 
     local photos
-    if ( prefs.processFilterIsActive) then
+    if (prefs.processFilterIsActive) then
         photos = prefs.processPhotos
     else
         photos = LrApplication.activeCatalog():getTargetPhotos()
