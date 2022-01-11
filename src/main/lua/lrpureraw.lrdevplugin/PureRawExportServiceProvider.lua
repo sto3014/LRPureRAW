@@ -8,7 +8,6 @@ local LrFileUtils = import("LrFileUtils")
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
 local logger = require("Logger")
-
 --local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
 --LrMobdebug.start()
 
@@ -21,9 +20,10 @@ local PureRawExportServiceProvider = {}
 -----------------------------------------------------------------------------]]
 
 function PureRawExportServiceProvider.updateExportSettings (exportSettings)
+    --LrMobdebug.on()
     logger.trace("********** Start service provider DxO PureRAW **********")
     logger.trace("updateExportSettings() start")
-    prefs = LrPrefs.prefsForPlugin()
+    local prefs = LrPrefs.prefsForPlugin()
     logger.trace("Init process preferences.")
     prefs.processFilterIsActive = false
     prefs.processIsRunning = false
@@ -36,6 +36,7 @@ function PureRawExportServiceProvider.updateExportSettings (exportSettings)
     prefs.processCountExcludedFileFormat = 0
     prefs.processCountMissing = 0
     prefs.processDiffFoldersCount = 0
+
     logger.trace("updateExportSettings() end")
 end
 --[[---------------------------------------------------------------------------

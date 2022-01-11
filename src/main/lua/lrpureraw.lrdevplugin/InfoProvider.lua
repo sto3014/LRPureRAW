@@ -7,38 +7,15 @@ local LrFileUtils = import("LrFileUtils")
 --local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
 --LrMobdebug.start()
 local logger = require("Logger")
-local initProvider = require("InitProvider")
 
 InfoProvider = {
     vInfo = require("Info.lua")
 }
 
 function InfoProvider.sectionsForTopOfDialog(f, _)
-    logger:trace("sectionsForTopOfDialog")
+    logger.trace("sectionsForTopOfDialog")
 
     local prefs = LrPrefs.prefsForPlugin()
-    if (MAC_ENV) then
-        -- PureRawPath_Title
-        prefs.PureRawDir_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/MAC=DxO PureRAW directory")
-        prefs.PureRawExe_Title = LOC("$$$/LRPurePath/Settings/PureRawExe/MAC=Executable")
-    else
-        -- PureRawPath_Title
-        prefs.PureRawPath_Title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/WIN=DxO PureRAW executable")
-    end
-
-    prefs.resetMetaData_Title = LOC("$$$/LRPurePath/Reset/Title=Set after export")
-
-    prefs.scriptsTitle = LOC("$$$/LRPureRaw/Settings/ScriptsTitle=Scripts")
-
-    prefs.scriptBeforeTitle = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Script before export:")
-    prefs.scriptAfterTitle = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=Script after export:")
-
-    prefs.scriptBeforeExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export:")
-    prefs.scriptAfterExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export:")
-
-    prefs.scriptBeforeExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export:")
-    prefs.scriptAfterExecuteTitle = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export:")
-
     local bind = LrView.bind
     --
     -- Windows
@@ -53,13 +30,11 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                 --
                 f:row({
                     f:static_text({
-                        title = bind("PureRawPath_Title"),
+                        title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/WIN=DxO PureRAW executable"),
                         width_in_chars = 19,
-                        -- fill_horizontal = 1,
-                        -- height_in_lines = -1
                     }),
                     f:edit_field({
-                        value = LrView.bind("PureRawPath"),
+                        value = bind("PureRawPath"),
                         fill_horizontal = 1,
                         enabled = false
                     }),
@@ -86,10 +61,8 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                 }),
                 f:row({
                     f:static_text({
-                        title = bind("resetMetaData_Title"),
+                        title = LOC("$$$/LRPurePath/Reset/Title=Set after export"),
                         width_in_chars = 19,
-                        -- fill_horizontal = 1,
-                        -- height_in_lines = -1
                     }),
                     f:group_box {
                         title = LOC("$$$/LRPureRaw/Reset/label=Color Label"),
@@ -146,13 +119,11 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                 -- Path to Scripts
                 f:row({
                     f:static_text({
-                        title = bind("scriptsTitle"),
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptsTitle=Scripts"),
                         width_in_chars = 19,
-                        -- fill_horizontal = 1,
-                        -- height_in_lines = -1
                     }),
                     f:group_box({
-                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Before export"),
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Script before export:"),
                         fill_horizontal = 2,
                         spacing = f:control_spacing(),
                         size = "regular",
@@ -184,20 +155,18 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                             })
                         }),
                         f:checkbox {
-                            title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export"),
-                            value = LrView.bind("scriptBeforeExecute"),
-                            --checked_value = true, -- this is the initial state
-                            --unchecked_value = false,
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export:"),
+                            value = bind("scriptBeforeExecute"),
                         },
                     }),
                     f:group_box({
-                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=After export"),
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=Script after export:"),
                         fill_horizontal = 2,
                         spacing = f:control_spacing(),
                         size = "regular",
                         f:row({
                             f:edit_field({
-                                value = LrView.bind("scriptAfter"),
+                                value = bind("scriptAfter"),
                                 fill_horizontal = 1,
                                 enabled = false
                             }),
@@ -223,11 +192,8 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                             })
                         }),
                         f:checkbox {
-                            title = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export"),
-                            value = LrView.bind("scriptAfterExecute"),
-
-                            --checked_value = true, -- this is the initial state
-                            --unchecked_value = false,
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export:"),
+                            value = bind("scriptAfterExecute"),
                         },
                     })
                 }),
@@ -246,13 +212,11 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                 -- Path to pureraw
                 f:row({
                     f:static_text({
-                        title = bind("PureRawDir_Title"),
+                        title = LOC("$$$/LRPurePath/Settings/PathToPureRaw/MAC=DxO PureRAW directory"),
                         width_in_chars = 19,
-                        -- fill_horizontal = 1,
-                        -- height_in_lines = -1
                     }),
                     f:edit_field({
-                        value = LrView.bind("PureRawDir"),
+                        value = bind("PureRawDir"),
                         fill_horizontal = 1,
                         enabled = false
                     }),
@@ -291,13 +255,11 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                 -- Name of executable
                 f:row({
                     f:static_text({
-                        title = bind("PureRawExe_Title"),
+                        title = LOC("$$$/LRPurePath/Settings/PureRawExe/MAC=Executable"),
                         width_in_chars = 19,
-                        -- fill_horizontal = 1,
-                        -- height_in_lines = -1
                     }),
                     f:edit_field({
-                        value = LrView.bind("PureRawExe"),
+                        value = bind("PureRawExe"),
                         fill_horizontal = 1,
                         enabled = false
                     }),
@@ -331,10 +293,8 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                 f:row({
 
                     f:static_text({
-                        title = bind("resetMetaData_Title"),
+                        title = LOC("$$$/LRPurePath/Reset/Title=Set after export"),
                         width_in_chars = 19,
-                        -- fill_horizontal = 1,
-                        -- height_in_lines = -1
                     }),
                     f:group_box {
                         title = LOC("$$$/LRPureRaw/Reset/label=Color Label"),
@@ -394,19 +354,17 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                 -- Path to Scripts
                 f:row({
                     f:static_text({
-                        title = bind("scriptsTitle"),
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptsTitle=Scripts"),
                         width_in_chars = 19,
-                        -- fill_horizontal = 1,
-                        -- height_in_lines = -1
                     }),
                     f:group_box({
-                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Before export"),
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeTitle=Script before export:"),
                         fill_horizontal = 2,
                         spacing = f:control_spacing(),
                         size = "regular",
                         f:row({
                             f:edit_field({
-                                value = LrView.bind("scriptBefore"),
+                                value = bind("scriptBefore"),
                                 fill_horizontal = 1,
                                 enabled = false
                             }),
@@ -432,20 +390,18 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                             })
                         }),
                         f:checkbox {
-                            title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export"),
-                            value = LrView.bind("scriptBeforeExecute"),
-                            --checked_value = true, -- this is the initial state
-                            --unchecked_value = false,
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptBeforeExecuteTitle=Execute before export:"),
+                            value = bind("scriptBeforeExecute"),
                         },
-                   }),
+                    }),
                     f:group_box({
-                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=After export"),
+                        title = LOC("$$$/LRPureRaw/Settings/ScriptAfterTitle=Script after export:"),
                         fill_horizontal = 2,
                         spacing = f:control_spacing(),
                         size = "regular",
                         f:row({
                             f:edit_field({
-                                value = LrView.bind("scriptAfter"),
+                                value = bind("scriptAfter"),
                                 fill_horizontal = 1,
                                 enabled = false
                             }),
@@ -471,11 +427,8 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                             })
                         }),
                         f:checkbox {
-                            title = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export"),
-                            value = LrView.bind("scriptAfterExecute"),
-
-                            --checked_value = true, -- this is the initial state
-                            --unchecked_value = false,
+                            title = LOC("$$$/LRPureRaw/Settings/ScriptAfterExecuteTitle=Execute after export:"),
+                            value = bind("scriptAfterExecute"),
                         },
                     })
                 }),

@@ -17,17 +17,44 @@ InitProvider = {
     vInfo = require("Info.lua")
 }
 
-
 function init()
-    --    LrMobdebug.on()
 
+    --    LrMobdebug.on()
     logger.trace("init() start")
+    local currentPrefs = { ["PureRawDir"] = true,
+                           ["PureRawExe"] = true,
+                           ["PureRawPath"] = true,
+                           ["excludeAlreadyProcessed"] = true,
+                           ["excludeMissing"] = true,
+                           ["excludeNoneDNG"] = true,
+                           ["excludeVirtualCopies"] = true,
+                           ["forceOneSource"] = true,
+                           ["hasErrors"] = true,
+                           ["resetColorLabel"] = true,
+                           ["resetPickStatus"] = true,
+                           ["resetRating"] = true,
+                           ["scriptAfter"] = true,
+                           ["scriptAfterExecute"] = true,
+                           ["scriptAfterPath"] = true,
+                           ["scriptBefore"] = true,
+                           ["scriptBeforeExecute"] = true,
+                           ["scriptBeforePath"] = true }
+
     local prefs = LrPrefs.prefsForPlugin()
-    --[[
-        for key,value in pairs(prefs["< contents >"]) do
-            prefs[key]=nil
+    -- Reset all
+--[[    for key, value in pairs(prefs["< contents >"]) do
+        prefs[key] = nil
+    end
+    ]]
+    -- Reset persistent
+    logger.trace("Delete old preferences:")
+    for key, value in pairs(prefs["< contents >"]) do
+        if ( not currentPrefs[key] ) then
+            logger.trace("   Delete key: " .. key)
+            prefs[key] = nil
         end
-    --]]
+    end
+
     prefs.hasErrors = false
 
     local errorMessage = '\n'
@@ -46,7 +73,7 @@ function init()
         end
         prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
         if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
-            for i=1,5,1 do
+            for i = 1, 5, 1 do
                 local tempPath = prefs.PureRawDir .. "/Contents/MacOS/" .. "PureRawv" .. tostring(i)
                 if (LrFileUtils.exists(tempPath) == "file") then
                     prefs.PureRawExe = "PureRawv" .. tostring(i)
@@ -67,7 +94,7 @@ function init()
         end
         prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
         if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
-            for i=1,5,1 do
+            for i = 1, 5, 1 do
                 local tempPath = prefs.PureRawDir .. "\\" .. "PureRawv" .. tostring(i) .. ".exe"
                 if (LrFileUtils.exists(tempPath) == "file") then
                     prefs.PureRawExe = "PureRawv" .. tostring(i) .. ".exe"
@@ -76,8 +103,6 @@ function init()
             end
         end
     end
-
-    logger.trace("PureRawPath: " .. prefs.PureRawPath .. " (" .. tostring(LrFileUtils.exists(prefs.PureRawPath)) .. ")")
 
     if (prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 or LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
         errorNo = errorNo + 1
@@ -134,23 +159,26 @@ function init()
         prefs.excludeVirtualCopies = false
     end
 
-    if ( prefs.excludeAlreadyProcessed == nil) then
+    if (prefs.excludeAlreadyProcessed == nil) then
         prefs.excludeAlreadyProcessed = true
     end
 
-    if ( prefs.excludeNoneDNG == nil) then
+    if (prefs.excludeNoneDNG == nil) then
         prefs.excludeNoneDNG = true
     end
 
-    if ( prefs.excludeMissing == nil) then
+    if (prefs.excludeMissing == nil) then
         prefs.excludeMissing = true
     end
 
-    logger.trace("Preferences:")
     local tkeys = {}
-    for k in pairs(prefs["< contents >"]) do table.insert(tkeys, k) end
+    for k in pairs(prefs["< contents >"]) do
+        table.insert(tkeys, k)
+    end
     table.sort(tkeys)
-    for _,key in ipairs(tkeys) do
+
+    logger.trace("Saved preferences:")
+    for _, key in ipairs(tkeys) do
         logger.trace("   " .. tostring(key) .. "=" .. tostring(prefs["< contents >"][key]))
     end
     logger.trace("Init done.")
