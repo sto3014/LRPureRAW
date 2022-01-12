@@ -25,17 +25,18 @@ function PureRawExportServiceProvider.updateExportSettings (exportSettings)
     logger.trace("updateExportSettings() start")
     local prefs = LrPrefs.prefsForPlugin()
     logger.trace("Init process preferences.")
-    prefs.processFilterIsActive = false
-    prefs.processIsRunning = false
-    prefs.processCountExcluded = 0
-    prefs.processCurrent = 0
-    prefs.processIsLatest = false
-    prefs.processPhotos = {}
-    prefs.processCountExcludedVirtualCopies = 0
-    prefs.processCountExcludedAlreadyProcessed = 0
-    prefs.processCountExcludedFileFormat = 0
-    prefs.processCountMissing = 0
-    prefs.processDiffFoldersCount = 0
+    prefs.process = {}
+    prefs.process.FilterIsActive = false
+    prefs.process.IsRunning = false
+    prefs.process.CountExcluded = 0
+    prefs.process.Current = 0
+    prefs.process.IsLatest = false
+    prefs.process.Photos = {}
+    prefs.process.CountExcludedVirtualCopies = 0
+    prefs.process.CountExcludedAlreadyProcessed = 0
+    prefs.process.CountExcludedFileFormat = 0
+    prefs.process.CountMissing = 0
+    prefs.process.DiffFoldersCount = 0
 
     logger.trace("updateExportSettings() end")
 end
@@ -298,27 +299,27 @@ local function validateExclude()
 -------------------------------------------------------------------------------]]
 local function validateExclude()
     local prefs = LrPrefs.prefsForPlugin()
-    if (not prefs.processFilterIsActive) then
+    if (not prefs.process.FilterIsActive) then
         return true
     end
-    if (prefs.processCountExcluded > 0) then
-        if (prefs.processCountExcluded == prefs.processCountPhotos) then
+    if (prefs.process.CountExcluded > 0) then
+        if (prefs.process.CountExcluded == prefs.process.CountPhotos) then
             LrDialogs.message(LOC("$$$/LRPureRaw/Errors/ErrorAllExcluded=All photos were excluded."),
                     LOC("$$$/LRPureRaw/Errors/ErrorAllExcludedDetails=Total: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4^nMissing: ^5",
-                            prefs.processCountPhotos,
-                            prefs.processCountExcludedFileFormat,
-                            prefs.processCountExcludedAlreadyProcessed,
-                            prefs.processCountExcludedVirtualCopies,
-                    prefs.processCountMissing, "critical"))
+                            prefs.process.CountPhotos,
+                            prefs.process.CountExcludedFileFormat,
+                            prefs.process.CountExcludedAlreadyProcessed,
+                            prefs.process.CountExcludedVirtualCopies,
+                    prefs.process.CountMissing, "critical"))
             return false
         else
             if (LrDialogs.confirm(LOC("$$$/LRPureRaw/Errors/ErrorSomeExcluded=Some photos were excluded."),
                     LOC("$$$/LRPureRaw/Errors/ErrorExcludedDetails=Selected: ^1^n^nWrong file format: ^2^nAlready processed: ^3^nVirtual copy: ^4^nMissing: ^5^n^nContinue?",
-                            prefs.processCountPhotos,
-                            prefs.processCountExcludedFileFormat,
-                            prefs.processCountExcludedAlreadyProcessed,
-                            prefs.processCountExcludedVirtualCopies,
-                            prefs.processCountMissing)) == "cancel") then
+                            prefs.process.CountPhotos,
+                            prefs.process.CountExcludedFileFormat,
+                            prefs.process.CountExcludedAlreadyProcessed,
+                            prefs.process.CountExcludedVirtualCopies,
+                            prefs.process.CountMissing)) == "cancel") then
                 return false
             else
                 return true
@@ -373,20 +374,20 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     end
 
     local photos
-    if (prefs.processFilterIsActive) then
-        photos = prefs.processPhotos
+    if (prefs.process.FilterIsActive) then
+        photos = prefs.process.Photos
     else
         photos = LrApplication.activeCatalog():getTargetPhotos()
     end
 
     -- force one source
-    if (prefs.processFilterIsActive and prefs.forceOneSource) then
+    if (prefs.process.FilterIsActive and prefs.forceOneSource) then
         if (hasSeveralSourceFolders(photos)) then
             return
         end
     end
 
-    if (prefs.processFilterIsActive and (not validateExclude())) then
+    if (prefs.process.FilterIsActive and (not validateExclude())) then
         return
     end
 
@@ -419,6 +420,10 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
     end
 
     startDxoPureRAW(images)
+
+    -- We don't need this table to be saved.
+    prefs.process = nil
+
     logger.trace("processRenderedPhotos() end")
 
 end

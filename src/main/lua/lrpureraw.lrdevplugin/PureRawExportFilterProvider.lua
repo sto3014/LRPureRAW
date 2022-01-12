@@ -26,21 +26,21 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
     local catalog = LrApplication.activeCatalog()
 
     local prefs = LrPrefs.prefsForPlugin()
-    -- InitProvider set this pref to false. If the export preset does not use the filter it is false.
-    prefs.processFilterIsActive = true
 
-    if (not prefs.processIsRunning) then
-        prefs.processIsRunning = true
-        prefs.processCountPhotos = #catalog:getTargetPhotos()
+    prefs.process.FilterIsActive = true
+
+    if (not prefs.process.IsRunning) then
+        prefs.process.IsRunning = true
+        prefs.process.CountPhotos = #catalog:getTargetPhotos()
     end
-    prefs.processCurrent = prefs.processCurrent + 1
-    if (prefs.processCurrent == prefs.processCountPhotos) then
-        prefs.processIsLatest = true
+    prefs.process.Current = prefs.process.Current + 1
+    if (prefs.process.Current == prefs.process.CountPhotos) then
+        prefs.process.IsLatest = true
     end
-    logger.trace("isRunning=" .. tostring(prefs.processIsRunning))
-    logger.trace("countPhotos=" .. prefs.processCountPhotos)
-    logger.trace("current=" .. prefs.processCurrent)
-    logger.trace("isLatest=" .. tostring(prefs.processIsLatest))
+    logger.trace("isRunning=" .. tostring(prefs.process.IsRunning))
+    logger.trace("countPhotos=" .. prefs.process.CountPhotos)
+    logger.trace("current=" .. prefs.process.Current)
+    logger.trace("isLatest=" .. tostring(prefs.process.IsLatest))
     local excluded = false
 
     -- if nothing was selected, nothing should be exported.
@@ -55,14 +55,14 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
         local fileFormat = photo:getRawMetadata("fileFormat")
         if (fileFormat == nil) then
             logger.trace("fileFormat is not set. So it seems not to be a DNG or RAW.")
-            prefs.processCountExcludedFileFormat = prefs.processCountExcludedFileFormat + 1
+            prefs.process.CountExcludedFileFormat = prefs.process.CountExcludedFileFormat + 1
             excluded = true
         end
         if (not excluded) then
             logger.trace("Filetype for " .. photo:getFormattedMetadata("fileName") .. ": " .. fileFormat)
             if (fileFormat ~= "DNG" and fileFormat ~= "RAW") then
                 logger.trace("Photo is not a DNG or RAW. Skipped.")
-                prefs.processCountExcludedFileFormat = prefs.processCountExcludedFileFormat + 1
+                prefs.process.CountExcludedFileFormat = prefs.process.CountExcludedFileFormat + 1
                 excluded = true
             end
         end
@@ -73,7 +73,7 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
         if (software ~= nil) then
             logger.trace("Software: " .. software)
             if (software == "DxO PureRAW") then
-                prefs.processCountExcludedAlreadyProcessed = prefs.processCountExcludedAlreadyProcessed + 1
+                prefs.process.CountExcludedAlreadyProcessed = prefs.process.CountExcludedAlreadyProcessed + 1
                 excluded = true
             end
         else
@@ -86,7 +86,7 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
         logger.trace("Virtual copy: " .. tostring(virtualCopy))
         if (virtualCopy) then
             logger.trace("Photo is virtual copy. Skipped.")
-            prefs.processCountExcludedVirtualCopies = prefs.processCountExcludedVirtualCopies + 1
+            prefs.process.CountExcludedVirtualCopies = prefs.process.CountExcludedVirtualCopies + 1
             excluded = true
         end
     end
@@ -96,21 +96,21 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
             logger.trace("Photo missing: " .. tostring(false))
         else
             logger.trace("Photo missing: " .. tostring(true))
-            prefs.processCountMissing = prefs.processCountMissing + 1
+            prefs.process.CountMissing = prefs.process.CountMissing + 1
             excluded = true
         end
     end
 
     if (excluded) then
-        prefs.processCountExcluded = prefs.processCountExcluded + 1
+        prefs.process.CountExcluded = prefs.process.CountExcluded + 1
     else
-        prefs.processPhotos[#prefs.processPhotos + 1] = photo
+        prefs.process.Photos[#prefs.process.Photos + 1] = photo
     end
-    logger.trace("countExcluded=" .. prefs.processCountExcluded)
-    logger.trace("processPhotos=" .. tostring(#prefs.processPhotos))
-    if (prefs.processIsLatest) then
-        if (prefs.processCountExcluded > 0) then
-            if (prefs.processCountExcluded == prefs.processCountPhotos) then
+    logger.trace("countExcluded=" .. prefs.process.CountExcluded)
+    logger.trace("processPhotos=" .. tostring(#prefs.process.Photos))
+    if (prefs.process.IsLatest) then
+        if (prefs.process.CountExcluded > 0) then
+            if (prefs.process.CountExcluded == prefs.process.CountPhotos) then
                 logger.trace("All photos excluded")
             else
                 logger.trace("Some photos excluded")
@@ -118,7 +118,7 @@ function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
         else
             logger.trace("No photos excluded")
         end
-        prefs.processIsRunning = false
+        prefs.process.IsRunning = false
     end
     logger.trace("shouldRenderPhoto() end")
     return not excluded
