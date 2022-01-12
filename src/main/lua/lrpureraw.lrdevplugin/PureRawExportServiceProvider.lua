@@ -8,9 +8,7 @@ local LrFileUtils = import("LrFileUtils")
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
 local logger = require("Logger")
---local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
---LrMobdebug.start()
-
+require("Debugger")
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
 
@@ -20,7 +18,6 @@ local PureRawExportServiceProvider = {}
 -----------------------------------------------------------------------------]]
 
 function PureRawExportServiceProvider.updateExportSettings (exportSettings)
-    --LrMobdebug.on()
     logger.trace("********** Start service provider DxO PureRAW **********")
     logger.trace("updateExportSettings() start")
     local prefs = LrPrefs.prefsForPlugin()

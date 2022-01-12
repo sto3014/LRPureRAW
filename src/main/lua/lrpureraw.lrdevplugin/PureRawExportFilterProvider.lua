@@ -10,17 +10,14 @@ local LrPrefs = import("LrPrefs")
 local LrView = import("LrView")
 
 local logger = require("Logger")
+require("Debugger")
 
--- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
--- LrMobdebug.start()
 -------------------------------------------------------------------------------
 
 local PureRawExportFilterProvider = {}
 
 -------------------------------------------------------------------------------
 function PureRawExportFilterProvider.shouldRenderPhoto(exportSettings, photo)
-    -- LrMobdebug.on()
-
     logger.trace("shouldRenderPhoto() start")
 
     local catalog = LrApplication.activeCatalog()

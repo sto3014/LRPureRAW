@@ -9,17 +9,12 @@ local LrFileUtils = import "LrFileUtils"
 local LrDialogs = import "LrDialogs"
 
 local logger = require("Logger")
--- local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
--- LrMobdebug.start()
-
 
 InitProvider = {
     vInfo = require("Info.lua")
 }
 
 function init()
-
-    --    LrMobdebug.on()
     logger.trace("init() start")
     local currentPrefs = { ["PureRawDir"] = true,
                            ["PureRawExe"] = true,

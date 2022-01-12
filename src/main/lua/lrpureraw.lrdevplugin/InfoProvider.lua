@@ -4,8 +4,6 @@ local LrDialogs = import("LrDialogs")
 local LrPathUtils = import("LrPathUtils")
 local LrFileUtils = import("LrFileUtils")
 
---local LrMobdebug = import 'LrMobdebug' -- Import LR/ZeroBrane debug module
---LrMobdebug.start()
 local logger = require("Logger")
 
 InfoProvider = {
