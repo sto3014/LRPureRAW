@@ -34,7 +34,6 @@ function PureRawExportServiceProvider.updateExportSettings (exportSettings)
     prefs.process.CountExcludedFileFormat = 0
     prefs.process.CountMissing = 0
     prefs.process.DiffFoldersCount = 0
-
     logger.trace("updateExportSettings() end")
 end
 --[[---------------------------------------------------------------------------

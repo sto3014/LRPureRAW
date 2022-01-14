@@ -13,6 +13,7 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO PureRAW_.
 * New in 1.5: Export filter - see [Filter for valid photos](#filter-for-valid-photos):
     * Filter for virtual copies
     * Filter which forces a single source folder
+    * Missing photos are excluded
 * New in 1.5: Ability to execute custom scripts before/after export - see [Custom scripts](#custom-scripts)
 * Set metadata (color, rating, flags) after export to identify the processed photos
 * Predefined filters for PureRAW specific attributes
@@ -27,15 +28,15 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO PureRAW_.
 
 ---
 
-1. [Download](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.0.0.zip) the zip archive for version 1.5.0.0.
+1. [Download](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.1.0.zip) the zip archive for version 1.5.1.0.
 2. Extract the archive in the download folder.
 3. Install plug-in
     1. On Windows  
-       In Explore goto `Downloads\LRPureRAW-1.5.0.0` and double click `install.bat`.
+       In Explore goto `Downloads\LRPureRAW-1.5.1.0` and double click `install.bat`.
     2. On macOS  
-       Open a terminal window, change to `Downloads/LRPureRAW-1.5.0.0` and execute `install.sh`:
+       Open a terminal window, change to `Downloads/LRPureRAW-1.5.1.0` and execute `install.sh`:
         ```
-        -> ~ cd Downloads/LRPureRAW-1.5.0.0
+        -> ~ cd Downloads/LRPureRAW-1.5.1.0
         -> ./install.sh 
         ```
 4. Restart Lightroom
@@ -294,6 +295,9 @@ The `Filter for valid photos` register defines 4 filter options:
   A photo which was already exported by DxO PureRAW will be ignored. This filter compares the (EXIF) property
   `Software`. If the value is `DxO PureRAW` it will be rejected.  
   This filter is always set to true, and you can't change it. It is displayed just for clearness.
+* Exclude missing photos  
+  Photos which are not available are excluded. For some kind of export Smart Previews are enough, but we need
+  the RAW file of course. This filter is always active, and you can't change it. It is displayed just for clearness.
 * Exclude virtual copies  
   Maybe you do not want that a virtual copy is exported, because you prefer another workflow:
     * process the original photo
@@ -341,6 +345,7 @@ from this folder to Lightroom. Therefore, the default export path was changed to
 
 ## Acknowledgements
 
+---
 Thanks to [Mark Russinovich](https://docs.microsoft.com/de-de/archive/blogs/markrussinovich/) for his brilliant tools in
 general and in details for [Junction](https://docs.microsoft.com/en-us/sysinternals/downloads/junction) which I used to
 create symbolic links.

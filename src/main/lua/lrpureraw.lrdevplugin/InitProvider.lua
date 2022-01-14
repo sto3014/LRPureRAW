@@ -7,44 +7,45 @@
 local LrPrefs = import "LrPrefs"
 local LrFileUtils = import "LrFileUtils"
 local LrDialogs = import "LrDialogs"
-
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 local logger = require("Logger")
 
-InitProvider = {
-    vInfo = require("Info.lua")
-}
+local currentPrefs = { ["PureRawDir"] = true,
+                       ["PureRawExe"] = true,
+                       ["PureRawPath"] = true,
+                       ["excludeAlreadyProcessed"] = true,
+                       ["excludeMissing"] = true,
+                       ["excludeNoneDNG"] = true,
+                       ["excludeVirtualCopies"] = true,
+                       ["forceOneSource"] = true,
+                       ["hasErrors"] = true,
+                       ["resetColorLabel"] = true,
+                       ["resetPickStatus"] = true,
+                       ["resetRating"] = true,
+                       ["scriptAfter"] = true,
+                       ["scriptAfterExecute"] = true,
+                       ["scriptAfterPath"] = true,
+                       ["scriptBefore"] = true,
+                       ["scriptBeforeExecute"] = true,
+                       ["scriptBeforePath"] = true }
 
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 function init()
     logger.trace("init() start")
-    local currentPrefs = { ["PureRawDir"] = true,
-                           ["PureRawExe"] = true,
-                           ["PureRawPath"] = true,
-                           ["excludeAlreadyProcessed"] = true,
-                           ["excludeMissing"] = true,
-                           ["excludeNoneDNG"] = true,
-                           ["excludeVirtualCopies"] = true,
-                           ["forceOneSource"] = true,
-                           ["hasErrors"] = true,
-                           ["resetColorLabel"] = true,
-                           ["resetPickStatus"] = true,
-                           ["resetRating"] = true,
-                           ["scriptAfter"] = true,
-                           ["scriptAfterExecute"] = true,
-                           ["scriptAfterPath"] = true,
-                           ["scriptBefore"] = true,
-                           ["scriptBeforeExecute"] = true,
-                           ["scriptBeforePath"] = true }
 
     local prefs = LrPrefs.prefsForPlugin()
     -- Reset all
---[[    for key, value in pairs(prefs["< contents >"]) do
+    --[[
+    for key, value in pairs(prefs["< contents >"]) do
         prefs[key] = nil
     end
     ]]
     -- Reset persistent
     logger.trace("Delete old preferences:")
-    for key, value in pairs(prefs["< contents >"]) do
-        if ( not currentPrefs[key] ) then
+    for key, _ in pairs(prefs["< contents >"]) do
+        if (not currentPrefs[key]) then
             logger.trace("   Delete key: " .. key)
             prefs[key] = nil
         end
@@ -178,6 +179,8 @@ function init()
     end
     logger.trace("Init done.")
 end
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 
 init()
 

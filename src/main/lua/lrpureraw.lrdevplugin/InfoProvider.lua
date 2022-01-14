@@ -3,13 +3,11 @@ local LrPrefs = import("LrPrefs")
 local LrDialogs = import("LrDialogs")
 local LrPathUtils = import("LrPathUtils")
 local LrFileUtils = import("LrFileUtils")
-
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 local logger = require("Logger")
-
-InfoProvider = {
-    vInfo = require("Info.lua")
-}
-
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 function InfoProvider.sectionsForTopOfDialog(f, _)
     logger.trace("sectionsForTopOfDialog")
 
@@ -435,7 +433,6 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
     end
 
 end
-
--------------------------------------------------------------------------------
-
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 return InfoProvider
