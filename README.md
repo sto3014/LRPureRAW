@@ -18,11 +18,12 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO PureRAW_.
 * Set metadata (color, rating, flags) after export to identify the processed photos
 * Predefined filters for PureRAW specific attributes
 
-## Requirements
+## Support
 
 ---
-
-* _DxO PureRAW_ 1.0 or higher
+* _Windows_ 10 or later
+* _MacOS_ 10.1 or later 
+* _DxO PureRAW_ 1.0 - 2.0
 
 ## Installation
 
@@ -46,8 +47,13 @@ The plug-in and presets are now available for the current user.
 ## Update
 
 ---
+### Update LRPureRAW
 Same as installation. Be aware, that the export preset `PureRAW Original`will be overwritten. If you changed this preset
 before make a copy of it and store it in your `User Presets`. Your copy will still work in version 1.5.
+
+### Update DxO PureRAW
+If you update DxO PureRAW from 1.0/1.5 to 2.0 you must change the DxO installation path. 
+See [Plug-in Settings](#dxo-pureraw)
 
 ## Usage
 
