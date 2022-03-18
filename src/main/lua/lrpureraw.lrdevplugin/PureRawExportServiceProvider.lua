@@ -199,14 +199,14 @@ local function initExportProgress()
 -------------------------------------------------------------------------------]]
 local function initExportProgress(exportContext)
     logger.trace("initExportProgress() start")
-
+    local prefs = LrPrefs.prefsForPlugin()
     local exportSession = exportContext.exportSession
     local exportSettings = assert(exportContext.propertyTable)
     local nPhotos = exportSession:countRenditions()
     local progressScope = exportContext:configureProgress {
         title = nPhotos > 1 and
-                LOC("$$$/LRPurePath/ProgressMany=Export ^1 photos for DxO PureRAW", nPhotos)
-                or LOC "$$$/LRPurePath/ProgressOne=Export one photo for DxO PureRAW",
+                LOC("$$$/LRPurePath/ProgressMany=Export ^1 photos for DxO PureRAW ^2", nPhotos, prefs.PureRawVersion)
+                or LOC("$$$/LRPurePath/ProgressOne=Export one photo for DxO PureRAW ^1",prefs.PureRawVersion)
     }
     logger.trace("Export format is " .. exportSettings.LR_format)
     logger.trace("Renditions: " .. exportSession:countRenditions())

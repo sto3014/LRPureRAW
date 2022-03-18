@@ -55,7 +55,7 @@ Fix installation chapter in README.md
 ### Changed
 ### Fixed
 
-## [1.5.1.0] - 2022
+## [1.5.1.0] - 2022-01-14
 ### Added
 * New standard filter: Missing photos are excluded.
 ### Changed
@@ -63,4 +63,8 @@ Fix installation chapter in README.md
 * Fixed missing titles in export filter.
 * Fixed error when only missing photos were exported.
 
-
+## [1.5.2.0] - 2022-03-18
+### Added
+* Support for DxO PureRAW 2
+### Changed
+### Fixed

@@ -10,10 +10,12 @@ local LrDialogs = import "LrDialogs"
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
 local logger = require("Logger")
+local utils = require("Utils")
 
 local currentPrefs = { ["PureRawDir"] = true,
                        ["PureRawExe"] = true,
                        ["PureRawPath"] = true,
+                       ["PureRawVersion"] = true,
                        ["excludeAlreadyProcessed"] = true,
                        ["excludeMissing"] = true,
                        ["excludeNoneDNG"] = true,
@@ -29,6 +31,7 @@ local currentPrefs = { ["PureRawDir"] = true,
                        ["scriptBefore"] = true,
                        ["scriptBeforeExecute"] = true,
                        ["scriptBeforePath"] = true }
+
 
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
@@ -65,6 +68,7 @@ function init()
             prefs.PureRawDir = '/Applications/DxO PureRAW 2.app'
             prefs.PureRawExe = "PureRawv2"
             prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
+            prefs.PureRawVersion=2
             if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
                 for i = 5, 1, -1 do
                     local tempPath
@@ -81,6 +85,7 @@ function init()
                         prefs.PureRawExe = tempExe
                         prefs.PureRawPath = tempPath
                         prefs.PureRawDir = tempDir
+                        prefs.PureRawVersion= tostring(i)
                         break
                     end
                 end
@@ -90,23 +95,35 @@ function init()
         --
         -- Windows
         --
-        if prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 then
-            pureRawDir = 'C:\\Program Files\\DxO\\DxO PureRAW'
-            prefs.PureRawDir = pureRawDir
-        end
-        if (prefs.PureRawExe == nil or prefs.PureRawExe:len() == 0) then
-            prefs.PureRawExe = "PureRawv1.exe"
-        end
-        prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
-        if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
-            for i = 1, 5, 1 do
-                local tempPath = prefs.PureRawDir .. "\\" .. "PureRawv" .. tostring(i) .. ".exe"
-                if (LrFileUtils.exists(tempPath) == "file") then
-                    prefs.PureRawExe = "PureRawv" .. tostring(i) .. ".exe"
-                    prefs.PureRawPath = tempPath
+        if (prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0) then
+            -- Default values since 18.03.2022
+            prefs.PureRawDir = "C:\\Program Files\\DxO\\DxO PureRAW 2"
+            prefs.PureRawExe = "PureRawv2.exe"
+            prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
+            prefs.PureRawVersion=2
+            if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
+                for i = 5, 1, -1 do
+                    local tempPath
+                    local tempExe
+                    local tempDir
+                    tempExe = "PureRawv" .. tostring(i) .. ".exe"
+                    if ( i == 1 ) then
+                        tempDir = "C:\\Program Files\\DxO\\DxO PureRAW"
+                    else
+                        tempDir = "C:\\Program Files\\DxO\\DxO PureRAW " .. tostring(i)
+                    end
+                    tempPath = tempDir .. "\\" .. tempExe
+                    if (LrFileUtils.exists(tempPath) == "file") then
+                        prefs.PureRawExe = tempExe
+                        prefs.PureRawPath = tempPath
+                        prefs.PureRawDir = tempDir
+                        prefs.PureRawVersion= tostring(i)
+                        break
+                    end
                 end
             end
         end
+
     end
 
     if (prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 or LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
@@ -114,6 +131,12 @@ function init()
         errorMessage = errorMessage .. '\n' ..
                 LOC("$$$/LRPureRaw/Settings/PathNotExists=^1. Path to ^2 does not exist:", tostring(errorNo), "DxO PureRAW") .. "\n" .. prefs.PureRawPath .. "\n"
         prefs.hasErrors = true
+    end
+
+    if (prefs.PureRawVersion == nil or prefs.PureRawVersion:len() ==0) then
+        if ( prefs.PureRawDir ~= nil and prefs.PureRawDir:len() >0) then
+            prefs.PureRawVersion = utils.getPureRawVersion(prefs.PureRawDir)
+        end
     end
 
     if (prefs.hasErrors) then

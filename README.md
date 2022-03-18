@@ -22,21 +22,21 @@ _Lightroom Classic_ plug-in which add an export provider for _DxO PureRAW_.
 
 ---
 
-* _DxO PureRAW_ 1.X
+* _DxO PureRAW_ 1.0 or higher
 
 ## Installation
 
 ---
 
-1. [Download](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.1.0.zip) the zip archive for version 1.5.1.0.
+1. [Download](https://github.com/sto3014/LRPureRAW/archive/refs/tags/1.5.2.0.zip) the zip archive for version 1.5.2.0.
 2. Extract the archive in the download folder.
 3. Install plug-in
     1. On Windows  
-       In Explore goto `Downloads\LRPureRAW-1.5.1.0` and double click `install.bat`.
+       In Explore goto `Downloads\LRPureRAW-1.5.2.0` and double click `install.bat`.
     2. On macOS  
-       Open a terminal window, change to `Downloads/LRPureRAW-1.5.1.0` and execute `install.sh`:
+       Open a terminal window, change to `Downloads/LRPureRAW-1.5.2.0` and execute `install.sh`:
         ```
-        -> ~ cd Downloads/LRPureRAW-1.5.1.0
+        -> ~ cd Downloads/LRPureRAW-1.5.2.0
         -> ./install.sh 
         ```
 4. Restart Lightroom
@@ -218,13 +218,16 @@ In this section the paths for the _DxO PureRAW_ executable are defined.
 
 * On Windows
     * DxO PureRAW Executable  
-      Path to the exe file. The default value is `C:\Program Files\DxO\DxO PureRAW\PureRawv1.exe`   
+      Path to the exe file. The default value is `C:\Program Files\DxO\DxO PureRAW 2\PureRawv2.exe` for DxO Pure RAW 2
+      or `C:\Program Files\DxO\DxO PureRAW\PureRawv1.exe` for DxO PureRAW 1 and 1.5.  
       If DxO PureRAW was installed in a different place you have to select the executable by yourself.
 * On macOS
-    * DxO PureRAW Application Path to the application. The default value is `/Applications/DxO PureRAW.app`   
-      If DxO PureRAW was installed in a different place you have to select the executable by yourself.
+    * DxO PureRAW Application Path to the application. The default value is `/Applications/DxO PureRAW 2.app` for DxO
+      Pure RAW 2 or  `/Applications/DxO PureRAW.app` for DxO PureRAW 1 and 1.5.  
+      If DxO PureRAW was installed in a different place you have to select the path by yourself.
     * DxO PureRAW Executable  
-      The name of the executable. The default value is `PureRawv1`
+      The name of the executable. The default value is `PureRawv2` respectively `PureRawv1`. Normally there is no reason
+      to change it.
 
 ### Set after export
 
@@ -296,8 +299,8 @@ The `Filter for valid photos` register defines 4 filter options:
   `Software`. If the value is `DxO PureRAW` it will be rejected.  
   This filter is always set to true, and you can't change it. It is displayed just for clearness.
 * Exclude missing photos  
-  Photos which are not available are excluded. For some kind of export Smart Previews are enough, but we need
-  the RAW file of course. This filter is always active, and you can't change it. It is displayed just for clearness.
+  Photos which are not available are excluded. For some kind of export Smart Previews are enough, but we need the RAW
+  file of course. This filter is always active, and you can't change it. It is displayed just for clearness.
 * Exclude virtual copies  
   Maybe you do not want that a virtual copy is exported, because you prefer another workflow:
     * process the original photo

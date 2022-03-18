@@ -28,4 +28,19 @@ function Utils.ends_with(str, ending)
 end
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
+function Utils.getPureRawVersion(pureRawDir)
+    local version
+    if (MAC_ENV) then
+        version = string.sub(pureRawDir, -5, -5)
+    else
+        version = string.sub(pureRawDir, -1, -1)
+    end
+    if (version ~= "W") then
+        return version
+    else
+        return 1
+    end
+end
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 return Utils

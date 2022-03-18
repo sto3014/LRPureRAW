@@ -6,6 +6,8 @@ local LrFileUtils = import("LrFileUtils")
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
 local logger = require("Logger")
+local utils = require("Utils")
+
 
 local InfoProvider = {}
 
@@ -64,6 +66,7 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                                 prefs.PureRawPath = pureRawPath[1]
                                 prefs.PureRawExe = LrPathUtils.leafName(pureRawPath[1])
                                 prefs.PureRawDir = LrPathUtils.parent(pureRawPath[1])
+                                prefs.PureRawVersion = utils.getPureRawVersion(prefs.PureRawDir)
                             end
                         end
                     })
@@ -246,9 +249,9 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
                             if type(pureRawDir) == "table" and #pureRawDir > 0 then
                                 if (pureRawDir[1]:sub(-#".app") == ".app") then
                                     prefs.PureRawDir = pureRawDir[1]
-                                    local version = getPureRawVersion(prefs.PureRawDir)
-                                    logger.trace("version=" .. tostring(version))
-                                    prefs.PureRawExe = "PureRawv" .. version
+                                    prefs.PureRawVersion = utils.getPureRawVersion(prefs.PureRawDir)
+                                    logger.trace("version=" .. tostring(prefs.PureRawVersion ))
+                                    prefs.PureRawExe = "PureRawv" .. prefs.PureRawVersion
                                     prefs.PureRawPath =   prefs.PureRawDir  .. "/Contents/MacOS/" ..  prefs.PureRawExe
                                     logger.trace(prefs.PureRawPath)
                                     if LrFileUtils.exists(prefs.PureRawPath) ~= "file" then
