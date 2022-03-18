@@ -1,5 +1,5 @@
 "$$$/LRPureRaw/PluginName=PureRAW"
-"$$$/LRPureRaw/Settings/PathNotExists=^1. Path zu ^2 existiert nicht:"
+"$$$/LRPureRaw/Settings/PathNotExists=^1. Pfad zu ^2 existiert nicht:"
 "$$$/LRPurePath/Settings/PathToPureRaw/MAC=DxO PureRAW Verzeichnis:"
 "$$$/LRPurePath/Settings/PathToPureRaw/WIN=DxO PureRAW Programm-Datei:"
 "$$$/LRPureRaw/Settings/PluginSettings=Plugin Einstellungen"

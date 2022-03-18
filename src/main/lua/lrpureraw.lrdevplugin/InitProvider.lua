@@ -68,14 +68,13 @@ function init()
             prefs.PureRawDir = '/Applications/DxO PureRAW 2.app'
             prefs.PureRawExe = "PureRawv2"
             prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
-            prefs.PureRawVersion=2
             if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
                 for i = 5, 1, -1 do
                     local tempPath
                     local tempExe
                     local tempDir
                     tempExe = "PureRawv" .. tostring(i)
-                    if ( i == 1 ) then
+                    if (i == 1) then
                         tempDir = "/Applications/DxO PureRAW.app"
                     else
                         tempDir = "/Applications/DxO PureRAW " .. tostring(i) .. ".app"
@@ -85,7 +84,6 @@ function init()
                         prefs.PureRawExe = tempExe
                         prefs.PureRawPath = tempPath
                         prefs.PureRawDir = tempDir
-                        prefs.PureRawVersion= tostring(i)
                         break
                     end
                 end
@@ -100,14 +98,13 @@ function init()
             prefs.PureRawDir = "C:\\Program Files\\DxO\\DxO PureRAW 2"
             prefs.PureRawExe = "PureRawv2.exe"
             prefs.PureRawPath = prefs.PureRawDir .. "\\" .. prefs.PureRawExe
-            prefs.PureRawVersion=2
             if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
                 for i = 5, 1, -1 do
                     local tempPath
                     local tempExe
                     local tempDir
                     tempExe = "PureRawv" .. tostring(i) .. ".exe"
-                    if ( i == 1 ) then
+                    if (i == 1) then
                         tempDir = "C:\\Program Files\\DxO\\DxO PureRAW"
                     else
                         tempDir = "C:\\Program Files\\DxO\\DxO PureRAW " .. tostring(i)
@@ -117,7 +114,6 @@ function init()
                         prefs.PureRawExe = tempExe
                         prefs.PureRawPath = tempPath
                         prefs.PureRawDir = tempDir
-                        prefs.PureRawVersion= tostring(i)
                         break
                     end
                 end
@@ -133,17 +129,17 @@ function init()
         prefs.hasErrors = true
     end
 
-    if (prefs.PureRawVersion == nil or prefs.PureRawVersion:len() ==0) then
-        if ( prefs.PureRawDir ~= nil and prefs.PureRawDir:len() >0) then
-            prefs.PureRawVersion = utils.getPureRawVersion(prefs.PureRawDir)
-        end
-    end
-
     if (prefs.hasErrors) then
         logger.trace("Has errors: \n" .. errorMessage)
         LrDialogs.message(LOC("$$$/LRPurePath/Init/Failed=PureRaw could not be initialised."), LOC("$$$/LRPurePath/Settings/BadSettings/message=One more more settings have wrong values:^1", errorMessage), "critical")
     end
-
+    if ( prefs.PureRawVersion == nil) then
+        if (prefs.PureRawDir ~= nil and prefs.PureRawDir:len() > 0) then
+            prefs.PureRawVersion = utils.getPureRawVersion(prefs.PureRawDir)
+        else
+            prefs.PureRawVersion="2";
+        end
+    end
     if (prefs.resetColorLabel == nil or prefs.resetColorLabel:len() == 0) then
         prefs.resetColorLabel = "off"
     end
