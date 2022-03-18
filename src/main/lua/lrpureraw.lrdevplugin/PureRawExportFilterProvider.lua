@@ -128,6 +128,7 @@ end
 
 
 function PureRawExportFilterProvider.sectionForFilterInDialog(f, propertyTable)
+    logger.trace("sectionForFilterInDialog() start")
     local prefs = LrPrefs.prefsForPlugin()
     local bind = LrView.bind
     return

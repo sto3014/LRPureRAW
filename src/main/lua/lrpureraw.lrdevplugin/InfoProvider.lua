@@ -11,6 +11,16 @@ local InfoProvider = {}
 
 --[[----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]
+local function getPureRawVersion(pureRawDir)
+    local version = string.sub(pureRawDir, -5, -5)
+    if (version ~= "W") then
+        return version
+    else
+        return 1
+    end
+end
+--[[----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]
 function InfoProvider.sectionsForTopOfDialog(f, _)
     logger.trace("sectionsForTopOfDialog")
 
@@ -235,13 +245,15 @@ function InfoProvider.sectionsForTopOfDialog(f, _)
 
                             if type(pureRawDir) == "table" and #pureRawDir > 0 then
                                 if (pureRawDir[1]:sub(-#".app") == ".app") then
-                                    local pureRawExe = prefs.PureRawExe
-                                    local newToolPath = pureRawDir[1] .. "/Contents/MacOS/" .. pureRawExe
                                     prefs.PureRawDir = pureRawDir[1]
-                                    prefs.PureRawPath = newToolPath
-                                    if LrFileUtils.exists(newToolPath) ~= "file" then
+                                    local version = getPureRawVersion(prefs.PureRawDir)
+                                    logger.trace("version=" .. tostring(version))
+                                    prefs.PureRawExe = "PureRawv" .. version
+                                    prefs.PureRawPath =   prefs.PureRawDir  .. "/Contents/MacOS/" ..  prefs.PureRawExe
+                                    logger.trace(prefs.PureRawPath)
+                                    if LrFileUtils.exists(prefs.PureRawPath) ~= "file" then
                                         prefs.hasErrors = true
-                                        LrDialogs.message(LOC("$$$/LRPureRaw/Settings/NoFile=File not found"), LOC("$$$/LRPureRaw/Settings/NoExe=The folder chosen does not contain ^1.", pureRawExe), critical)
+                                        LrDialogs.message(LOC("$$$/LRPureRaw/Settings/NoFile=File not found"), LOC("$$$/LRPureRaw/Settings/NoExe=The folder chosen does not contain ^1.", "Contents/MacOS/" .. prefs.PureRawExe), critical)
                                     end
                                 else
                                     LrDialogs.message(LOC("$$$/LRPureRaw/Settings/BadPath=Path is incorrect"), LOC("$$$/LRPureRaw/Settings/NotAnApp=Selected file is not an application."), critical)

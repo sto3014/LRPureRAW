@@ -60,20 +60,29 @@ function init()
         --
         -- macOS
         --
-        if prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0 then
-            pureRawDir = '/Applications/DxO PureRAW.app'
-            prefs.PureRawDir = pureRawDir
-        end
-        if (prefs.PureRawExe == nil or prefs.PureRawExe:len() == 0) then
-            prefs.PureRawExe = "PureRawv1"
-        end
-        prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
-        if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
-            for i = 1, 5, 1 do
-                local tempPath = prefs.PureRawDir .. "/Contents/MacOS/" .. "PureRawv" .. tostring(i)
-                if (LrFileUtils.exists(tempPath) == "file") then
-                    prefs.PureRawExe = "PureRawv" .. tostring(i)
-                    prefs.PureRawPath = tempPath
+        if (prefs.PureRawPath == nil or prefs.PureRawPath:len() == 0) then
+            -- Default values since 18.03.2022
+            prefs.PureRawDir = '/Applications/DxO PureRAW 2.app'
+            prefs.PureRawExe = "PureRawv2"
+            prefs.PureRawPath = prefs.PureRawDir .. "/Contents/MacOS/" .. prefs.PureRawExe
+            if (LrFileUtils.exists(prefs.PureRawPath) ~= "file") then
+                for i = 5, 1, -1 do
+                    local tempPath
+                    local tempExe
+                    local tempDir
+                    tempExe = "PureRawv" .. tostring(i)
+                    if ( i == 1 ) then
+                        tempDir = "/Applications/DxO PureRAW.app"
+                    else
+                        tempDir = "/Applications/DxO PureRAW " .. tostring(i) .. ".app"
+                    end
+                    tempPath = tempDir .. "/Contents/MacOS/" .. tempExe
+                    if (LrFileUtils.exists(tempPath) == "file") then
+                        prefs.PureRawExe = tempExe
+                        prefs.PureRawPath = tempPath
+                        prefs.PureRawDir = tempDir
+                        break
+                    end
                 end
             end
         end

@@ -216,6 +216,8 @@ end
 local function startDxoPureRAW()
 -------------------------------------------------------------------------------]]
 local function startDxoPureRAW(images)
+    logger.trace("startDxoPureRAW() start")
+
     local prefs = LrPrefs.prefsForPlugin()
 
     local cmd
@@ -235,6 +237,7 @@ end
 local function resetMetadata()
 -------------------------------------------------------------------------------]]
 local function resetMetadata(exportContext)
+    logger.trace("resetMetadata() start")
     local prefs = LrPrefs.prefsForPlugin()
     local images = {}
     local catalog = LrApplication.activeCatalog()
@@ -294,6 +297,7 @@ end
 local function validateExclude()
 -------------------------------------------------------------------------------]]
 local function validateExclude()
+    logger.trace("validateExclude() start")
     local prefs = LrPrefs.prefsForPlugin()
     if (not prefs.process.FilterIsActive) then
         return true
@@ -329,6 +333,8 @@ end
 local function validateDestinationType()
 -------------------------------------------------------------------------------]]
 local function validateDestinationType(exportContext)
+    logger.trace("validateDestinationType() start")
+
     local exportSettings = assert(exportContext.propertyTable)
 
     if (exportSettings.LR_export_destinationType ~= "specificFolder") then
