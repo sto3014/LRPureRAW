@@ -16,6 +16,8 @@ local currentPrefs = { ["PureRawDir"] = true,
                        ["PureRawExe"] = true,
                        ["PureRawPath"] = true,
                        ["PureRawVersion"] = true,
+                       ["PureRawNewInterfaceUse"] = true,
+                       ["PureRawNewInterfaceCommand"] = true,
                        ["excludeAlreadyProcessed"] = true,
                        ["excludeMissing"] = true,
                        ["excludeNoneDNG"] = true,
@@ -140,6 +142,26 @@ function init()
             prefs.PureRawVersion="2";
         end
     end
+
+    if ( prefs.PureRawUseStandalone == nil) then
+        prefs.PureRawUseStandalone =true;
+    end
+
+    if ( prefs.PureRawStandaloneCommand == nil or prefs.PureRawStandaloneCommand:len()==0) then
+        if (MAC_ENV)  then
+            if ( prefs.PureRawVersion=="1") then
+                prefs.PureRawStandaloneCommand ="not supported"
+                prefs.PureRawUseStandalone =false;
+            else
+                prefs.PureRawStandaloneCommand ="com.dxo-labs.PureRawv" .. prefs.PureRawVersion .. ".standalone"
+            end
+        else
+            prefs.PureRawStandaloneCommand ="not supported"
+            prefs.PureRawUseStandalone =false;
+        end
+    end
+
+
     if (prefs.resetColorLabel == nil or prefs.resetColorLabel:len() == 0) then
         prefs.resetColorLabel = "off"
     end

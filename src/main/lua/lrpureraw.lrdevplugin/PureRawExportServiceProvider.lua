@@ -71,13 +71,21 @@ end
 --[[----------------------------------------------------------------------------
 local function getImagesList()
 -------------------------------------------------------------------------------]]
-local function getImageList(images)
+local function getImageList(images, standalone)
     local list = ""
     for _, image in ipairs(images) do
         if (list == "") then
-            list = '"' .. image .. '"'
+            if ( standalone) then
+                list = image ..  '\n'
+            else
+                list = '"' .. image .. '"'
+            end
         else
-            list = list .. ' ' .. '"' .. image .. '"'
+            if ( standalone) then
+                list = list .. image  .. '\n'
+            else
+                list = list .. ' ' .. '"' .. image .. '"'
+            end
         end
     end
     return list
@@ -223,9 +231,9 @@ local function startDxoPureRAW(images)
     local cmd
     if (#images > 0) then
         if (WIN_ENV) then
-            cmd = 'start /D ' .. '"' .. prefs.PureRawDir .. '"' .. ' ' .. prefs.PureRawExe .. ' ' .. getImageList(images)
+            cmd = 'start /D ' .. '"' .. prefs.PureRawDir .. '"' .. ' ' .. prefs.PureRawExe .. ' ' .. getImageList(images, false)
         else
-            cmd = 'open -a ' .. '"' .. prefs.PureRawPath .. '"' .. ' ' .. getImageList(images)
+            cmd = 'open -a ' .. '"' .. prefs.PureRawPath .. '"' .. ' ' .. getImageList(images, false)
         end
         logger.trace("Command line length: " .. cmd:len())
         logger.trace("Execute: " .. cmd)
@@ -233,6 +241,36 @@ local function startDxoPureRAW(images)
     end
 
 end
+--[[----------------------------------------------------------------------------
+local function startDxoPureRAWStandalone()
+-------------------------------------------------------------------------------]]
+local function startDxoPureRAWStandalone(images)
+    logger.trace("startDxoPureRAWStandalone() start")
+
+    local prefs = LrPrefs.prefsForPlugin()
+
+    local cmd
+    if (#images > 0) then
+        local imageString = getImageList(images, true)
+        local tmpFileName = os.tmpname()
+        logger.trace("batch-file=" .. tmpFileName)
+        local tmpFile = io.open(tmpFileName, "w")
+        tmpFile:write(imageString)
+        tmpFile:close()
+        if (WIN_ENV) then
+            -- cmd = 'start /D ' .. '"' .. prefs.PureRawDir .. '"' .. ' ' .. prefs.PureRawExe .. ' ' .. getImageList(images)
+            return
+        else
+            cmd = 'open -n -b ' .. '"' .. prefs.PureRawStandaloneCommand .. '"' .. ' --args' .. ' --as-lightroom-plugin' .. ' --lr-version="11.2"' .. ' --batch-file="'.. tmpFileName .. '"'
+        end
+        logger.trace("Command line length: " .. cmd:len())
+        logger.trace("Execute: " .. cmd)
+        local status = LrTasks.execute(cmd)
+    end
+
+end
+
+
 --[[----------------------------------------------------------------------------
 local function resetMetadata()
 -------------------------------------------------------------------------------]]
@@ -421,7 +459,11 @@ function PureRawExportServiceProvider.processRenderedPhotos(functionContext,
         end
     end
 
-    startDxoPureRAW(images)
+    if ( prefs.PureRawUseStandalone) then
+        startDxoPureRAWStandalone(images)
+    else
+        startDxoPureRAW(images)
+    end
 
     -- We don't need this table to be saved.
     prefs.process = nil
